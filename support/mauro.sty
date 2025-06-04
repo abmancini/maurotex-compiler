@@ -1,0 +1,1904 @@
+% mauro.sty
+
+\typeout{mauro.sty}
+\typeout{stylefile per Maurolico, ver.4.0b17, 11/04/2023 Paolo Mascellani e Massimiliano Dominici}
+\typeout{stylefile per Maurolico, ver.4.0b16, 18/04/2021 Paolo Mascellani e Massimiliano Dominici}
+\typeout{stylefile per Maurolico, ver.4.0b15, 27/01/2019 Paolo Mascellani e Massimiliano Dominici}
+\typeout{stylefile per Maurolico, ver.4.0b14, 25/04/2015 Paolo Mascellani e Massimiliano Dominici}
+\typeout{stylefile per Maurolico, ver.4.0b13, 25/09/2013 Paolo Mascellani e Massimiliano Dominici}
+\typeout{stylefile per Maurolico, ver.4.0b12, 14/06/2012 Massimiliano Dominici}
+\typeout{basato su ver.4.0b11, 28/12/2011 Massimiliano Dominici}
+\typeout{basato su ver.4.0b10, 10/3/2011 Massimiliano Dominici}
+\typeout{basato su ver.4.0b9, 15/3/2004 Paolo Mascellani}
+\typeout{basato su ver.3.4,  27/07/2000 Paolo Mascellani}
+\typeout{basato su ver.2.74, 16/05/1999 Ken SAITO}
+
+%
+%  Laboratorio Informatico del Consorzio Sociale "Polis"
+%  via G. Garibaldi 33, 56127 Pisa - Italia
+%  (info@elabor.homelinux.org)
+%
+%  responsabile sviluppo:
+%  Paolo Mascellani (paolo@elabor.homelinux.org)
+%
+%  coordinatore del progetto "Maurolico":
+%  Pier Daniele Napolitani (napolita@dm.unipi.it)
+%  
+%  Questo programma e` software libero. Lei puo` redistribuirlo
+%  e/o modificarlo nei termini della "GNU General Public License",
+%  come pubblicata dalla "Free Software Foundation", versione 2 del
+%  giugno 1991.
+%  
+%  Questo programma e` distribuito nella speranza che possa essere
+%  utile, ma SENZA ALCUNA GARANZIA, implicita o espressa. Vedere la 
+%  "GNU General Public License" per maggiori dettagli.
+%  
+%  Lei, assieme al programma, dovrebbe aver ricevuto anche una copia
+%  della "GNU General Public License", contenuta nel file "LICENZA";
+%  se no, scriva alla "Free Software Foundation, Inc., 675 Mass Ave,
+%  Cambridge, MA 02139, USA".
+%
+
+\ProvidesPackage{mauro}[2023/04/11 V4.0.b17 MauroTex package]
+\RequirePackage{refcount}
+
+\raggedbottom
+%\sloppy
+
+\def\DEBUG{NO}
+
+\def\MauroTeX{$\cal{MAURO}$-{\TeX}}
+\def\MTeX{$\cal{M}$-\TeX}
+
+\def\slnot#1{\textsl{\textsf{#1}}}
+%\font\unit=cmr18
+
+%\renewcommand{\baselinestretch}{1.3}
+%<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+% definizione \@Tfor, "Loop"
+% uso: definire \TforDo#1{...}
+% si ripete \TforDo per ogni argomento contenuto nell'argomento
+% di \@Tfor
+%
+% Esempio:
+% \def\TforDo#1{[[#1]]}
+% \@Tfor{{abc}{def}{xyz}}
+% ===> [[abc]][[def]][[xyz]]
+%
+
+\long\def\TforPrevious{\@empty}
+\long\def\@Tfor#1{%
+  \long\def\@TMPSTR{#1}%
+  \ifx\@TMPSTR\@empty\else\TMP#1|||\fi%
+}
+\long\def\TMP#1#2|||{%
+  \long\def\TforNow{#1#2}%
+  \ifx\TforNow\TforPrevious%
+    \TforDo{#1#2}%
+    \long\def\TforPrevious{\@empty}%
+  \else%
+    \TforDo{#1}%
+    \long\def\TforPrevious{#2}%
+    \@Tfor{#2}%
+  \fi%
+}
+
+%%%%%%%%%fine definizione \@Tfor
+
+%========= definizione di \Divide ============
+
+\newcounter{NumberField}
+
+%\def\DivTwo#1#2:||{\def\One{#1}\def\Two{#2}}
+%\def\DivThree#1#2#3:||{\def\One{#1}\def\Two{#2}\def\Three{#3}}
+%\def\DivFour#1#2#3#4:||%
+%{\def\One{#1}\def\Two{#2}\def\Three{#3}\def\Four{#4}}
+%\def\DivFive#1#2#3#4#5:||%
+%{\def\One{#1}\def\Two{#2}\def\Three{#3}\def\Four{#4}\def\Five{#5}}
+%\def\DivSix#1#2#3#4#5#6:||%
+%{\def\One{#1}\def\Two{#2}\def\Three{#3}\def\Four{#4}\def\Five{#5}%
+%\def\Six{#6}}
+%\def\DivSeven#1#2#3#4#5#6#7:||%
+%{\def\One{#1}\def\Two{#2}\def\Three{#3}\def\Four{#4}\def\Five{#5}%
+%\def\Six{#6}\def\Seven{#7}}
+%\def\Show{One = \One Two = \Two Three = \Three Four = \Four}
+%
+%\def\Divide#1{%
+%\def\One{}\def\Two{}\def\Three{}\def\Four{}\def\Five{}\def\Six{}\def\Seven{}%
+%\expandafter\DivTwo#1:||%
+%\ifx\Two\NULL%
+%\setcounter{NumberField}{1}%
+%\else
+%\expandafter\DivThree#1:||%
+%\ifx\Three\NULL%
+%\setcounter{NumberField}{2}%
+%\else
+%\expandafter\DivFour#1:||%
+%\ifx\Four\NULL%
+%\setcounter{NumberField}{3}%
+%\else
+%\expandafter\DivFive#1:||%
+%\ifx\Five\NULL%
+%\setcounter{NumberField}{4}%
+%\else
+%\expandafter\DivSix#1:||%
+%\ifx\Six\NULL%
+%\setcounter{NumberField}{5}%
+%\else
+%\expandafter\DivSeven#1:||%
+%\ifx\Seven\NULL%
+%\setcounter{NumberField}{6}%
+%\else%
+%\setcounter{NumberField}{7}%
+%\typeout{Number of variants exceeds the limit of this macro!}%
+%\fi%
+%\fi%
+%\fi%
+%\fi%
+%\fi%
+%\fi%
+%}
+
+%========= fine definizione di \Divide ============
+
+
+%definizione \Unc
+%\def\Unc#1{\Math{<}#1\Math{>}}
+
+%definizione provvisoria per il commando \textsc
+
+%\def\Textsc#1{#1}
+
+%definizione dell'environment enunciatio
+%
+\newenvironment{Enunciatio}%
+{\begin{large}\begin{center}}%
+{\end{center}\end{large}}
+%
+%fine definizione
+%>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+%<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+%definizione dell'environment scholium
+%\newenvironment{Scholium}%
+%{\begin{em}}{\end{em}}
+%fine definizione
+
+\def\Scholium{\begin{center}\begin{large}{\em Scholium}\end{large}\end{center}}
+
+%>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+%<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+%definizione dell'environment protasis
+%
+\newenvironment{Protasis}%
+{\begin{large}}%
+{\end{large}\par}
+%
+%fine definizione
+%>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+%<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+%definizioni per l'uso degli esponenti fuori environment matematico
+%\catcode`^=\active
+%\def\Superscript#1{$^{#1}$}
+%\def^#1{\ifmmode\sp{#1}\else\Superscript{{\mbox{#1}}}\fi}
+%>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+%<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+%definizione environment Math
+%<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+%\def\Math#1{\ifmmode#1\else$#1$\fi}
+%>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+%fine definizione environment Math
+%>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+%\newcommand{\LL}{||}
+%\def\DS{/\kern-.2em/}
+%\def\SS{/}
+\newcommand{\CONTR}[1]{\(\widetilde{\rm #1}\)}
+\def\TV{\VV}
+\newcommand{\ABBR}[1]{#1}
+\newcommand{\Cong}[1]{\textbf{[[}#1\textbf{]]}}
+
+\def\Figskip{\@ifnextchar[{\@Figskipnote}{\@Figskip}}
+\def\@Figskipnote[#1]#2{\footnote{#1}}
+\def\@Figskip#1{
+  \begin{center}
+    \fbox{\rule{2cm}{0cm}\rule{0cm}{#1}figura\rule{2cm}{0cm}}
+  \end{center}
+}
+
+\def\Figmarg{\@ifnextchar[{\@Figmargnote}{\@Figmarg}}
+\def\@Figmargnote[#1]#2{\footnote{#1}}
+\def\@Figmarg#1{}
+
+\newcommand\AliaManus[2]{\csname AliaManus#1\endcsname{#2}}
+
+%>>>>>>>>>>>> \footnote in tabular >>>>>>>>>>>>>
+
+%\let\orgtabular\tabular
+%\let\orgendtabular\endtabular
+%\def\tabular{\setcounter{NoFootnoteFlag}{1}\orgtabular}
+%\def\endtabular{\orgendtabular\setcounter{NoFootnoteFlag}{0}%
+%\WriteFootnoteText}
+
+%<<<<<<<<<<<< fine \footnote in tabular <<<<<<<<<<<<<<<
+
+%<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+%definizione Rbracecases, Lbracecases, RLbracecases,
+%            Rcases, Lcases, Voidcases
+%<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+%\def\TforDo#1{%
+%  \ifx\ACAPO\YES\\\fi%
+%  \def\ACAPO{YES}%
+%  {#1}%
+%}%
+
+%\def\PrintCases#1{%
+%  \def\ACAPO{NO}%
+%  \@Tfor{#1}%
+%#1
+%}%
+
+\def\PrintNextCases#1{%
+  \ifx#1\NULL\else%
+    \PrintNextCase#1:||%
+  \fi%
+}
+
+\def\PrintNextCase#1#2:||{%
+  #1%
+  \ifx#2\NULL\else \\ \PrintNextCases{#2}\fi%
+}
+
+\def\PrintCases#1{%
+  \begin{tabular}{l}%
+    \PrintNextCases{#1{}}%
+  \end{tabular}%
+}
+
+\long\def\Rcases#1{\(\left\langle\PrintCases{#1}\right.\)}
+\long\def\Lcases#1{\(\left.\PrintCases{#1}\right\rangle\)}
+\long\def\RLcases#1{\(\left\langle\PrintCases{#1}\right\rangle\)}
+\long\def\Rbracecases#1{\(\left\{\PrintCases{#1}\right.\)}
+\long\def\Lbracecases#1{\(\left.\PrintCases{#1}\right\}\)}
+\long\def\RLbracecases#1{\(\left\{\PrintCases{#1}\right\}\)}
+\long\def\Voidcases#1{\PrintCases{#1}}
+
+%\long\def\Rbracecases{\@ifnextchar[{\@Rbracecasesnum}{\@Rbracecases}}
+%\def\@Rbracecasesnum[#1]#2{\@Rbracecases{#2}}
+%\def\@Rbracecases#1{%
+%\def\TforDo##1{\hbox{\mbox{##1}}}%
+%\setcounter{NoFootnoteFlag}{1}%
+%$\left\{\vcenter{\@Tfor{#1}}\right.$%
+%\setcounter{NoFootnoteFlag}{0}%
+%\WriteFootnoteText%
+%}
+%
+%\long\def\Lbracecases{\@ifnextchar[{\@Lbracecasesnum}{\@Lbracecases}}
+%\def\@Lbracecasesnum[#1]#2{\@Lbracecases{#2}}
+%\def\@Lbracecases#1{%
+%\def\TforDo##1{\hbox{\mbox{##1}}}%
+%\setcounter{NoFootnoteFlag}{1}%
+%$\left.\vcenter{\@Tfor{#1}}\right\}$%
+%\setcounter{NoFootnoteFlag}{0}%
+%\WriteFootnoteText%
+%}
+%
+%\long\def\RLbracecases{\@ifnextchar[{\@RLbracecasesnum}{\@RLbracecases}}
+%\def\@RLbracecasesnum[#1]#2{\@RLbracecases{#2}}
+%\def\@RLbracecases#1{%
+%\def\TforDo##1{\hbox{\mbox{##1}}}%
+%\setcounter{NoFootnoteFlag}{1}%
+%$\left\{\vcenter{\@Tfor{#1}}\right\}$%
+%\setcounter{NoFootnoteFlag}{0}%
+%\WriteFootnoteText%
+%}
+
+%\long\def\Rcases{\@ifnextchar[{\@Rcasesnum}{\@Rcases}}
+%\def\@Rcasesnum[#1]#2{\@Rcases{#2}}
+%\def\@Rcases#1{%
+%\def\TforDo##1{\hbox{\mbox{##1}}}%
+%\setcounter{NoFootnoteFlag}{1}%
+%$\left\langle\vcenter{\@Tfor{#1}}\right.$%
+%\setcounter{NoFootnoteFlag}{0}%
+%\WriteFootnoteText%
+%}
+
+%\long\def\Lcases{\@ifnextchar[{\@Lcasesnum}{\@Lcases}}
+%\def\@Lcasesnum[#1]#2{\@Lcases{#2}}
+%\def\@Lcases#1{%
+%\def\TforDo##1{\hbox{\mbox{##1}}}%
+%\setcounter{NoFootnoteFlag}{1}%
+%$\left.\vcenter{\@Tfor{#1}}\right\rangle$%
+%\setcounter{NoFootnoteFlag}{0}%
+%\WriteFootnoteText%
+%}
+
+%\long\def\RLcases{\@ifnextchar[{\@RLcasesnum}{\@RLcases}}
+%\def\@RLcasesnum[#1]#2{\@RLcases{#2}}
+%\def\@RLcases#1{%
+%\def\TforDo##1{\hbox{\mbox{##1}}}%
+%\setcounter{NoFootnoteFlag}{1}%
+%$\left\langle\vcenter{\@Tfor{#1}}\right\rangle$%
+%\setcounter{NoFootnoteFlag}{0}%
+%\WriteFootnoteText%
+%}
+
+%\long\def\Voidcases{\@ifnextchar[{\@Voidcasesnum}{\@Voidcases}}
+%\def\@Voidcasesnum[#1]#2{\@Voidcases{#2}}
+%\def\@Voidcases#1{%
+%\def\TforDo##1{\hbox{\mbox{##1}}}%
+%\setcounter{NoFootnoteFlag}{1}%
+%$\vcenter{\@Tfor{#1}}$%
+%\setcounter{NoFootnoteFlag}{0}%
+%\WriteFootnoteText%
+%}
+
+
+%>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+%fine definizione 
+%     Rbracecases, Lbracecases, RLbracecases, Rcases, Lcases, Voidcases
+%>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+
+%>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+% definizione del counter NumUnit
+%>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+\newcounter{NumUnit}
+\setcounter{NumUnit}{0}
+\newcounter{OriginalNumUnit}
+
+\def\Markup#1#2{%
+  \ifx\MARKINTXT\YES%
+    \textbf{[}#1#2\textbf{]}%
+  \fi%
+}
+\def\Opera#1{\Markup{op: }{#1}}
+\def\Libro#1{\Markup{lib: }{#1}}
+\def\Arg#1{\Markup{arg: }{#1}}
+\def\Prop#1{\Markup{prop: }{#1}}
+% Da amsgen.sty
+\long\def\new@ifnextchar#1#2#3{%
+  \let\reserved@d= #1%
+  \def\reserved@a{#2}\def\reserved@b{#3}%
+  \futurelet\@let@token\new@ifnch
+}
+\def\new@ifnch{%
+  \ifx\@let@token\reserved@d \let\reserved@b\reserved@a \fi
+  \reserved@b
+}
+\def\Unit{%
+  \refstepcounter{NumUnit}%
+  {\footnotesize\bf \the\value{NumUnit}~}%
+  \new@ifnextchar[% ]
+  \LBUnit
+  {\relax}
+}
+\def\LBUnit[#1]{%
+  \immediate\write\@auxout{%
+    \string\newlabel{UL@#1}{{unitlabel}{\theNumUnit}}%
+  }%
+}
+% \def\UN[#1]#2{%
+%   % \textnormal{\S{\bf\mauropageref{UL@#1}}}%
+%   \ref{#1_#2}
+% }
+\def\UN{%
+  \@ifnextchar[\@xUN\@UN
+}
+\def\@xUN[#1]#2{\ref{#1_#2}}
+\def\@UN#1{\ref{#1}}
+%\def\UNITS#1#2{%
+%  { \bf \unitref{UL@#1}-\unitref{UL@#2}}%
+%}
+\def\maurocite#1#2{#2}
+\def\SetOriginalCounter{\setcounter{OriginalNumUnit}%
+{\the\value{NumUnit}}}
+\def\ResumeOriginalCounter{\setcounter{NumUnit}%
+{\the\value{OriginalNumUnit}}}
+
+%>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+% fine definizione del counter NumUnit
+%>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+%>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+%definizini provvisorie di Marg, Tavola, Formula
+%>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+\def\Marg#1{\marginpar{Fig.{#1}}}
+\def\Tavola#1{\begin{center}\begin{large}[Tavola #1]\end{large}\end{center}}
+\def\Formula#1{\begin{center}\begin{large}[Formula #1]\end{large}\end{center}}
+%>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+%>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+%---comincia la definizione di \VV e \VB--------%
+
+\def\@ForSlash#1:=#2\do#3{\edef\@FortmpSlash{#2}\ifx\@FortmpSlash\@empty \else
+    \expandafter\@ForloopSlash#2/\@nil/\@nil\@@#1{#3}\fi}
+\def\@ForloopSlash#1/#2/#3\@@#4#5{\def#4{#1}\ifx #4\@nnil \else
+       #5\def#4{#2}\ifx #4\@nnil \else#5\@IforloopSlash #3\@@#4{#5}\fi\fi}
+\def\@IforloopSlash#1/#2\@@#3#4{\def#3{#1}\ifx #3\@nnil 
+       \let\@Slashnextwhile=\@fornoop \else
+      #4\relax\let\@Slashnextwhile=\@IforloopSlash\fi\@Slashnextwhile#2\@@#3{#4}}
+
+\newcounter{TEMP}
+\newcounter{FoliumFlag}
+\def\FootnoteFlag{NO}
+\def\FoliumString{}
+\newcounter{NumVariante}
+\def\One{}
+\def\Two{}
+\def\Three{}
+\def\Four{}
+\def\OneBis{}
+\def\TwoBis{}
+\def\ThreeBis{}
+\def\FourBis{}
+\def\NULL{}
+\def\AUCT{AUCTNO}
+\def\SUPP{SUPP}
+\def\EXPUNSI{EXPU}
+\def\INTEGR{INTE}
+\def\LACUNA{%
+  \ifx\LEZflag\NO{***}\fi%
+}
+\def\VLflag{NO}
+\def\YES{YES}
+\def\NO{NO}
+\def\nonote{nonoteflag}
+\def\nonotetest{\nonote}
+\def\CRUCES{CRUX}
+
+\def\AUCTSI{\def\AUCT{AUCT}}
+\def\AUCTNO{\def\AUCT{AUCTNO}}
+
+\def\DividereDuePunti#1:#2:#3:#4|{%
+  \ifx\TDEPTH\UNO%
+    \def\OneOne{#1}%
+    \def\TwoOne{#2}%
+    \def\ThreeOne{#3}%
+    \def\FourOne{#4}%
+  \else%
+    \def\OneBis{#1}%
+    \def\TwoBis{#2}%
+    \def\ThreeBis{#3}%
+    \def\FourBis{#4}%
+  \fi%
+}
+
+\newcounter{VVDEPTH}
+\setcounter{VVDEPTH}{0}
+\def\MultiVV{%
+  \@ifnextchar[{\MultiVVB}{\def\FLAG{NO}\MultiVVA}%
+}
+
+\def\ZERO{0}
+\def\UNO{1}
+\def\DUE{2}
+\def\TDEPTH{0}
+
+\def\MultiVVA#1{%
+  \ifx\TDEPTH\ZERO%
+    \def\TDEPTH{1}%
+  \else%
+    \def\TDEPTH{2}%
+  \fi%
+  \addtocounter{VVDEPTH}{1}%
+  \setcounter{NumVariante}{0}%
+%  \ifnum\theNoFootnoteFlag=1%
+%    \GetNoteVarianti{#1}%
+%  \fi%
+  \@tfor\Argument:=#1\do{%
+    \stepcounter{NumVariante}%
+    \PrintOneVariant{\Argument}%
+  }%
+  \def\FootnoteFlag{NO}%
+  \ifnum\theVVDEPTH=1%
+    \ifx\APPAINTXT\YES%
+      \textbf{]}%
+    \else%
+      \egroup%
+      \footnote{\unhbox\VARBOX}
+    \fi%
+  \else%
+    \ifx\TCFlag\YES\else{)}\fi%
+  \fi%
+  \ifnum\theFoliumFlag=1%
+    \Folium{\FoliumString}\setcounter{FoliumFlag}{0}%
+  \fi%
+  \addtocounter{VVDEPTH}{-1}%
+  \ifx\TDEPTH\DUE%
+    \def\TDEPTH{1}%
+  \else%
+    \def\TDEPTH{0}%
+  \fi%
+}
+
+\def\LONGA{longa}
+\def\DUPLEX{duplex}
+\def\FLUNIT{unit}
+
+\def\MultiVVB[#1]#2{%
+  \def\FLAG{#1}%
+  \def\VLflag{NO}%
+  \def\TRflag{NO}%
+  \def\UNflag{NO}%
+  \ifx\FLAG\LONGA\def\VLflag{YES}\def\FLAG{NO}\fi%
+  \ifx\FLAG\FLUNIT\def\UNflag{YES}\def\VLflag{YES}\def\FLAG{NO}\fi%
+  \ifx\FLAG\DUPLEX\def\TRflag{YES}\def\VLflag{YES}\def\FLAG{NO}\fi%
+  \MultiVVA{#2}%
+  \def\FLAG{NO}%
+  \def\VLflag{NO}%
+  \def\TRflag{NO}%
+  \def\UNflag{NO}%
+}
+
+\def\PrintOneVariant#1{%
+  \expandafter\DividereDuePunti#1::|%
+  \ifx\TDEPTH\UNO%
+    \PrintOneVariantDepth{\OneOne}{\TwoOne}{\ThreeOne}{\FourOne}%
+  \else%
+    \PrintOneVariantDepth{\OneBis}{\TwoBis}{\ThreeBis}{\FourBis}%
+  \fi%
+}
+
+%\def\PrintOneVariantDepth#1#2#3#4{
+%  \def\One{#1}%
+%  \def\Two{#2}%
+%  \def\Three{#3}%
+%  \def\Four{#4}%
+%  \ifx\VBFLAG\YES%
+%    \ifnum\theNumVariante=1%
+%      \ifx\Three\NULL\Two\else\Three\fi%
+%    \fi%
+%  \else%
+%    \ResetLezFlag%
+%    \Inizia%
+%    \def\PRINTVAR{YES}%
+%    \ifnum\theVVDEPTH>1%
+%      \ifnum\theNumVariante=1%
+%        \if\One*\else\def\PRINTVAR{NO}\fi%
+%      \fi%
+%      \ifx\TCFlag\YES\def\PRINTVAR{NO}\fi%
+%    \fi%
+%    \ifx\Four\NULL%
+%      \TwoField%
+%    \else%
+%      \ThreeField%
+%    \fi%
+%  \fi%
+%}
+
+\def\PrintOneVariantDepth#1#2#3#4{%
+    \ResetLezFlag%
+    \Inizia%
+    \def\PRINTVAR{YES}%
+    \ifnum\theVVDEPTH>1%
+      \ifnum\theNumVariante=1%
+        \if#1*\else\def\PRINTVAR{NO}\fi%
+      \fi%
+      \ifx\TCFlag\YES\def\PRINTVAR{NO}\fi%
+    \fi%
+    \ifx#3\NULL%
+      \PrintField{#1}{#2}{#2}%
+    \else%
+      \PrintField{#1}{#2}{#3}%
+    \fi%
+}
+
+\newbox\VARBOX
+\newcommand\varbox[1]{\setbox\VARBOX=\hbox{\vbox{#1}}}
+\def\PrintField#1#2#3{%
+  \ifx\nonotetest#2\addtocounter{NumVariante}{-1}%
+  \else%
+    \ifnum\theNumVariante=1%
+      \ifx\FLAG\NO%
+	\ifx\NMflag\NO%
+          \ifx\TCFlag\YES%
+            {#3}%
+          \else%
+            \ifx\UNflag\YES%
+            \else%
+              \def\TCFlag{YES}%
+              {#3}%
+              \def\TCFlag{NO}%
+            \fi%
+          \fi%
+	\fi%
+      \else%
+        \def\FLAG{NO}%
+      \fi%
+      \ifnum\theVVDEPTH=1%
+        \ifx\APPAINTXT\YES%
+          \textbf{[}%
+        \else%
+          \varbox\bgroup%
+        \fi%
+      \else%
+        \ifx\TCFlag\YES\else{ (}\fi%
+      \fi%
+      \def\FootnoteFlag{YES}%
+      \ifx\PRINTVAR\YES%
+        #2% SPECIFICHE DELLA NOTA
+        \Testimone{#1}%
+        \def\PRINTSEP{YES}%
+      \else%
+        \def\PRINTSEP{NO}%
+      \fi%
+    \else% VARIANTI SUCCESSIVE
+      \ifx\PRINTVAR\YES%
+        \ifx\PRINTSEP\YES%
+          \AltraVar% SPAZIATURA TRA VARIANTI
+        \fi%
+        \ifx\TRflag\YES% TRASPOSIZIONE (duplex)
+          {\slnot{post} }%
+        \fi%      
+        #2\Testimone{#1}%
+        \def\PRINTSEP{YES}%
+      \else%
+        \def\PRINTSEP{NO}%
+      \fi%
+    \fi%
+  \fi%
+}
+
+%\def\ThreeField{%
+%  \ifx\nonotetest\Two\addtocounter{NumVariante}{-1}%
+%  \else%
+%    \ifnum\theNumVariante=1%
+%      \ifx\FLAG\NO%
+%	\ifx\NMflag\NO%
+
+
+%          \ifx\TCFlag\YES%
+%            {\Three}%
+%          \else%
+%            \def\TCFlag{YES}%
+%            {\Three}%
+%            \def\TCFlag{NO}%
+%          \fi%
+%	\fi%
+%      \else%
+%        \def\FLAG{NO}%
+%      \fi%
+%      \ifnum\theVVDEPTH=1%
+%        \footnote\bgroup%
+%      \else%
+%        \ifx\TCFlag\YES\else{ (}\fi%
+%      \fi%
+%      \def\FootnoteFlag{YES}%
+%      \ifx\PRINTVAR\YES%
+%        \Two% SPECIFICHE DELLA NOTA
+%        \Testimone{\One}%
+%        \def\PRINTSEP{YES}%
+%      \else%
+%        \def\PRINTSEP{NO}%
+%      \fi%
+%    \else% VARIANTI SUCCESSIVE
+%    %\fi%
+%    %\ifnum\theNumVariante>1%
+%      \ifx\PRINTVAR\YES%
+%        \ifx\PRINTSEP\YES%
+%          \AltraVar% SPAZIATURA TRA VARIANTI
+%        \fi%
+%        \ifx\TRflag\YES% TRASPOSIZIONE (duplex)
+%          {\slnot{post} }%
+%        \fi%      
+%        \Two\Testimone{\One}%
+%        \def\PRINTSEP{YES}%
+%      \else%
+%        \def\PRINTSEP{NO}%
+%      \fi%
+%    \fi%
+%  \fi%
+%}
+%
+%\def\TwoField{%
+%  \ifx\nonotetest\Two\addtocounter{NumVariante}{-1}%
+%  \else%
+%    \ifnum\theNumVariante=1% PRIMA VARIANTE
+%      \relax%
+%      \ifx\FLAG\NO%
+%        \ifx\TCFlag\YES%
+%          {\Two}%
+%        \else%
+%          \def\TCFlag{YES}%
+%          {\Two}%
+%          \def\TCFlag{NO}%
+%        \fi%
+%      \else%
+%        \def\FLAG{NO}
+%      \fi%
+%      \ifnum\theVVDEPTH=1%
+%        \footnote\bgroup%
+%      \else%
+%        \ifx\TCFlag\YES\else{ (}\fi%
+%      \fi%
+%      \def\FootnoteFlag{YES}%
+%      \ifx\PRINTVAR\YES%
+%        \Two% SPECIFICHE DELLA NOTA
+%        \Testimone{\One}%
+%        \def\PRINTSEP{YES}%
+%      \else%
+%        \def\PRINTSEP{NO}%
+%      \fi%
+%    \fi%
+%  \fi%
+%  \ifnum\theNumVariante>1%
+%    \ifx\PRINTVAR\YES%
+%      \ifx\PRINTSEP\YES%
+%        \AltraVar%
+%      \fi%
+%      \Two\Testimone{\One}%
+%      \def\PRINTSEP{YES}%
+%    \else%
+%      \def\PRINTSEP{NO}%
+%    \fi%
+%  \fi%
+%}
+
+% >>>>>>>> macro per Sigla dei testimoni >>>>>>>>>>
+
+%\newcounter{NumberTest}
+%\setcounter{NumberTest}{0}
+%\newcounter{SaveNTest}
+
+\def\GetTestOne{%
+  \ifx\TDEPTH\UNO%
+    \TestOne%
+  \else%
+    \TestOneBis%
+  \fi
+}
+
+\def\GetTestTwo{%
+  \ifx\TDEPTH\UNO%
+    \TestTwo%
+  \else%
+    \TestTwoBis%
+  \fi
+}
+
+\def\GetTestThree{%
+  \ifx\TDEPTH\UNO%
+    \TestThree%
+  \else%
+    \TestThreeBis%
+  \fi
+}
+
+\def\Testimone#1{%
+  \@ForSlash\Sigla:=#1\do{%
+    \@ScrivereTestimone{\Sigla}%
+  }%
+}
+
+\def\TestOne{unk1}%
+\def\TestTwo{unk2}%
+\def\TestThree{unk3}%
+\def\TestOneBis{bis1}%
+\def\TestTwoBis{bis2}%
+\def\TestThreeBis{bis3}%
+
+\def\DivTestTwo#1#2:||{%
+  \ifx\TDEPTH\UNO%
+    \def\TestOne{#1}%
+    \def\TestTwo{#2}%
+    \def\TestThree{}%
+  \else%
+    \def\TestOneBis{#1}%
+    \def\TestTwoBis{#2}%
+    \def\TestThreeBis{}%
+  \fi%
+}
+
+\def\DivTestThree#1#2#3:||{%
+  \ifx\TDEPTH\UNO%
+    \def\TestOne{#1}%
+    \def\TestTwo{#2}%
+    \def\TestThree{#3}%
+  \else%
+    \def\TestOneBis{#1}%
+    \def\TestTwoBis{#2}%
+    \def\TestThreeBis{#3}%
+  \fi%
+}
+
+\def\DivideTestimone#1{%
+  \expandafter\DivTestTwo#1:||%
+  \ifx\TDEPTH\UNO%
+    \ifx\TestTwo\NULL\else%
+      \expandafter\DivTestThree#1:||%
+    \fi%
+  \else%
+    \ifx\TestTwoBis\NULL\else%
+      \expandafter\DivTestThree#1:||%
+    \fi%
+  \fi%
+}
+
+\def\@ScrivereTestimone#1{%
+  \expandafter\DivideTestimone{#1}%
+  \if\GetTestOne*% LA LEZIONE NON E` DOVUTA AD UN TESTIMONE
+    \ifx\FLinizio\YES% NON CI SONO COMMENTI IN NOTA
+      \ifnum\theNumVariante=1% E` LA PRIMA VARIANTE
+        {\slnot{:}}%
+      \fi%
+    \fi%
+  \else%
+    \ %
+    \ifx\TDEPTH\UNO%
+      \ifx\TestTwo\NULL%
+        \slnot{\TestOne}%
+      \else%
+        \ifx\TestThree\NULL%
+          \slnot{\TestOne}%
+          \if\TestTwo+\else{$^{\slnot{\tiny\TestTwo}}$}\fi%
+        \else%
+          \slnot{#1}%
+        \fi%
+      \fi%
+    \else%
+      \ifx\TestTwoBis\NULL%
+        \slnot{\TestOneBis}%
+      \else%
+        \ifx\TestThreeBis\NULL%
+          \slnot{\TestOneBis}%
+          \if\TestTwoBis+\else{$^{\slnot{\tiny\TestTwoBis}}$}\fi%
+        \else%
+          \slnot{#1}%
+        \fi%
+      \fi%
+    \fi%
+  \fi%
+}
+
+%\def\SIGone#1{\csname#1@SIG\endcsname}
+%\def\SIGone#1{#1}
+%
+%\def\a@SIG{\a@GG}
+%\def\b@SIG{\b@GG}
+%\def\g@SIG{\g@GG}
+%\def\d@SIG{\d@GG}
+%\def\e@SIG{\e@GG}
+%\def\z@SIG{\z@GG}
+%\def\h@SIG{\h@GG}
+%\def\q@SIG{\q@GG}
+%\def\i@SIG{\i@GG}
+%\def\k@SIG{\k@GG}
+%\def\l@SIG{\l@GG}
+%\def\m@SIG{\m@GG}
+%\def\n@SIG{\n@GG}
+%\def\c@SIG{\c@GG}
+%\def\o@SIG{\o@GG}
+%\def\p@SIG{\p@GG}
+%\def\r@SIG{\r@GG}
+%\def\s@SIG{\s@GG}
+%\def\t@SIG{\t@GG}
+%\def\u@SIG{\u@GG}
+%\def\f@SIG{\f@GG}
+%\def\x@SIG{\x@GG}
+%\def\y@SIG{\y@GG}
+%\def\w@SIG{\w@GG}
+%
+%\def\A@SIG{{\slnot A}}
+%\def\B@SIG{{\slnot B}}
+%\def\C@SIG{{\slnot C}}
+%\def\D@SIG{{\slnot D}}
+%\def\E@SIG{{\slnot E}}
+%\def\F@SIG{{\slnot F}}
+%\def\G@SIG{{\slnot G}}
+%\def\H@SIG{{\slnot H}}
+%\def\I@SIG{{\slnot I}}
+%\def\J@SIG{{\slnot J}}
+%\def\K@SIG{{\slnot K}}
+%\def\L@SIG{{\slnot L}}
+%\def\M@SIG{{\slnot M}}
+%\def\N@SIG{{\slnot N}}
+%\def\O@SIG{{\slnot O}}
+%\def\P@SIG{{\slnot P}}
+%\def\Q@SIG{{\slnot Q}}
+%\def\R@SIG{{\slnot R}}
+%\def\S@SIG{{\slnot S}}
+%\def\T@SIG{{\slnot T}}
+%\def\U@SIG{{\slnot U}}
+%\def\V@SIG{{\slnot V}}
+%\def\W@SIG{{\slnot W}}
+%\def\X@SIG{{\slnot X}}
+%\def\Y@SIG{{\slnot Y}}
+%\def\Z@SIG{{\slnot Z}}
+
+% <<<<<<<< FINE macros per Sigla dei testimoni <<<<<<<<<
+
+
+%>>>>>>>>>>>>>>definizione \GG >>>>>>>>>>>>>>>
+\@ifpackageloaded{ibycus4}{\def\GG#1{{\greek#1}}}{\def\GG#1{{\greektext#1}}}
+\def\maurogreek{\foreignlanguage{greek}}
+
+%\newcounter{GGend}%
+%\def\DivGG#1#2:||{\def\AnteGG{#1}\def\PostGG{#2}%
+%\ifx\PostGG\NULL%
+%\setcounter{GGend}{0}%
+%\else%
+%\setcounter{GGend}{1}%
+%\fi%
+%}
+%
+%\def\GG#1{%
+%\def\ArgGG{#1}%
+%\loop%
+%\expandafter\DivGG\ArgGG:||%
+%\GGone{\AnteGG}%
+%\ifnum\theGGend>0%
+%\edef\ArgGG{\PostGG}%
+%\repeat%
+%}
+%
+%\def\GGone#1{\csname #1@GG\endcsname}
+%
+%\def\a@GG{$\alpha$}
+%\def\b@GG{$\beta$}
+%\def\g@GG{$\gamma$}
+%\def\d@GG{$\delta$}
+%\def\e@GG{$\epsilon$}
+%\def\z@GG{$\zeta$}
+%\def\h@GG{$\eta$}
+%\def\q@GG{$\theta$}
+%\def\i@GG{$\iota$}
+%\def\k@GG{$\kappa$}
+%\def\l@GG{$\lambda$}
+%\def\m@GG{$\mu$}
+%\def\n@GG{$\nu$}
+%\def\c@GG{$\xi$}
+%\def\o@GG{o}
+%\def\p@GG{$\pi$}
+%\def\r@GG{$\rho$}
+%\def\s@GG{$\sigma$}
+%\def\t@GG{$\tau$}
+%\def\u@GG{$\upsilon$}
+%\def\f@GG{$\phi$}
+%\def\x@GG{$\chi$}
+%\def\y@GG{$\psi$}
+%\def\w@GG{$\omega$}
+%
+%\def\A@GG{A}
+%\def\B@GG{B}
+%\def\G@GG{$\Gamma$}
+%\def\D@GG{$\Delta$}
+%\def\E@GG{E}
+%\def\Z@GG{Z}
+%\def\H@GG{H}
+%\def\Q@GG{$\Theta$}
+%\def\I@GG{I}
+%\def\K@GG{K}
+%\def\L@GG{$\Lambda$}
+%\def\M@GG{M}
+%\def\N@GG{N}
+%\def\C@GG{$\Xi$}
+%\def\O@GG{O}
+%\def\P@GG{$\Pi$}
+%\def\R@GG{P}
+%\def\S@GG{$\Sigma$}
+%\def\T@GG{T}
+%\def\U@GG{$\Upsilon$}
+%\def\F@GG{$\Phi$}
+%\def\X@GG{X}
+%\def\Y@GG{$\Psi$}
+%\def\W@GG{$\Omega$}
+
+
+%<<<<<<<<<<<<<<fine definizione \GG <<<<<<<<<<<<
+
+%\def\VV{\@ifnextchar[{\@VL}{\@VV}}
+\def\BeginNM{\Markup{BeginNM}{}}
+\def\EndNM{\Markup{EndNM}{}}
+\def\NOTAMARG{\def\VLflag{NO}\def\NMflag{YES}\MultiVV}
+\def\VV{\def\VLflag{NO}\def\NMflag{NO}\MultiVV}
+\def\VL{\def\VLflag{YES}\def\NMflag{NO}\MultiVV}
+
+\def\VB{\VBMark}
+
+\def\VBMark#1{%
+  \Markup{VB}{}%
+  \VBNoMark{#1}%
+}
+
+\def\VBNoMark#1{\expban#1||}
+
+\def\expban#1#2||{%
+  \DDPban#1::||%
+}
+
+\def\DDPban#1:#2:#3:#4||{%
+  \if#4:#3\else#2\fi%
+}
+
+\def\Sub{\textsubscript}
+\def\Sup{\textsuperscript}
+\def\SupSub{\supersubscript}
+\def\supersubscript#1#2{\hbox{$^{\rm #1}_{\rm #2}$}}
+\def\textsubscript#1{\hbox{$_{\rm #1}$}}
+
+\def\Math{\Matematica}
+\def\Matematica#1{\hbox{${#1}$}}
+
+\def\LB#1#2{%
+  #2%
+  \def\VV{\VBNoMark}%
+  \def\VB{\VBNoMark}%
+  \def\Sup{\string\Sup}%
+  \def\Sub{\string\Sub}%
+  \def\SupSub{\string\SupSub}%
+  \def\Math{\string\Math}%
+  \immediate\write\@auxout{%
+    \string\newlabel{CR@#1}{{#2}{\theNumUnit}}%
+  }%
+  \def\VV{\def\VLflag{NO}\def\NMflag{NO}\MultiVV}%
+  \def\VB{\VBMark}%
+  \def\Sup{\textsuperscript}%
+  \def\Sub{\textsubscript}%
+  \def\SupSub{\supersubscript}%
+  \def\Math{\Matematica}%
+}
+
+\@ifpackageloaded{babel}{%
+  \PackageError{mauro}{Package babel in uso}{%
+    Per utilizzare il package mauro bisogna che il package babel\MessageBreak
+    non sia ancora stato caricato.\MessageBreak
+    Caricare il package babel dopo il package mauro.\MessageBreak
+    Si consiglia di terminare la compilazione premendo ``x''.}
+}{}
+
+\let\mauropageref\pageref
+\newcounter{LBRef}
+% \def\SetLBRef#1{\setcounter{LBRef}{\mauropageref{CR@#1}}}
+\def\SetLBRef#1{\setcounterpageref{LBRef}{CR@#1}}
+
+\def\CR#1{%
+  \Inizia%
+  \Lezione%
+  \ifx\TRflag\NO%
+    {$\sim$}%
+  \else%
+    \ifnum\theNumVariante=1%
+      {$\sim$}%
+    \fi%
+  \fi%
+  \@ifundefined{r@CR@#1}{ ??}{%
+    \SetLBRef{#1}%
+    \ifnum\theLBRef=\theNumUnit\else%
+      { \bf \mauropageref{CR@#1}}%
+    \fi%
+  }%
+  { \ref{CR@#1}}%
+}
+
+\def\Segue{\def\FLinizio{NO}}
+\def\Inizia{\def\FLinizio{YES}}
+
+%----------------definizione \VB -----------------
+
+%\def\MultiVB#1{%
+%\setcounter{NumVariante}{0}%
+%\@tfor\Argument:=#1\do{%
+%\stepcounter{NumVariante}%
+%\ifnum\theNumVariante=1\YB{\Argument}\fi%
+%}%
+%}
+
+%\def\MultiVB#1{%
+%  \Divide{#1}%
+%  \YB{\One}%
+%}
+%
+%\def\YB#1{%
+%  \expandafter\DividereDuePunti#1::|%
+%  \ifx\Four\NULL%
+%    \Two%
+%  \else%
+%    \Three%
+%  \fi%
+%}
+%-----------fine definizione \VB -----------------
+
+% PER GESTIRE LA PRESENZA NEL SECONDO SOTTOCAMPO DI PIU` MACRO CHE
+% RIPORTANO LA LEZIONE (LA PRIMA LA RIPORTA VERAMENTE, MENTRE LE ALTRE
+% LA SALTANO
+\newcounter{LezFlag}
+\def\LEZflag{NO}
+\def\Lezione{%
+  \def\LEZflag{YES}%
+  \ifnum\theLezFlag=0%
+    \ifx\TDEPTH\UNO%
+      {\ThreeOne}%
+      \ifx\ThreeOne\NULL%
+      \else%
+        { }%
+      \fi%
+    \else%
+      {\ThreeBis}%
+      \ifx\ThreeBis\NULL%
+      \else%
+        { }%
+      \fi%
+    \fi%
+    \setcounter{LezFlag}{1}%
+  \else%
+    { }%
+  \fi%
+  \def\LEZflag{NO}%
+}
+\def\ResetLezFlag{\setcounter{LezFlag}{0}}
+
+%\def\CORR#1{{\slnot{#1}}}
+\def\REP[#1]{{\Lezione}{\slnot{%
+  \ifx1#1{priore}\else{altero}\fi%
+  \ loco}}}
+\def\BIS{{\Lezione}{\slnot{bis}}}
+\def\INTERL{{\Lezione}{\slnot{supra lineam}}}
+\def\MARG{{\Lezione}{\slnot{in marg.}}}
+\def\MARGSIGN{{\Lezione}\slnot{signo posito in marg.}}
+\def\ANTEDEL#1{\slnot{ante} {\Lezione}\slnot{del.} #1}
+\def\POSTDEL#1{\slnot{post} {\Lezione}\slnot{del.} #1}
+%\def\ANTEDELNL#1{\slnot{ante} {\Lezione}\slnot{del. #1}}
+%\def\POSTDELNL#1{\slnot{post} {\Lezione}\slnot{del. #1}}
+%\def\NOTAMARG#1{{#1} \slnot{adnotavit}}
+\def\NL{{\slnot{non legitur}}}
+\def\OM{{\slnot{om.}}}
+\def\OMLAC{{\slnot{spatio relicto om.}}}
+\def\EX#1{{\Lezione}\slnot{ex} #1}
+\def\PC{{\Lezione}\slnot{post corr.}}
+\def\NC#1{\dag #1\dag}
+%\def\LAC#1{{\slnot{#1}}}
+%\def\TR#1{%
+%  \ifnum\theLezFlag=1%
+%    { }%
+%  \fi%
+%  {\slnot{#1}}%
+%  \Segue%
+%}
+
+\def\PL#1{{\slnot{#1}}}
+\def\DES#1{{\Lezione}{\slnot{#1}}\Segue}
+\def\ED#1{{\Lezione}{\slnot{#1}}\Segue}
+
+
+\def\Adnotatio#1{%
+  \ifx\COMMINTXT\YES%
+    \textbf{[}#1\textbf{]}%
+    \typeout{TESTO}
+  \else%
+    \adnnote{#1}%
+    \typeout{FINALE}
+  \fi%
+}
+\def\theadnnote{[\arabic{adnnote}]}
+\def\Annotazioni{\newpage%
+             \begingroup%
+             \parindent 0pt%
+             \parskip 2ex%
+             \def\anotesize{\normalsize}%
+             \theadnnotes%
+             \endgroup}
+
+\long\def\Comm#1{%
+  \ifx\COMMINTXT\YES%
+    \textbf{[}#1\textbf{]}%
+  \else%
+    \endnote{#1}%
+  \fi%
+}
+\AtBeginDocument{\def\theendnote{[\ensuremath{\bullet}\arabic{endnote}]}}
+\def\Commenti{\newpage%
+             \begingroup%
+             \parindent 0pt%
+             \parskip 2ex%
+             \def\enotesize{\normalsize}%
+             \theendnotes%
+             \endgroup}
+
+\def\FoliumInTesto{\let\Folium\@FoliumInTesto}%
+\def\FoliumInMargine{\let\Folium\@FoliumInMargine}%
+\def\Folium#1{\relax}%
+
+\def\@FoliumInTesto#1{%
+  \ifx\FootnoteFlag\NO%
+    [Fol.\ #1]%
+  \else%
+    \setcounter{FoliumFlag}{1}%
+    \gdef\FoliumString{#1}%
+  \fi%
+}%
+
+\def\@FoliumInMargine#1{%
+  \ifx\FootnoteFlag\NO%
+    $|$\marginpar{[#1]}%
+  \else%
+    \ifnum\theNumVariante>1%
+      \setcounter{FoliumFlag}{1}%
+      \gdef\FoliumString{#1}%
+    \fi%
+  \fi%
+}%
+
+\def\note{\@ifnextchar[{\@notetesto}{\@note}}
+
+\def\@notetesto[#1]#2{#1\def\FootnoteFlag{YES}\@newnote{\ #2}%
+\def\FootnoteFlag{NO}%
+\ifnum\theFoliumFlag=1%
+\Folium{\FoliumString}\setcounter{FoliumFlag}{0}\fi%
+}
+\def\@note#1{\def\FootnoteFlag{YES}\@newnote{\ #1}%
+\def\FootnoteFlag{NO}%
+\ifnum\theFoliumFlag=1%
+\Folium{\FoliumString}\setcounter{FoliumFlag}{0}\fi%
+}
+
+%------fine definizione delle macro ---------------
+%---------- \Comm, \Folium, \note------
+
+
+%-----------definizione delle macro \Incipit, \Explicit ----
+
+\def\Incipit{\@ifnextchar[{\@IncipitConNota}{\@Incipit}}
+\def\@Incipit{\relax}
+\def\@IncipitConNota[#1]#2{\footnote{#1}}
+\def\Explicit{\@ifnextchar[{\@ExplicitConNota}{\@Explicit}}
+\def\@Explicit{\relax}
+\def\@ExplicitConNota[#1]#2{\footnote{#1}}
+%------fine definizione delle macro \Incipit, \Explicit ----
+
+
+%----------- definizione macros per note in "cases" -------
+
+\newcounter{NoFootnoteFlag}
+\newcounter{FootnoteInStock}
+\newcounter{FootnoteNow}
+
+\def\@newnote#1{%
+\ifnum\theNoFootnoteFlag=0%
+\footnote{#1}
+\else
+\footnotemark
+\AddFootnoteInStock{#1}
+\fi%
+}
+
+
+\def\NoteType{note}
+\def\VVType{VV}
+
+%\def\WriteFootnoteText{%
+%\setcounter{FootnoteNow}{0}%
+%\ifnum\theFootnoteInStock>0%
+%\addtocounter{footnote}{-\theFootnoteInStock}%
+%\@whilenum\value{FootnoteNow}<\theFootnoteInStock\do{%
+%\addtocounter{FootnoteNow}{1}%
+%\addtocounter{footnote}{1}%
+%\ifnum\theFootnoteNow=1\def\TmpFootText{\FootnoteContentOne}%
+%\edef\TmpFootType{\FootnoteContentTypeOne}\fi%
+%\ifnum\theFootnoteNow=2\def\TmpFootText{\FootnoteContentTwo}%
+%\edef\TmpFootType{\FootnoteContentTypeTwo}\fi%
+%\ifnum\theFootnoteNow=3\def\TmpFootText{\FootnoteContentThree}%
+%\edef\TmpFootType{\FootnoteContentTypeThree}\fi%
+%\ifnum\theFootnoteNow=4\def\TmpFootText{\FootnoteContentFour}%
+%\edef\TmpFootType{\FootnoteContentTypeFour}\fi%
+%\ifnum\theFootnoteNow=5\def\TmpFootText{\FootnoteContentFive}%
+%\edef\TmpFootType{\FootnoteContentTypeFive}\fi%
+%\ifnum\theFootnoteNow=6\def\TmpFootText{\FootnoteContentSix}%
+%\edef\TmpFootType{\FootnoteContentTypeSix}\fi%
+%
+%\ifx\TmpFootType\NoteType%
+%\footnotetext{\TmpFootText}%
+%\else%
+%\WriteFVVC%
+%\fi%
+%}
+%\setcounter{FootnoteInStock}{0}%
+%\fi%
+%\ClearFVVC
+%}
+
+%------ fine definizione macros per note in "cases" -------
+
+
+%\def\AddFootnoteInStock#1{%
+%\addtocounter{FootnoteInStock}{1}%
+%\ifnum\theFootnoteInStock=1\gdef\FootnoteContentOne{#1}%
+%\gdef\FootnoteContentTypeOne{\NoteType}\fi%
+%\ifnum\theFootnoteInStock=2\gdef\FootnoteContentTwo{#1}%
+%\gdef\FootnoteContentTypeTwo{\NoteType}\fi%
+%\ifnum\theFootnoteInStock=3\gdef\FootnoteContentThree{#1}%
+%\gdef\FootnoteContentTypeThree{\NoteType}\fi%
+%\ifnum\theFootnoteInStock=4\gdef\FootnoteContentFour{#1}%
+%\gdef\FootnoteContentTypeFour{\NoteType}\fi%
+%\ifnum\theFootnoteInStock=5\gdef\FootnoteContentFive{#1}%
+%\gdef\FootnoteContentTypeFive{\NoteType}\fi%
+%\ifnum\theFootnoteInStock=6\gdef\FootnoteContentSix{#1}%
+%\gdef\FootnoteContentTypeSix{\NoteType}\fi%
+%}
+
+%\gdef\ClearFVVC{%
+%\gdef\FVVCOneOne{}%
+%\gdef\FVVCOneTwo{}%
+%\gdef\FVVCOneThree{}%
+%\gdef\FVVCOneFour{}%
+%\gdef\FVVCOneFive{}%
+%\gdef\FVVCOneSix{}%
+%\gdef\FVVCOneSeven{}%
+%\gdef\FVVCOneEight{}%
+%\gdef\FVVCTwoOne{}%
+%\gdef\FVVCTwoTwo{}%
+%\gdef\FVVCTwoThree{}%
+%\gdef\FVVCTwoFour{}%
+%\gdef\FVVCTwoFive{}%
+%\gdef\FVVCTwoSix{}%
+%\gdef\FVVCTwoSeven{}%
+%\gdef\FVVCTwoEight{}%
+%\gdef\FVVCThreeOne{}%
+%\gdef\FVVCThreeTwo{}%
+%\gdef\FVVCThreeThree{}%
+%\gdef\FVVCThreeFour{}%
+%\gdef\FVVCThreeFive{}%
+%\gdef\FVVCThreeSix{}%
+%\gdef\FVVCThreeSeven{}%
+%\gdef\FVVCThreeEight{}%
+%\gdef\FVVCFourOne{}%
+%\gdef\FVVCFourTwo{}%
+%\gdef\FVVCFourThree{}%
+%\gdef\FVVCFourFour{}%
+%\gdef\FVVCFourFive{}%
+%\gdef\FVVCFourSix{}%
+%\gdef\FVVCFourSeven{}%
+%\gdef\FVVCFourEight{}%
+%\gdef\FVVCFiveOne{}%
+%\gdef\FVVCFiveTwo{}%
+%\gdef\FVVCFiveThree{}%
+%\gdef\FVVCFiveFour{}%
+%\gdef\FVVCFiveFive{}%
+%\gdef\FVVCFiveSix{}%
+%\gdef\FVVCFiveSeven{}%
+%\gdef\FVVCFiveEight{}%
+%\gdef\FVVCSixOne{}%
+%\gdef\FVVCSixTwo{}%
+%\gdef\FVVCSixThree{}%
+%\gdef\FVVCSixFour{}%
+%\gdef\FVVCSixFive{}%
+%\gdef\FVVCSixSix{}%
+%\gdef\FVVCSixSeven{}%
+%\gdef\FVVCSixEight{}%
+
+%}
+%\ClearFVVC
+
+%\def\WriteFVVC{%
+%\setcounter{NumVariante}{0}
+%\footnotetext{%
+%\ifnum\theFootnoteNow=1%
+%\xdef\FLAG{\FootnoteFragTypeOne}%
+%\ifx\FVVCOneOne\NULL\else\YYnote{\FVVCOneOne}\fi%
+%\ifx\FVVCOneTwo\NULL\else\YYnote{\FVVCOneTwo}\fi%
+%\ifx\FVVCOneThree\NULL\else\YYnote{\FVVCOneThree}\fi%
+%\ifx\FVVCOneFour\NULL\else\YYnote{\FVVCOneFour}\fi%
+%\ifx\FVVCOneFive\NULL\else\YYnote{\FVVCOneFive}\fi%
+%\ifx\FVVCOneSix\NULL\else\YYnote{\FVVCOneSix}\fi%
+%\ifx\FVVCOneSeven\NULL\else\YYnote{\FVVCOneSeven}\fi%
+%\ifx\FVVCOneEight\NULL\else\YYnote{\FVVCOneEight}\fi%
+%\fi%
+%\ifnum\theFootnoteNow=2%
+%\xdef\FLAG{\FootnoteFragTypeTwo}%
+%\ifx\FVVCTwoOne\NULL\else\YYnote{\FVVCTwoOne}\fi%
+%\ifx\FVVCTwoTwo\NULL\else\YYnote{\FVVCTwoTwo}\fi%
+%\ifx\FVVCTwoThree\NULL\else\YYnote{\FVVCTwoThree}\fi%
+%\ifx\FVVCTwoFour\NULL\else\YYnote{\FVVCTwoFour}\fi%
+%\ifx\FVVCTwoFive\NULL\else\YYnote{\FVVCTwoFive}\fi%
+%\ifx\FVVCTwoSix\NULL\else\YYnote{\FVVCTwoSix}\fi%
+%\ifx\FVVCTwoSeven\NULL\else\YYnote{\FVVCTwoSeven}\fi%
+%\ifx\FVVCTwoEight\NULL\else\YYnote{\FVVCTwoEight}\fi%
+%\fi%
+%\ifnum\theFootnoteNow=3%
+%\xdef\FLAG{\FootnoteFragTypeThree}%
+%\ifx\FVVCThreeOne\NULL\else\YYnote{\FVVCThreeOne}\fi%
+%\ifx\FVVCThreeTwo\NULL\else\YYnote{\FVVCThreeTwo}\fi%
+%\ifx\FVVCThreeThree\NULL\else\YYnote{\FVVCThreeThree}\fi%
+%\ifx\FVVCThreeFour\NULL\else\YYnote{\FVVCThreeFour}\fi%
+%\ifx\FVVCThreeFive\NULL\else\YYnote{\FVVCThreeFive}\fi%
+%\ifx\FVVCThreeSix\NULL\else\YYnote{\FVVCThreeSix}\fi%
+%\ifx\FVVCThreeSeven\NULL\else\YYnote{\FVVCThreeSeven}\fi%
+%\ifx\FVVCThreeEight\NULL\else\YYnote{\FVVCThreeEight}\fi%
+%\fi%
+%\ifnum\theFootnoteNow=4%
+%\xdef\FLAG{\FootnoteFragTypeFour}%
+%\ifx\FVVCFourOne\NULL\else\YYnote{\FVVCFourOne}\fi%
+%\ifx\FVVCFourTwo\NULL\else\YYnote{\FVVCFourTwo}\fi%
+%\ifx\FVVCFourThree\NULL\else\YYnote{\FVVCFourThree}\fi%
+%\ifx\FVVCFourFour\NULL\else\YYnote{\FVVCFourFour}\fi%
+%\ifx\FVVCFourFive\NULL\else\YYnote{\FVVCFourFive}\fi%
+%\ifx\FVVCFourSix\NULL\else\YYnote{\FVVCFourSix}\fi%
+%\ifx\FVVCFourSeven\NULL\else\YYnote{\FVVCFourSeven}\fi%
+%\ifx\FVVCFourEight\NULL\else\YYnote{\FVVCFourEight}\fi%
+%\fi%
+%\ifnum\theFootnoteNow=5%
+%\xdef\FLAG{\FootnoteFragTypeFive}%
+%\ifx\FVVCFiveOne\NULL\else\YYnote{\FVVCFiveOne}\fi%
+%\ifx\FVVCFiveTwo\NULL\else\YYnote{\FVVCFiveTwo}\fi%
+%\ifx\FVVCFiveThree\NULL\else\YYnote{\FVVCFiveThree}\fi%
+%\ifx\FVVCFiveFour\NULL\else\YYnote{\FVVCFiveFour}\fi%
+%\ifx\FVVCFiveFive\NULL\else\YYnote{\FVVCFiveFive}\fi%
+%\ifx\FVVCFiveSix\NULL\else\YYnote{\FVVCFiveSix}\fi%
+%\ifx\FVVCFiveSeven\NULL\else\YYnote{\FVVCFiveSeven}\fi%
+%\ifx\FVVCFiveEight\NULL\else\YYnote{\FVVCFiveEight}\fi%
+%\fi%
+%\ifnum\theFootnoteNow=6%
+%\xdef\FLAG{\FootnoteFragTypeSix}%
+%\ifx\FVVCSixOne\NULL\else\YYnote{\FVVCSixOne}\fi%
+%\ifx\FVVCSixTwo\NULL\else\YYnote{\FVVCSixTwo}\fi%
+%\ifx\FVVCSixThree\NULL\else\YYnote{\FVVCSixThree}\fi%
+%\ifx\FVVCSixFour\NULL\else\YYnote{\FVVCSixFour}\fi%
+%\ifx\FVVCSixFive\NULL\else\YYnote{\FVVCSixFive}\fi%
+%\ifx\FVVCSixSix\NULL\else\YYnote{\FVVCSixSix}\fi%
+%\ifx\FVVCSixSeven\NULL\else\YYnote{\FVVCSixSeven}\fi%
+%\ifx\FVVCSixEight\NULL\else\YYnote{\FVVCSixEight}\fi%
+%\fi%
+%}%
+%}
+
+
+
+
+%\def\ThreeFieldFoot{}
+
+%\newcounter{TMP}
+
+\def\GetNoteVarianti#1{%
+  \addtocounter{FootnoteInStock}{1}%
+  \setcounter{TMP}{0}%
+  \@TforVV{#1}%
+}
+%
+%\def\TforVVPrevious{\@empty}%
+%\def\@TforVV#1{%
+%\def\@TMPSTRVV{#1}\ifx\@TMPSTRVV\@empty\else\TMPVV#1|||\fi}%
+%\def\TMPVV#1#2|||{%
+%\def\TforVVNow{#1#2}\ifx\TforVVNow\TforVVPrevious\TforVVDo{#1#2}%
+%\def\TforVVPrevious{\@empty}%
+%\else%
+%\TforVVDo{#1}\def\TforVVPrevious{#2}\@TforVV{#2}\fi}
+%
+%\def\TforVVDo#1{%
+%\stepcounter{TMP}%
+%\ifnum\theFootnoteInStock=1{%
+%\xdef\FootnoteFragTypeOne{\FLAG}%
+%\gdef\FootnoteContentTypeOne{\VVType}%
+%\ifnum\theTMP=1\gdef\FVVCOneOne{#1}\fi%
+%\ifnum\theTMP=2\gdef\FVVCOneTwo{#1}\fi%
+%\ifnum\theTMP=3\gdef\FVVCOneThree{#1}\fi%
+%\ifnum\theTMP=4\gdef\FVVCOneFour{#1}\fi%
+%\ifnum\theTMP=5\gdef\FVVCOneFive{#1}\fi%
+%\ifnum\theTMP=6\gdef\FVVCOneSix{#1}\fi%
+%\ifnum\theTMP=7\gdef\FVVCOneSeven{#1}\fi%
+%\ifnum\theTMP=8\gdef\FVVCOneEight{#1}\fi%
+%}\fi%
+%
+%\ifnum\theFootnoteInStock=2{%
+%\xdef\FootnoteFragTypeTwo{\FLAG}%
+%\gdef\FootnoteContentTypeTwo{\VVType}%
+%\ifnum\theTMP=1\gdef\FVVCTwoOne{#1}\fi%
+%\ifnum\theTMP=2\gdef\FVVCTwoTwo{#1}\fi%
+%\ifnum\theTMP=3\gdef\FVVCTwoThree{#1}\fi%
+%\ifnum\theTMP=4\gdef\FVVCTwoFour{#1}\fi%
+%\ifnum\theTMP=5\gdef\FVVCTwoFive{#1}\fi%
+%\ifnum\theTMP=6\gdef\FVVCTwoSix{#1}\fi%
+%\ifnum\theTMP=7\gdef\FVVCTwoSeven{#1}\fi%
+%\ifnum\theTMP=8\gdef\FVVCTwoEight{#1}\fi%
+%}\fi%
+%
+%\ifnum\theFootnoteInStock=3{%
+%\xdef\FootnoteFragTypeThree{\FLAG}%
+%\gdef\FootnoteContentTypeThree{\VVType}%
+%\ifnum\theTMP=1\gdef\FVVCThreeOne{#1}\fi%
+%\ifnum\theTMP=2\gdef\FVVCThreeTwo{#1}\fi%
+%\ifnum\theTMP=3\gdef\FVVCThreeThree{#1}\fi%
+%\ifnum\theTMP=4\gdef\FVVCThreeFour{#1}\fi%
+%\ifnum\theTMP=5\gdef\FVVCThreeFive{#1}\fi%
+%\ifnum\theTMP=6\gdef\FVVCThreeSix{#1}\fi%
+%\ifnum\theTMP=7\gdef\FVVCThreeSeven{#1}\fi%
+%\ifnum\theTMP=8\gdef\FVVCThreeEight{#1}\fi%
+%}\fi%
+%
+%\ifnum\theFootnoteInStock=4{%
+%\xdef\FootnoteFragTypeFour{\FLAG}%
+%\gdef\FootnoteContentTypeFour{\VVType}%
+%\ifnum\theTMP=1\gdef\FVVCFourOne{#1}\fi%
+%\ifnum\theTMP=2\gdef\FVVCFourTwo{#1}\fi%
+%\ifnum\theTMP=3\gdef\FVVCFourThree{#1}\fi%
+%\ifnum\theTMP=4\gdef\FVVCFourFour{#1}\fi%
+%\ifnum\theTMP=5\gdef\FVVCFourFive{#1}\fi%
+%\ifnum\theTMP=6\gdef\FVVCFourSix{#1}\fi%
+%\ifnum\theTMP=7\gdef\FVVCFourSeven{#1}\fi%
+%\ifnum\theTMP=8\gdef\FVVCFourEight{#1}\fi%
+%}\fi%
+%
+%\ifnum\theFootnoteInStock=5{%
+%\xdef\FootnoteFragTypeFive{\FLAG}%
+%\gdef\FootnoteContentTypeFive{\VVType}%
+%\ifnum\theTMP=1\gdef\FVVCFiveOne{#1}\fi%
+%\ifnum\theTMP=2\gdef\FVVCFiveTwo{#1}\fi%
+%\ifnum\theTMP=3\gdef\FVVCFiveThree{#1}\fi%
+%\ifnum\theTMP=4\gdef\FVVCFiveFour{#1}\fi%
+%\ifnum\theTMP=5\gdef\FVVCFiveFive{#1}\fi%
+%\ifnum\theTMP=6\gdef\FVVCFiveSix{#1}\fi%
+%\ifnum\theTMP=7\gdef\FVVCFiveSeven{#1}\fi%
+%\ifnum\theTMP=8\gdef\FVVCFiveEight{#1}\fi%
+%}\fi%
+%
+%\ifnum\theFootnoteInStock=6{%
+%\xdef\FootnoteFragTypeSix{\FLAG}%
+%\gdef\FootnoteContentTypeSix{\VVType}%
+%\ifnum\theTMP=1\gdef\FVVCSixOne{#1}\fi%
+%\ifnum\theTMP=2\gdef\FVVCSixTwo{#1}\fi%
+%\ifnum\theTMP=3\gdef\FVVCSixThree{#1}\fi%
+%\ifnum\theTMP=4\gdef\FVVCSixFour{#1}\fi%
+%\ifnum\theTMP=5\gdef\FVVCSixFive{#1}\fi%
+%\ifnum\theTMP=6\gdef\FVVCSixSix{#1}\fi%
+%\ifnum\theTMP=7\gdef\FVVCSixSeven{#1}\fi%
+%\ifnum\theTMP=8\gdef\FVVCSixEight{#1}\fi%
+%}\fi%
+%}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\def\YYnote#1{%
+%\stepcounter{NumVariante}%
+%\def\FootnoteFlag{YES}%
+%\expandafter\DividereDuePunti#1::|%
+%\ifx\Four\NULL\TwoFieldNote%
+%\else\ThreeFieldNote%
+%\fi%
+%\def\FootnoteFlag{NO}%
+%}
+%
+%\def\ThreeFieldNote{%
+%\ifx\nonotetest\Two\addtocounter{NumVariante}{-1}\else%
+%\ifnum\theNumVariante=1%
+%\ifx\One\NULL% prima variante senza testimoni (\CORR)
+%\ifx\FLAG\AUCT%
+%{\Three} {\Two}%
+%\fi%
+%\ifx\FLAG\SUPP%
+%{\Three} {\sl suppl. \Two\/}%
+%\fi%
+%\ifx\FLAG\EXPU%
+%{\Three} {\sl exp. \Two\/}%
+%\fi%
+%\ifx\FLAG\NO%
+%{\Three} {\Two}%
+%\fi%
+%\else% prima variante con testimoni (normale)
+%\ifx\Three\NULL% senza testo (ADD e DEL)
+%\kern-.3em\Two\Testimone{\One}%
+%\else%
+%\ifx\FLAG\AUCT%
+%{\Three} \Two\Testimone{\One}%
+%\fi%
+%\ifx\FLAG\NO%
+%{\Three} \Two\Testimone{\One}%
+%\fi%
+%\fi%
+%\fi%
+%\fi%
+%\ifnum\theNumVariante>1%
+%\ifx\FLAG\SUPP%
+%{\Three} {\sl suppl. \Two\/}%
+%\else%
+%\ifx\FLAG\EXPU%
+%{\Three} {\sl exp. \Two\/}%
+%\else%
+%\ifx\Three\NULL%
+%\Two\Testimone{\One}% 
+%\else%
+%\ifx\One\NULL%
+%{\Three} \Two%
+%\else%
+%{\Three} \Two\Testimone{\One}%
+%\fi%
+%\fi%
+%\fi%
+%\fi%
+%\fi%
+%\fi%
+%}
+%\def\TwoFieldNote{%
+%\ifx\nonotetest\Two\addtocounter{NumVariante}{-1}\else%
+%\ifnum\theNumVariante=1%
+%\ifx\One\NULL%
+%\ifx\FLAG\SUPP%
+%{\Two} {\sl supplevi\/}%
+%\fi%
+%\ifx\FLAG\EXPU%
+%{\Two} {\sl expunsi\/}%
+%\fi%
+%\ifx\FLAG\XLACUNA%
+%\ifx\Two\NULL%
+%{\sl lacunam statui\/}%
+%\else%
+%{\sl lacunam statuit {\Two}\/}%
+%\fi%
+%\fi%
+%\else% due campi di cui il primo non e` vuoto
+%\ifx\FLAG\XLACUNA%
+%\Two\Testimone{\One}%
+%\else%
+%\relax\Two\Testimone{\One}%
+%\fi%
+%\fi%
+%\fi%
+%\ifnum\theNumVariante>1%
+%\Two\Testimone{\One}%
+%\fi%
+%\fi%
+%}
+
+% MACRO CIT
+
+%\newwrite\cit
+%\immediate\openout\cit=\jobname.cit
+%
+%\def\Cit{\@ifnextchar[{\@CitOp}{\@Cit}}
+%
+%\def\@Cit#1{
+%  \CitArgTwo#1|||\relax%
+%  \CitOne%
+%  \def\Null{}%
+%  \def\Space{ }%
+%  \ifx\CitTwo\Null%
+%    \immediate\write\cit{exp}%
+%  \else%
+%    \ifx\CitTwo\Space%
+%      \immediate\write\cit{exp}%
+%    \else%
+%      \CitArgThree#1|||\relax%
+%      \ifx\CitThree\Null%
+%        \immediate\write\cit{exp || \CitTwo}%
+%      \else%
+%        \immediate\write\cit{exp || \CitTwo || \CitThree}%
+%      \fi%
+%    \fi%
+%  \fi%
+%}
+%
+%\def\@CitOp[#1]#2{%
+%  \CitArgTwo#2|||\relax%
+%  \CitOne%
+%  \def\Space{ }%
+%  \def\Null{}%
+%  \ifx\CitTwo\Null%
+%    \immediate\write\cit{#1}%
+%  \else%
+%    \ifx\CitTwo\Space%
+%      \immediate\write\cit{#1}%
+%    \else%
+%      \CitArgThree#2|||\relax%
+%      \ifx\CitThree\Null%
+%        \immediate\write\cit{#1 || \CitTwo}%
+%      \else%
+%        \immediate\write\cit{#1 || \CitTwo || \CitThree}%
+%      \fi%
+%    \fi%
+%  \fi%
+%}
+%
+%\def\CitArgTwo#1#2|||{%
+%	\def\CitOne{#1}%
+%	\def\CitTwo{#2}%
+%}
+%\def\CitArgThree#1#2#3|||{%
+%	\def\CitOne{#1}%
+%	\def\CitTwo{#2}%
+%	\def\CitThree{#3}%
+%}
+
+% MACRO DATE E CIT
+%\newwrite\dat
+%\immediate\openout\dat=\jobname.dat
+\def\Cit{\@ifnextchar[{\@CitOp}{\@CitNoOp}}
+\def\@CitNoOp#1{\@DateCit{Cit}{}{#1}}
+\def\@CitOp[#1]#2{\@DateCit{Cit: }{#1}{#2}}
+
+\def\Date{\@ifnextchar[{\@DateOp}{\@DateNoOp}}
+\def\@DateNoOp#1{\@DateCit{Date}{}{#1}}
+\def\@DateOp[#1]#2{\@DateCit{Date: }{#1}{#2}}
+
+\def\@DateCit#1#2#3{%
+  \Markup{#1}{#2}%
+  \PrintDateCit#3:||%
+}
+
+\def\PrintDateCit#1#2:||{#1}
+
+%\def\DateArgTwo#1#2|||{%
+%	\xdef\DateOne{#1}%
+%	\xdef\DateTwo{#2}%
+%}
+%\def\DateArgThree#1#2#3|||{%
+%	\xdef\DateOne{#1}%
+%	\xdef\DateTwo{#2}%
+%	\xdef\DateThree{#3}%
+%}
+
+% DEFINIZIONI PROVVISORIE
+
+%\newcommand{\Adnotatio}[1]{\Comm{#1}}
+\newcommand{\CRUX}[1]{\hbox{\textdagger}#1\hbox{\textdagger}}
+\newcommand{\EXPU}[1]{[#1]}
+\newcommand{\INTE}[1]{$<$#1$>$}
+\newcommand{\LACc}{\LACUNA}
+\newcommand{\LACm}{\LACUNA}
+\newcommand{\LACs}{\LACUNA}
+\newcommand{\Nota}{}
+\newcommand{\AltraVar}{\hspace{1em}}
+\newcommand{\Abbr}[1]{#1}
+\newcommand{\mtilde}{$\widetilde{\hbox{m}}$}
+\newcommand{\ptilde}{$\widetilde{\hbox{p}}$}
+\newcommand{\RUBR}[1]{#1}
+
+% DEFINIZIONI RIGUARDANTI I SIMBOLI
+
+\font\mauro=mauro
+
+% SISTEMA SOLARE
+\def\SOL{{\mauro\char0}}  % SOLE
+\def\MER{{\mauro\char1}}  % MERCURIO
+\def\VEN{{\mauro\char2}}  % VENERE
+\def\TER{{\mauro\char3}}  % TERRA
+\def\MAR{{\mauro\char4}}  % MARTE
+\def\GIO{{\mauro\char5}}  % GIOVE
+\def\SAT{{\mauro\char6}}  % SATURNO
+\def\LUN{{\mauro\char10}} % LUNA
+
+% SEGNI ZODIACALI
+\def\ARS{{\mauro\char11}} % ARIETE
+\def\TRS{{\mauro\char12}} % TORO
+\def\GMN{{\mauro\char13}} % GEMELLI
+\def\CNC{{\mauro\char14}} % CANCRO
+\def\LEO{{\mauro\char15}} % LEONE
+\def\VRG{{\mauro\char16}} % VERGINE
+\def\LBR{{\mauro\char17}} % BILANCIA
+\def\SCR{{\mauro\char18}} % SCORPIONE
+\def\SGT{{\mauro\char19}} % SAGITTARIO
+\def\CPR{{\mauro\char20}} % CAPRICORNO
+\def\AQR{{\mauro\char21}} % ACQUARIO
+\def\PSC{{\mauro\char22}} % PESCI
+\def\CNJ{{\mauro\char52}} % CONGIUNZIONE
+\def\OPP{{\mauro\char53}} % OPPOSIZIONE
+
+% SIMBOLI ASTRONOMICI EXTRA
+\def\Stella{{\Huge$\ast$}}
+\def\Terra{{\Huge$\bullet$}}
+
+% SIMBOLI MATEMATICI
+\def\QDR{{\mauro\char30}} % QUADRATO
+\def\TRN{{\mauro\char31}} % TRIANGOLO
+\def\RTT{{\mauro\char32}} % RETTANGOLO
+\def\PRL{{\mauro\char33}} % PARALLELOGRAMMA
+\def\TRP{{\mauro\char34}} % TRAPEZIO
+\def\DRTT{{\mauro\char35}} % DOPPIO RETTANGOLO
+\def\RDX{{\mauro\char40}} % RADIX MAIUSCOLA
+\def\rdx{{\mauro\char41}} % RADIX MINUSCOLA
+\def\CUB{{\mauro\char42}} % CUBO
+\def\PPD{{\mauro\char43}} % PARALLELEPIPEDO
+\def\PEN{{\mauro\char44}} % PENTAGONO
+\def\HEX{{\mauro\char45}} % ESAGONO
+\def\PYR{{\mauro\char46}} % PIRAMIDE
+\def\HEXC{\mbox{\Large$\ast$\normalsize}} % ESAGONO CENTRALE
+
+\def\PER{{\lower1.5ex\hbox{$\mathchar'26$}\mkern-6mu p}}
+\def\CUM{{\rotatebox[origin=c]{180}{c}}}
+
+% SCANSIONE RAGIONAMENTO
+\def\DB{{\mauro\char50}}  % BARRA DOPPIA
+\def\SB{{\mauro\char51}}  % BARRA SINGOLA
+
+% VECCHIE DEFINIZIONI SIMBOLI MATEMATICI
+\def\PG{\PRL}
+\def\T{\TRN}
+\def\Q{\QDR}
+\def\R{\RTT}
+\def\TP{\TRP}
+
+% DEFINIZIONI NUOVE DECISE AD AGOSTO 2000
+\def\APPAINTXT{NO}
+\def\MARKINTXT{NO}
+\def\COMMINTXT{NO}
+\def\ApparatoNelTesto{\def\APPAINTXT{YES}}
+\def\MarkupNelTesto{\def\MARKINTXT{YES}}
+\def\CommentiNelTesto{\def\COMMINTXT{YES}}
+\def\MarginaliaInNota{}
+\let\Tit\relax
+
+% MACRO DI SEMPLIFICAZIONE
+\def\NTEST{}
+\def\NomeTestimone#1{\def\NTEST{#1}}
+
+\def\@SVV[#1][#2]#3{\VV{{#2:#1:#3}}}
+\def\Smarg{\@ifnextchar[{\@SVV[\MARG]}{\@SVV[\MARG][\NTEST]}}
+\def\Smargsign{\@ifnextchar[{\@SVV[\MARGSIGN]}{\@SVV[\MARGSIGN][\NTEST]}}
+\def\Sinterl{\@ifnextchar[{\@SVV[\INTERL]}{\@SVV[\INTERL][\NTEST]}}
+\def\Spc{\@ifnextchar[{\@SVV[\PC]}{\@SVV[\PC][\NTEST]}}
+\def\Sbis{\@ifnextchar[{\@SVV[\BIS]}{\@SVV[\BIS][\NTEST]}}
+
+\def\@SVVD[#1][#2][#3]#4#5{%
+  \VV{%
+    {#3:#1:#5}%
+    {\NTEST:#2:#4}%
+  }%
+}
+
+\def\SVVcorr[#1]{%
+  \@ifnextchar[{%
+    \@SVVD[#1][\DES{}]%
+  }{%
+    \@SVVD[#1][\DES{ante corr.}][\NTEST+]%
+  }%
+}
+
+\def\Smargcorr{\SVVcorr[\MARG]}
+\def\Smargsigncorr{\SVVcorr[\MARGSIGN]}
+\def\Sintcorr{\SVVcorr[\INTERL]}
+
+\def\SVVdel[#1][#2]#3#4{\VV{{#2:#1{#3}:#4}}}
+
+\def\Santedel{\@ifnextchar[{\SVVdel[\ANTEDEL]}{\SVVdel[\ANTEDEL][\NTEST]}}
+\def\Spostdel{\@ifnextchar[{\SVVdel[\POSTDEL]}{\SVVdel[\POSTDEL][\NTEST]}}
+\def\Sex{\@ifnextchar[{\SVVdel[\EX]}{\SVVdel[\EX][\NTEST]}}
+
+\def\DESCOMPL#1#2#3{\slnot{#1} {\Lezione}\slnot{#2} #3}
+\def\EDCOMPL{\DESCOMPL}
+
+\def\lbracket{[}
+\def\rbracket{]}
+\def\texthash{\#}
+%%% Nuove divisioni del testo
+\newcommand\Title[2]{\chapter*{%
+% check if #1 is empty
+\ifx&#1&\else#1\\\fi#2}}
+\newcommand\Teorema{\section*}
+\newcommand\Corollario{\subsection*}
+\newcommand\Aliter{\subsection*}
+\newcommand\Lemma{\subsection*}
+\newcommand\Scolio{\subsection*}
+\newcommand\Capitolo{\section*}
+\newcommand\Sottocapitolo{\subsection*}
+\newcommand\Additio{\subsection*}
+
+\newcommand\UNDERLINE[1]{\underline{#1}}
+\newcommand\CITMARG[1]{\emph{#1}}
+\newcommand\CITMARGSIGN[1]{\emph{#1}}
+
+\def\UnList #1;#2|{%
+  #1\ifx#2\relax\else, \UnList#2|\fi
+}
+\newcommand\frontespizio[3]{%
+  \thispagestyle{empty}
+  {\centering
+    \vspace*{30pt}
+    {\Huge #1\\#2\par}
+    \vspace{24pt}
+    a cura di\\[12pt]
+    {\Large\UnList #3;|\par}
+    \par
+  }
+  \newpage\thispagestyle{empty}\null\newpage
+}
+\newcommand\htmlcut[1][]{}
+\newenvironment{tabula}[1]{\begin{tabular}{#1}}{\end{tabular}}
+
+\let\CORR\textit
+\let\linea\hline
+
+\let\pstart\par
+\let\pend\par
+
+\AtBeginDocument{\@ifpackageloaded{graphicx}{\setkeys{Gin}{width=.6\textwidth}}{}}

@@ -1,0 +1,50 @@
+\documentclass[12pt,italian]{article}
+
+%  File di prova degli errori per il package MauroTeX
+%  allineato alla versione 4 di mauro.sty
+%  allineato alla versione 1.9 di m2hv, m2lv, m2rtf
+
+%  eLabor scrl
+%  (ex. Laboratorio Informatico del Consorzio Sociale "Polis")
+%  via G. Garibaldi 33, 56127 Pisa - Italia
+%  <http://elabor.homelinux.org>
+%  <info@elabor.homelinux.org>
+%
+%  responsabile sviluppo:
+%  Paolo Mascellani (paolo@elabor.homelinux.org)
+%
+%  coordinatore del progetto "Maurolico":
+%  Pier Daniele Napolitani (napolita@dm.unipi.it)
+%  
+%  Questo programma e` software libero. Lei puo` redistribuirlo
+%  e/o modificarlo nei termini della "GNU General Public License",
+%  come pubblicata dalla "Free Software Foundation", versione 2 del
+%  giugno 1991.
+%  
+%  Questo programma e` distribuito nella speranza che possa essere
+%  utile, ma SENZA ALCUNA GARANZIA, implicita o espressa. Vedere la 
+%  "GNU General Public License" per maggiori dettagli.
+%  
+%  Lei, assieme al programma, dovrebbe aver ricevuto anche una copia
+%  della "GNU General Public License", contenuta nel file "LICENZA";
+%  se no, scriva alla "Free Software Foundation, Inc., 675 Mass Ave,
+%  Cambridge, MA 02139, USA".
+%
+
+\usepackage{geometry}
+\geometry{a4paper,tmargin=2cm,bmargin=2cm,lmargin=2cm,rmargin=2cm}
+\setlength\parskip{\medskipamount}
+\setlength\parindent{0pt}
+\usepackage{ibycus4, latexsym, endnotes, adn, mauro, babel}
+
+\begin{document}
+\par
+\section{Macro di semplificazione}
+\par \Smarg{questa lezione} \`e a
+margine, mentre \Smarg[A1]{questa} \`e stata aggiunta da un'altra
+mano.  \par
+\NomeTestimone{} Per semplificare: \Smarg{questa
+lezione} \`e a margine, mentre \Smarg[A1]{questa} \`e stata aggiunta
+da un'altra mano.  \par
+
+\end{document}

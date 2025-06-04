@@ -1,0 +1,1729 @@
+\documentclass[12pt]{book}
+
+%  File di prova per il package MauroTeX
+%  allineato alla versione 4 di mauro.sty
+%  allineato alla versione 1.14 di mvisit e programmi derivati
+%
+%  eLabor sc
+%  via Ponye a Piglieri 8, 56121 Pisa - Italia
+%  <https://elabor.biz>
+%  <info@elabor.biz>
+%
+%  responsabile sviluppo:
+%  Paolo Mascellani (paolo@elabor.homelinux.org)
+%
+%  coordinatore del progetto "Maurolico":
+%  Pier Daniele Napolitani (napolita@dm.unipi.it)
+%  
+%  Questo programma e` software libero. Lei puo` redistribuirlo
+%  e/o modificarlo nei termini della "GNU General Public License",
+%  come pubblicata dalla "Free Software Foundation", versione 2 del
+%  giugno 1991.
+%  
+%  Questo programma e` distribuito nella speranza che possa essere
+%  utile, ma SENZA ALCUNA GARANZIA, implicita o espressa. Vedere la 
+%  "GNU General Public License" per maggiori dettagli.
+%  
+%  Lei, assieme al programma, dovrebbe aver ricevuto anche una copia
+%  della "GNU General Public License", contenuta nel file "LICENZA";
+%  se no, scriva alla "Free Software Foundation, Inc., 675 Mass Ave,
+%  Cambridge, MA 02139, USA".
+%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% COMMENTI
+%
+% l'innestamento di macro dentro \LB crea dei problemi.
+%
+% \OM, quando utilizzata come lezione nel primo campo di \VV, scrive
+% ``om.'' nel testo critico.
+%
+% \MarginaliaInNota non fa nulla
+%
+% La macro \Folium viene trattata all'interno delle note come se fosse
+% stata impostata \FoulimInTesto anche se e` stata impostata
+% \FoliumInMargine
+%
+% Ci sono dei problemi di compatibilita` con il package babel:
+% non che questo package sia fondamentale per Maurolico, ma gli errori
+% che ne nascono sono piuttosto subdoli, quindi e` meglio evitarli.
+%   1 - il package babel va obbligatoriamente caricato DOPO il mauro;
+%   2 - la macro \SS (e, per coerenza anche la \DS) e` stata definita
+%       come \SB (\DS diventa \DB)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{times}
+\usepackage{geometry}
+%\geometry{a4paper,tmargin=2cm,bmargin=2cm,lmargin=2cm,rmargin=2cm}
+\setlength\parskip{\medskipamount}
+\setlength\parindent{0pt}
+\usepackage{ibycus4, latexsym, mauro, endnotes, adn}
+\usepackage[greek,italian]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage{xr}
+
+%\FoliumInMargine
+\FoliumInTesto
+%\MarginaliaInNota
+%\CommentiNelTesto
+%\MarkupNelTesto
+%\ApparatoNelTesto
+
+\externaldocument[Photismi_]{pluto.txt}
+\Manus{paolo}{PaoloStart}{PaoloStop}{itshape}
+\Manus{daniele}{\lbracket}{\rbracket}
+\Manus{A55}{\lbracket}{\rbracket}{bfseries}
+\Manus{50}{\ensuremath{\ulcorner}}{\ensuremath{\lrcorner}}{}
+
+\ElencoTestimoni{A/Am/B/A+/A2/A1/B1/B2/Clavius/D/C/F/G/H/J/K/L/O/P/R/S/V/W/alpha/phi/omega}
+
+\begin{document}
+\htmlcut[inizio]
+\par
+\frontespizio{X}{MaurPro}{Paolo Mascellani#Pier Daniele Napolitani}
+\title{Esempi e prove \MauroTeX}
+\author{Paolo Mascellani#Ivan Ricotti}
+\par
+\Title{Prova Titolo}{Prova sottotitolo}
+\par
+\Title{Prova titolo senza sottotitolo}{}
+\par
+\author{Paolo Mascellani ({\tt p.mascellani@dm.unipi.it})}
+\par
+\date{4 dicembre 2011}
+\par
+\maketitle
+\par
+Documento di esempio delle macro 
+\MTeX.
+\label{gatto}
+\section{Accipicchi{\`a}, però ... per{\'o} ... per{\"u} ... per{\^a}}
+\par
+\section{Elementi \textit{di base} (\textbf{capitolo 3})}\label{cane}
+\par
+Gli {\it Aritmeticorum libri duo} furono pubblicati nel 1575.
+\par
+\subsection{Elementi \LaTeX}
+\par
+Pier~Paolo non pu\`o essere staccato.
+\par
+Le seguenti lettere accentate vengono ottenute con comandi appositi del 
+\LaTeX:
+\`a, \`{e}, \`{i}, \`{o}, \`{u},
+\'{a}, \'e, \'{i}, \'{o}, \'{u}, 
+\'{A}, \'{E}, \'{I}, \'{O}, \'{U}, 
+\`{A}, \`{E}, \`{I}, \`{O}, \`{U},
+\^{a}, \^{e}, \^{i}, \^{o}, \^{u},\^{A}, \^{E}, \^{I}, \^{O}, \^{U}, 
+\"{a}, \"{e}, \"{i}, \"{o}, \"{u},\"{A}, \"{E}, \"{I}, \"{O}, \"{U}, 
+{\`\i}
+\par
+E poi ci sono i \dots ed i $\times$ (moltiplicazione).
+\par
+\cite{piripacchio}
+\par
+\maurocite{label}{testo della citazione}
+\par
+\begin{center}
+Esempio di testo centrato orizzontalmente.
+\end{center}
+\par
+{\it Questo {\`e} il corsivo.}
+\par
+{\sl E questo il tondo inclinato.}
+\par
+{\bf Questo {\`e} il nero.}
+\par
+{\it E questo {\rm {\`e} un po'} corsivo, un po'
+{\sl  tondo inclinato} e {\rm un po' tondo normale}.}
+\par
+{\it E questo {\rm {\`e} un po'} corsivo
+e un po' {\rm tondo}}.
+\par
+Nuove macro di stile: \textbf{questo è grassetto} e \textit{questo è italic} e \textsc{questo è maiuscoletto}.
+\par
+Questo\,{\`e} uno spazio fine non secabile.
+\par
+Questo $\flat$ {\`e} un bemolle.
+\par
+Questo $\natural$ {\`e} un bequadro.
+\par
+Questo $\cdot$ {\`e} un puntino centrato.
+\par
+Questa $\vert$ {\`e} una barra verticale.
+\par
+Questo -- {\`e} un trattino lungo (1567 -- 1672) - (1567-1672).
+\par
+Questo --- ancora di più.
+\par
+Ora ``virgolettiamo'' un po'.
+%\par
+%Questa \lbracket {\`e} una parentesi quadra sinistra.
+%\par
+%Questa \rbracket {\`e} una parentesi quadra destra.
+\par
+Questo \S {\`e} un paragrafo.
+\par
+\Teorema{Questo {\`e} un teorema}
+\Aliter{Questo {\`e} un aliter}
+\Lemma{Questo {\`e} un lemma}
+\Corollario{Questo {\`e} un corollario}
+\Scolio{Questo {\`e} un scolio}
+\Additio{Questo {\`e} un additio}
+\Capitolo{Questo {\`e} un capitolo}
+\Sottocapitolo{Questo {\`e} un sotto capitolo}
+\par
+\subsection{Liste}
+\par
+\begin{itemize}
+\item uno
+\item due
+\end{itemize}
+\par
+\begin{enumerate}
+\item uno
+\item due
+\end{enumerate}
+\par
+\begin{description}
+\item[descrizione uno] uno
+\item[descrizione due] due
+\end{description}
+\par
+\subsection{Quote}
+\par
+\begin{quote}
+Questa è una quote.
+\end{quote}
+\par
+\subsection{Footnote}
+\par
+Qui deve essere inserita\footnote{una nota a piè di pagina} ed in seguito ne va
+inserita\footnote{un'altra, magari anche un po' più lunghettina, così da verificare cosa
+succede quando si va a capo}.
+\par
+Alla fine, ne mettiamo\footnote{un'altra ancora}. E poi basta.
+\par
+\subsection{Macro da ignorare}
+\par
+Iniziamo da \noindent e
+proseguiamo con \newpage e
+poi
+
+\vspace{1cm}
+
+ed
+infine una bella sil\-la\-ba\-zio\-ne.
+\par
+\subsection{Titolo \textit{fantasioso} ed anche \textbf{peggio} di prima}
+\par
+\subsection{Simboli astronomici e altri caratteri speciali}
+\ref{gatto}
+\par
+%paolo: le definizioni di radix sono da rifare
+\par Radix:           \RDX 
+\par radix:           \rdx
+\par
+\par Sole:            \SOL 
+\par Luna:            \LUN
+\par Terra:           \TER 
+\par Mercurio:        \MER 
+\par Venere:          \VEN
+\par Marte:           \MAR 
+\par Giove:           \GIO 
+\par Saturno:         \SAT
+\par
+\par Ariete:          \ARS 
+\par Toro:            \TRS 
+\par Gemelli:         \GMN
+\par Cancro:          \CNC 
+\par Leone:           \LEO
+\par Vergine:         \VRG 
+\par Bilancia:        \LBR 
+\par Scorpione:       \SCR 
+\par Sagittario:      \SGT
+\par Capricorno:      \CPR 
+\par Acquario:        \AQR
+\par Pesci:           \PSC
+\par
+\par Congiunzione:    \CNJ
+\par Opposizione:     \OPP
+\par
+\ref{Photismi_peppa}
+
+\subsection{date}
+\label{topo} 
+\Date{
+        {Completum Messanae in Freto siculo Dominicae
+         Incarnationis 1554 Indictione XII}
+}
+\par
+\Date{
+        {Completum Messanae in Freto siculo Dominicae
+         Incarnationis 1554 Indictione XII}
+         {15.06.1554}
+     }
+\par
+\Date{
+        {Completum Messanae in Freto siculo Dominicae
+         Incarnationis 1554 Indictione XII}
+         {15.06.1554}
+        {L'indizione del 1554 non era la XII. O {\`e}
+        sbagliato l'anno o {\`e} sbagliata l'indizione}
+     }
+\par
+\subsection{Ambiente matematico}
+\par
+... erit $a$---$b$ ita $c$---$d$
+\par 
+Rectae $ab$, $cd$ erunt aequales per 22\Sup{am} 5\Sup{i}
+
+\par
+Proviamo ora con una formula un po' complicata nel testo
+$\left(\frac{n}{\int_{a}^{b}{\VV{{A:\frac{1}{x^{2}}}{B:\frac{2}{x^{3}}}}
+\VV{{A:dx}{B:dy}}}}\right)^{2}$ seguita da altro testo. E poi con la
+stessa come equazione
+$$\left(\frac{n}{\int_{a}^{b}{\frac{\VV{{A:1}{B:2}}}{x^{2}}
+\VV{{A:dx}{B:dy}}}}\right)^{2}$$ seguita, ovviamente, da altro testo
+ancora.
+\par
+\ref{topo} 
+
+\subsection{Enunciatio e Protasis}
+\begin{Enunciatio}
+Apollonius Eudemo salutem
+\end{Enunciatio}
+Si corpore bene vales ...
+\par
+\begin{Enunciatio}
+Propositio XVII
+\end{Enunciatio}
+\begin{Protasis}
+Sphaerarum superficies sunt quadratis diametrorum
+proportionales.
+\end{Protasis}
+\par
+Sint duae sphaerae ...
+\par
+\subsection{Altri ambienti}
+\par
+\begin{minipage}{5cm}
+Questo {\`e} un esempio di utilizzazione di un ambiente (minipage) che
+non {\`e} esplicitamente gestito.
+\end{minipage}
+\par
+\subsection{Scansione ragionamento}
+\par
+Prima parte {\DB} seconda parte {\SB} terza parte.
+\par
+\subsection{Greco}
+\par
+\GG{Eidos} \GG{Lo'gos} \GG{a)rxai=a gra'mmata}
+\par
+In latino \begin{textgreek}{
+Ειδοσ Λόγοσ ἀρχαῖα γράμματα
+}\end{textgreek} ancora in latino.
+\par
+{\c p}, 
+{\.o}, 
+{\v o}, 
+{\"u}, 
+{\&}, 
+{\it\&}, 
+{\ss}.
+\par
+\ABBR{proportio}
+\subsection{Folia}
+\par
+tangat recta \Folium{A:35r} circulum iam descriptum \par
+xxxx xxxxxxxx xxxxxxxxxx xxxxxxxxxxxx xxxxxxxxxx xxxxxx tangat recta \par \Folium{35*r}
+circulum iam descriptum xxxxxxxxxxxxx xxxxxxxxxxx xxxxxxxx xxxxxxxxx xxx   xxxxxxxx xxxxxxxxxxx
+xxxxxxxxx xxxxxxxxxxxx xxxxxxxxxxxxxxx xxxxxxxxxxxxxxxx xxxxxxxxxxxx xxxxxxxxxxxx xxxxxxxx\par
+colla\Folium{A:35r}terali
+\par
+\subsection{Persone, Luoghi, Opere}
+\par
+In questa sezione vediamo come si marcano i \Nome{{nomi}{nome di fantasia}}, i
+\Luogo{{luoghi}{luogo di fantasia}} e le \Opera{{opere}{opera di fantasia}}.
+\par
+\subsection{Citazioni}
+\par
+\Cit{{per 29\Sup{am} 3\Sup{ii}}}.
+\par
+\subsubsection{Senza riferimento}
+\par
+\par
+\paragraph{paragrafo}
+\par
+\label{etichetta}
+\par
+erit, \Cit{
+  {per primam sexti}
+}, ut triangulus
+\par
+\subsubsection{Con riferimento certo}
+\par
+erit, \Cit{
+        {per primam sexti}{E.6.1}
+}, ut triangulus
+\par
+\subsubsection{Con riferimento incerto}
+\par
+erit \Cit[imp]{
+        {per doctrinam Euclidis}
+}, quadratus praedictus aequalis duobus quadratis
+\par
+erit \Cit[imp]{
+        {per doctrinam Euclidis}{E.1.47}
+}, quadratus praedictus aequalis duobus quadratis
+\par
+erit \Cit[imp]{
+        {per doctrinam Euclidis}
+        {E.1.47}
+        {\`{e} senza dubbio il teorema di Pitagora}
+}, quadratus praedictus aequalis duobus quadratis
+\par
+\subsubsection{Equivoche}
+\par
+tales gentes, \Cit[eqv]{
+        {ut vult Ptolemaeus}
+        {Ptol.Alm.1.7/Ptol.Geogr.3.5}
+        {Tolomeo parla della
+                distribuzione dei popoli
+                in due luoghi diversi}
+}, vivunt in germanicis sylvis
+\par
+\par
+\ref{etichetta}
+\ref{puppa}
+\subsubsection{Nuova gestione}
+\ref{cane}
+\par
+testo prima \Cit{{testo citazione}{EUC/DAT/Y/5}{commento}} testo dopo.
+\subsection{Simboli grafici}
+\par
+\par parallelogramma:  \PRL
+\par triangolo:        \TRN
+\par quadrato:         \QDR
+\par rettangolo:       \RTT
+\par doppiorettangolo: \DRTT
+\par cubo:             \CUB
+\par piramide:         \PYR
+\par parallelepipedo:  \PPD
+\par pentagono:        \PEN
+\par esagono:          \HEX
+\par trapezio:         \TRP
+\par esagono centrale: \HEXC
+\par nove tagliato:    \CON
+\par p tagliata:       \PER
+\par
+\par taglio:           \strike{xxx}
+\par m con tilde:      \mtilde
+\par p con tilde:      \ptilde
+\par Prova di \RUBR{rubrica}.
+\par
+\htmlcut
+\par
+\subsection{Tabelle}
+\par
+\begin{center}
+\begin{tabula}{rcl}
+\inizio{Questo prima della tabella}
+prima.1
+&
+\VV{{A:prima.2}{B:seconda.3}}
+&
+prima.3 \\
+seconda.1 & seconda.2 & \regula \\
+3.1 & 3.2 & 3.3
+\fine{Questo dopo la tabella}
+\end{tabula}
+\end{center}
+\par
+\begin{center}
+\begin{tabula}{rcl}
+\lgra
+&
+prima.2
+&
+\rgra \\
+seconda.1 & seconda.2 & seconda.3 \\
+\lang & 3.2 & \rang
+\end{tabula}
+\end{center}
+\par
+\begin{center}
+\begin{tabula}{|rcl|}
+\linea \\
+prima.1 & prima.2 & prima.3 \\
+seconda.1 & \regula & seconda.3 \\
+3.1 & 3.2 & 3.3 \\ \linea
+\end{tabula}
+\end{center}
+\par
+\begin{center}
+\begin{tabula}{|rcl|}
+\linea \\
+prima.1 & prima.2 & prima.3 \\
+seconda.1 & seconda.2 & seconda.3 \\
+3.1 & 3.2 & 3.3 \\ \linea
+\end{tabula}
+\end{center}
+\par
+\begin{center}
+\begin{tabula}{|rcl|}
+\linea \\
+\mcol{2} prima.1 e prima.2 & prima.3 \\
+seconda.1 & \mcol{2} \regula \\
+\mcol{2} \regula & terza.3 \\ \linea
+\end{tabula}
+\end{center}
+\par
+\begin{center}
+\begin{tabula}{|rcl|}
+\linea \\
+\mrow{2} prima.1 e seconda.1 & prima.2 & prima.3 \\
+\mcol{2} \regula \\
+\mcol{2} \regula & terza.3 \\ \linea
+\end{tabula}
+\end{center}
+\par
+\subsection{Casistiche}
+\par
+\Rcases{{uno}{due}}
+\par
+\Lcases{{uno}{due}{tre}}
+\par
+\RLcases{{uno}{due}{tre}}
+\par
+\Rbracecases{{uno}{due}{tre}}
+\par
+\Lbracecases{{uno}{due}{tre}}
+\par
+\RLbracecases{{uno}{due}{tre}}
+\par
+\Voidcases{{uno}{due}{tre}}
+\par
+\Rbracecases{
+  {uno} 
+  {\Rbracecases{
+    {\Voidcases{{2.1.uno}{2.1.due}{2.1.tre}{2.1.quattro}}} 
+    {2.due} 
+    {\Rbracecases{
+      {2.3.uno}
+      {\RLbracecases{{2.3.2.uno}{2.3.2.due}}}
+    }}
+  }} 
+  {\Lbracecases{{3.uno}{3.due}}}
+}
+\par
+\subsection{Formule, figure e tavole}
+
+\par
+\Formula{di c. 37v}
+\par
+\Formula[didascalia formula]{di c. 37v}
+\par
+prima della figura
+\Figura{maurpro}
+dopo la figura e prima dell'altra
+\Figura[didascalia figura]{maurpro}
+dopo la seconda figura
+\Figskip[didascalia figskip]{5 cm}\Comm{qui va la figura 17}
+\Figskip{3.5 cm}
+\Figskip{3,5 cm}
+\Figskip{35 mm}
+\Figskip{6cm}\Comm{qui va la prima figura di c. 23v}
+dopo la seconda figura.
+\par
+Anche questa \`e una figura, ma si trova \Marg{a margine} a margine
+del testo principale. Questa, invece, \`e una frase riempitiva, che
+serve solo per vedere se il {\TeX} smette di lamentarsi, una volta per
+tutte e tutte per una.\par
+\CitMarg{Ecco come viene CitMarg}\par
+\CitMargSign{Ecco come viene CitMargSign}\par
+\underline{Ecco come viene fatto l'underline} \par
+\LACs
+\par
+Anche questa \`e una figura, ma si trova \Marg[didascalia]{a margine}
+a margine del testo principale.
+\par
+prima della tavola \Tavola{5} dopo la tavola
+\par
+prima della tavola \Tavola[didascalia tavola]{5} dopo la tavola
+\par
+\subsection{Scansione testo}
+\par
+\Prop{}
+\Unit[piripicchio] Apollonius Eudemo Salutem ... valemus
+et nos. \Unit Tempore quo eramus ...
+a nobis compositorum ...\Unit ...
+\par
+\Prop{}
+\par
+\subsection{annotazioni}
+\par
+Bisogna poter aggiungere\Adnotatio{questo \`e quello che ho fatto; per\`o,
+voglio aggiungere una nota un poco lunghetta per vedere se funziona il posizionamento per
+la nota successiva (che, naturalmente, andr\`o ad aggiungere tra poco)} delle
+annotazioni indispensabili alla comprensione del testo\Adnotatio{Non \`e il caso di questa}.
+\par
+\section{intestazione lettere}
+\par
+\numero{I}\label{I}\mittente{Francesco Maurolico} \destinatario{Ettore
+Pignatelli} \luogomitt{Messina} \data{14 agosto 1528}
+\commento{Lettera di dedica dei \Tit{Grammaticorum rudimentorum
+libri sex}
+(\maurocite{001}{{\it S1}},
+cc. 1v--2r) al duca di Monteleone e vicer{\'e} di Sicilia.}
+\intestazione 
+\par
+\section{Varianti (capitolo 4)}
+\par
+\AliaManus{paolo}{peppa}
+\par
+\AliaManus{daniele}{puppa!}
+\par
+\AliaManus{A55}{Quoniam (\Cit{{ut ait Euclides}{EUC/CAT/Supp. 6}})}
+\par
+Sit data \VV{
+    {A:ratio}
+    {B\banale:gratia}
+    {C:latio}
+}, sit datus cubus.
+\par
+Sit data \VV{
+    {A:ratio}
+    {B/D\banale:gratia}
+    {C:latio}
+}, sit datus cubus.
+\par
+\VV{
+  {A:{Manifestum ergo est: triangulum aequale quadrato \(ab\)}}
+  {B:Patet igitur \Folium{Z:15} quadratum \(ab\) aequalem esse trigono \(mno\)}
+}
+\par
+\VV{
+    {*:multitudinis}
+    {A:\CONTR{mul.nis}}
+    {B:multiplicationis}
+    }
+\par
+sit data \VV{
+    {*:ratio}
+    {B:gratia}
+    {C:latio}
+    }, sit datus cubus.
+\par
+\VV{
+    {A:aequales}
+    {C:aequates}
+    {B:equites}
+    }
+\par
+\VV{
+    {A/B:aequales}
+    {C/D:equites}
+    }
+\par
+a vertice \VV{
+    {A:coni}
+    {B:canis}
+    {C:\OM}
+    } demittitur
+\par
+a vertice \VV{
+    {A:coni}
+    {B:canis}
+    {C:\OMLAC}
+    } demittitur
+\par
+erit \VV{
+          {B:triangulum}
+          {A:\NL}
+        }\Comm{In A al posto di ``triangulum'' c'{\`e}
+               una macchia d'inchiostro}
+aequalis quadrato
+\par
+erit \VV{
+    {A:\DES{duo versus legi nequeunt in}:\LACm}
+    {D:\DES{spatium duorum versuum rel.}:}
+    {C:\DES{spatium aliquot verborum rel.}:}
+   } aequalis quadrato
+\par
+erunt quatuor \VV{
+                  {B:\BIS:triangula}
+                  } maius quam dimidio portionum.
+\par
+erunt quatuor \VV{
+                  {A:triangula}
+                  {B:quadrata quadrata}
+                  } maius quam dimidio portionum.
+\par
+\TV{
+    {A:il povero cieco}
+    {B:il cieco povero}
+   }
+\par
+primus \VV{
+           {Clavius:secundusque}
+           {A:et secundus}
+           {B:vel secundus}
+           }
+\par
+primus \VV{
+           {A:et secundus}
+           {Clavius:secundusque}
+           {B:vel secundus}
+           }
+\par
+primus \VV{
+           {A:et secundus}
+           {B:vel secundus}
+           {Clavius:\OM}
+           }
+primus \VV{
+           {A:et secundus}
+           {B:vel secundus}
+           {Clavius:\NIHIL}
+           }
+\section{Integrazioni (capitolo 5)}
+primum \VV{
+    {A+:\INTERL:et secundum}
+}
+\par
+primum \VV{
+    {A+:\SUPRA:et secundum}
+}
+\par
+primum \VV{
+   {A+:\INTERL:et secundum}
+   {B:\OM}
+   }
+\par
+primum \VV{
+    {A+:\INTERL:et secundum}
+    {B:\OMLAC}
+     }
+\par
+primum\VV{
+    {B:et secundum}
+    {A+:\INTERL\DES{diverso atramento}:}
+     }
+\par
+primum \VV{
+    {B:et secundum}
+    {A1:\INTERL:}
+    {A:\OM}
+    }
+\par
+primum \VV{
+    {B:et secundum}
+    {A:\OM}
+    {A2:\INTERL:}
+    }
+\par
+primum \VV{
+    {B:et secundum}
+    {A:\OM}
+    {A2:\INTERL:et tertium}
+    }
+\par
+primum \VV{
+    {A/B:\OM}
+    {A2:\INTERL:et secundum}
+}
+\par
+primum \VV{
+    {A2:\INTERL:et secundum}
+    {A/B:\OM}
+}
+\par
+... $ab$ et $bc$ \VV{
+                     {A:\MARG:per 47 primi}
+                    }
+\par
+... $ab$ et $bc$ \VV{
+   {B:\INTERL:per 47 primi}
+   {A:\OM}
+   {A2:\MARG:}
+   }
+\par
+... $ab$ et $bc$ \VV{
+   {A:\MARGSIGN:per 47 primi}
+   }
+\par
+triangulum \VV{
+               {A:\ANTEDEL{primum}:secundum}
+              } erit
+\par
+... \VV{
+   {A:\POSTDEL{primum}:triangulum}
+   } secundum erit
+\par
+... \VV{
+    {A+:\POSTDEL{\PL{aliquot literas}}:Propositio}
+    } 13
+\par
+... \VV{
+    {A+:\EX{primum}:pristinum}
+    }
+\par
+... \VV{
+    {A+:\EX{pre stinum}:pristinum}
+    }
+\par
+... \VV{
+   {A+:\PC:pristinum}
+   }
+\par
+... \VV{
+   {A+:\EX{\PL{aliquot literas}}:pristinum}
+   }
+\par
+... \VV{
+    {A+:\EX{primum}:pristinum}
+    {B/C:\INTERL:priorem}
+    }
+\par
+... \VV{
+   {C:pristinum}
+   {A+:\PC:}
+   {B:primum}
+   }
+\par
+... \VV{
+   {A1:secundum}
+   {A:primum}
+   }
+\par
+est aequalis \VV{
+                 {A/B2/C:primae}
+                 {B:primae et secundae}
+                  }
+\par
+est aequalis \VV{
+                {A/B2/C:primae}
+                {B:primae et secundae}
+                }, \VV{
+                       {B2:\MARGSIGN:per 5 quinti Euclidis}
+                       {A/B/C:\OM}
+                        }, ergo ...
+\par
+... \VV{
+    {B1:Euclides}
+    {B:\NL}
+    {A:Archimedes}
+   }
+\par
+\BeginNM
+Et talis est praestantia sphaericorum doctrina\NOTAMARG{
+{Am:\MARG:Vide etiam quod dicit Martianus de astrologia}
+}.
+\EndNM
+Sed ad definitiones accedamus.
+\par
+\BeginNM
+Et talis est praestantia sphaericorum doctrina\NOTAMARG{
+{Am:\DES{in rubro atramento}:Vide etiam quod dicit Martianus de astrologia}
+}.
+\EndNM
+Sed ad definitiones accedamus.
+\par
+\BeginNM
+Et talis est praestantia sphaericorum doctrina\NOTAMARG{
+{Am/B:\MARG:Vide
+  \VV{{*:etiam}{B:\OM}}
+  quod dicit
+  \VV{{Am:Martianus}{B:Capella}} de astrologia}
+}.
+\EndNM
+Sed ad definitiones accedamus.
+\par
+\section{Congetture (capitolo 6)}
+a vertice \VV{
+    {*:\ED{conieci}:coni}
+    {C:comico}
+    {B:cunni}
+    {A:canis}
+    } 
+\par
+... \VV{
+    {*:\ED{correxi}:$2+2=4$}
+    {A:$2+2=5$}
+    }
+\par
+... \VV{
+        {*:\ED{conieci}:ch'\`e}
+        {A:che}
+        {B/C:qui rectus est}
+} ...
+\par
+... \VV{
+    {A:\POSTDEL{secundum}:primum}
+   } \VV{
+         {*:\ED{correxi}:est triangulum}
+         {A:sunt triangula}
+        }
+\par
+... \VV{
+    {*:\ED{Clagett}:132}
+    {A:123}
+    {B:112}
+    }
+\par
+... \VV{
+    {*:\ED{Clagett}:132}
+    {A:123}
+    {B:112}
+    {*:\ED{Napoli}:125}
+    }
+\par
+... \VV{
+    {*:\ED{conieci}:132}
+    {A:123}
+    {B:112}
+    {*:\ED{Napoli}:125}
+    {*:\ED{Clagett}:113}
+    }
+\par
+... \VV{
+    {A:132}
+    {B:112}
+    {*:\ED{Clagett}:518}
+    }
+\par
+... \VV{
+    {*:\ED{Clagett}:recta}
+    {B:secta}
+    {A:sancta}
+    }
+\par
+a vertice \VV{
+    {*:\ED{conieci}:coni}
+    {A:cani}
+    {C:comico}
+    {B:\OM}
+    {*:\ED{Clagett}:conico}
+    } demittitur 
+\par
+la \VV{
+    {*:\ED{conieci coll. {\it Cosm.}, I, 101}:terra}
+    {A:torre}
+    } \`e immobile al centro del mondo
+\par
+la \VV{
+    {*:\ED{conieci coll. {\it Cosm. 1543}, I, f. 17v, 34}:terra}
+    {A:torre}
+    } \`e immobile al centro del mondo
+\par
+... \VV{
+    {A:\Cit{
+        {per 21\Sup{am} sexti Euclidis}
+        {E.6.21}
+        {Qui avrebbe dovuto citare E.5.15}
+        }
+    }
+    {*:\ED{intelligendum est}:per 15\Sup{am} quinti Euclidis}
+   }
+\par
+parallelus $cd$ per doctrinam \CRUX{de piscibus siculis}
+\par
+parallelus $cd$ per doctrinam \CRUX{\VV{
+                        {A:de piscibus siculis}
+                        {B:de arcanis antiquis}
+                        {*:\ED{locum valde corruptum}:}}}
+\par
+... primum \EXPU{\VV{
+          {*:\ED{seclusi}:et}
+}} secundumque
+\par
+... primum \EXPU{\VV{
+          {*:\ED{secl. Clagett}:et}
+}} secundumque
+\par
+propositionem 17 \INTE{\VV{
+            {*:\ED{supplevi}:praecedentis libri}
+}} erit
+\par
+... 17 \INTE{\VV{       
+   {*:\ED{supplevi}:praecedentis libri}
+   {B:\DES{spatium aliquot literarum rel.}:\LACm}
+}} erit
+\par
+... 17 \INTE{\VV{       
+         {*:\ED{suppl. Clagett}:praecedentis libri}
+         {B:\DES{spatium rel.}:\LACm}
+         {*:\ED{suppl. Napoli}:huius}
+}} erit
+\par
+a vertice \INTE{\VV{    
+          {*:\ED{supplevi}:trianguli}
+          {A:\DES{aliquot literae legi nequent in}:\LACm}
+}} demittitur
+\par
+a vertice \INTE{\VV{    
+          {*:\ED{supplevi}:trianguli}
+          {A:\DES{aliquot literae legi nequent in}:\LACm}
+          {*:\ED{Clagett}:trapezii}
+}} demittitur
+\par
+Constat ergo ... Quod erat demonstrandum.
+\par
+\VV{{*:\ED{lacunam statui}:\LACc}}
+\begin{Enunciatio}
+Corollarium 3
+\end{Enunciatio}
+\par
+... \VV{
+    {*:\ED{lacunam statuit Clagett}:\LACc}
+    }
+\par
+... \VV{
+    {*:\ED{coll. {\it Cosm.} II 318 lacunam statui, ubi
+           dimensio orbis pertractaretur}:\LACc}
+    }
+\par
+\section{Varianti lunghe - Capitolo 7}
+\Unit ... \VV[longa]{
+                  {*:\CR{gatto1}:Si}
+                  {B:\OM}
+                } duae rectae ... erunt aequales.
+Sint \(ab\) et \(cd\) ... a vertice \LB{gatto1}{coni}.
+\par
+\Unit ... \VV[longa]{
+                  {*:\CR{gatto2}:Si}
+                  {B:\OM}
+                } duae rectae ... erunt aequales.
+\Unit Sint \(ab\) et \(cd\) ... \Unit ... \LB{gatto2}{a vertice coni}.
+\par
+\Unit ...
+\VV[longa]{
+  {A:\CR{gufo}:Palam est}
+  {C:Proculdubio possumus in parabolico segmento inscribere
+     iam dictam figuram
+     rectilineam ita ut excessum parabolici segmenti minorem
+     sit quacunque proposita magnitudine}
+  {B:\DES{spatium duorum versuum relicto om.}:\LACm}
+}
+quod in portione parabolica possibile est inscribere polygonium rectilineum 
+ita ut relictae portiones sint minus\LB{gufo}{omni
+proposito spatio}. \Unit  Nam intra portionem ...
+\par
+\Unit ... \VV[longa]{
+                {*:\CR{gatto3}:Si}{B:\OM}
+                } duae rectae ... erunt aequales.
+\Unit Sint \(ab\) \VV{
+                   {A:et}{C:est}
+                    } \(cd\) ... \Unit ... a vertice
+\LB{gatto3}{coni}.
+\par
+\Unit ... \VV[longa]{
+                   {*:\CR{gatto4}:Si}{B:\OM}
+                   } duae rectae ... erunt aequales. \Unit 
+Sint \(ab\) et \(cd\) ... \Unit Rursus, cum sint... a
+vertice \LB{gatto4}{\VV{
+   {A:coni}{C:cani}
+}}.
+\par
+\Unit ... \VV[longa]{
+        {A/C:\CR{gatto5}:\VV{
+                {A:Si}
+                {C:Sunt}}
+                duae rectae}
+        {B:\OM}}
+... erunt aequales
+\Unit Sint \(ab\) et \(cd\) ...
+\Unit ... a vertice \LB{gatto5}{coni}.
+\par
+\Unit \VV[longa]{
+                 {*:\CR{gatto6}:Si}
+                 {D:\OM}
+                 {*:\CR{cane}:Si}
+                 {B:\OM}
+                }
+              duae rectae ... erunt \LB{cane}{aequales}.
+\Unit Sint \(ab\) et \(cd\) ...
+\Unit ... \LB{gatto6}{a vertice coni}.
+\par
+\Unit ... tanta est \VV[longa]{
+                        {*:\CR{miao1}:inter}
+                        {B:\BIS:}
+                          }
+                   curvum et rectum fortasse propter
+\LB{miao1}{dissimilitudinem}, inimicitia.
+\par
+\Unit ... tanta est \VV[longa]{
+                          {*:\CR{miao2}:inter}
+                          {B:\BIS:}
+                         }
+                      \VV{
+                          {A/B:curvum}
+                          {B:\REP[2]:circunferentiam}
+                          } et rectum fortasse propter
+\LB{miao2}{dissimilitudinem}, inimicitia.
+\par
+\Unit ... tanta est \VV[longa]{
+                          {*:\CR{miao3}:inter}
+                          {B:\BIS:}
+                         }
+                         curvum et \VV{
+                          {A/B:rectum}
+                          {B:\REP[1]:rectilineum}
+                          } fortasse propter
+\LB{miao3}{dissimilitudinem}, inimicitia.
+\par
+\Unit Hic Archimedis de quadratura parabolae libellus \VV[longa]{
+                          {*:\CR{miao4}:ex}
+                          {A:\BIS:}
+                         } corruptissimo,
+                      \VV{
+                          {*:quod}
+                          {A:\REP[2]:qui}
+                          }
+circumfertur, \LB{miao4}{exemplari}, labore et industria
+Francisci Maurolyci restitutus est.
+\par
+\Unit ... tanta est \VV[longa]{
+                          {*:\CR{miao5}:inter}
+                          {B:\BIS:}
+                         }
+                      \VV{
+                          {A:curvum}
+                          {B:circunferentiam}
+                          } et rectum fortasse propter
+\LB{miao5}{dissimilitudinem}, inimicitia.
+\par
+\Unit Hic Archimedis de quadratura parabolae libellus \VV[longa]{
+                      {*:\CR{miao6}:ex}
+                      {A:\BIS:}
+                     }
+                      \VV{
+                          {*:\ED{conieci}:corrupto}
+                          {A:corsicano}
+                          } quod circumfertur,
+\LB{miao6}{exemplari}, labore et industria
+Francisci Maurolyci restitutus est.
+\par
+\Unit ... ut dicebamus. \Unit \VV[longa]{
+                                {A+:\CR{zebra}\MARGSIGN:Hic}
+                              }
+                                 est notandum quod
+si recta \(ab\) parallelus non erit rectae \(cd\) ...
+\Unit \LB{zebra}{Quod erat propositum},
+meliori modo explicatum.
+\par
+\Unit ... ut dicebamus. \Unit \VV[longa]{
+                                {A+:\CR{zebra1}\MARG:Hic}
+                             } est notandum quod
+si recta \(ab\) parallelus non erit rectae \(cd\) ...
+\Unit \LB{zebra1}{Quod erat propositum}, meliori modo explicatum.
+\par
+\Unit 
+... ut dicebamus.
+\Unit \VV[longa]{
+  {A1:\CR{lince}\MARG:Et}
+  {A:Et rursus, per praecedentem, erit cubus sesquialterus dicti
+     cylindri ... ut demonstrari potest}
+}
+rursus, cum sit cubus sesquitertius dicti prismatis (demonstratio tota 
+pendet ex antepraemissa), ... \Unit Et sic demonstrabitur: cum sit: ...
+\Unit \LB{lince}{Quod erat propositum}.
+\par
+\Unit 
+... ut dicebamus.
+\Unit \VV[longa]{
+  {A1:\CR{lince1}\MARG:Et}
+  {A:Et rursus, per praecedentem, erit cubus sesquialterus dicti
+     cylindri ... ut demonstrari potest}
+  {B/C:\OM}
+}
+rursus, cum sit cubus sesquitertius dicti prismatis (demonstratio tota 
+pendet ex antepraemissa), ... \Unit Et sic demonstrabitur: cum sit: ...
+\Unit \LB{lince1}{Quod erat propositum}.
+\par
+\Unit \VV[longa]{
+      {*:\CR{lupo}\ED{conieci}:Erit}
+      {A:Ibit ergo paradoxa sesquitertia tripodi eandem altitudinem et
+         eandem bastionem habentis}
+      {B:Ibit ergo paradoxa per centrum tripodi eandem basim habentis}
+} ergo parabola sesquitertia trigoni eandem
+altitudine et eandem basim \LB{lupo}{habentis}.
+\par
+\Unit Demittatur a puncto sumpto in parabola super diametrum
+\CRUX{\VV[longa]{
+    {*:\CR{volpe}\ED{locum corruptum}:ordinem}
+    {*:\ED{coniecit Clagett}: ordinatam usque ad \(K\) et sumatur punctum
+       \(A\) in diametro ab altera parte verticis parabolae \(Z\) ita ut
+       \(AZ\) aequalis sit \(ZK\). Et recta \(AL\) ducatur per \(A\) usque 
+       ad punctum sumptum}
+} \(uK\) et similiter punctum \(A\) sit ad praesentem paradoxam \(Z\) ita ut 
+recta \(AL\) ducatur per \(A\) \(uad\) punctum \LB{volpe}{supremum}.}
+\Unit Per 33\Sup{am} primi Conicorum tanget
+ talis recta parabolam.
+\par
+\Unit
+\EXPU{\VV[longa]{
+    {*:\CR{orso}\ED{seclusi}:Erit}
+  }
+  quadratum \(ab\) aequalis duobus quadratis dictis per doctrinam
+  \LB{orso}{Euclidis}.}
+Erit quadratum \(ab\) aequalis duobus quadratis \(bc\), \(ca\) simul sumpta 
+per 47\Sup{am} primi Elementorum.
+%\par
+%\Unit ... 
+%\VV[trans]{
+ % {A:\CR{pane}\DES{hoc loco}:perfectus}
+ % {B:\CR{burro}:}
+%} 
+%numerus producitur ex multiplicatione ultimi in serie pariter parium ab 
+%unitate dispositorum,\LB{pane}{dispositorum} in totum aggregatum
+%ipsorum, dum tamen tale aggregatum sit numerus primus, hoc
+%est a nullo, preterquam ab unitate,
+%numeratus.\LB{burro}{numeratus} \Unit ...
+%\par
+%\Unit Campanus mathematicus erat sed pro libidine sua
+%\VV[trans]{
+ % {A1:\CR{sole}\DES{huc transp.}:et}
+ % {A:\CR{luna}:}
+%} 
+%multa mutavit ex sententia Euclidis,\LB{sole}{Euclidis} et multa
+%addidit.\LB{luna}{addidit} \Unit ...
+%\par
+%\Unit Namque superficies
+%\VV[trans]{
+ % {*:\CR{acqua}\ED{huc transposui}:talium}
+ % {A:\CR{fuoco}:}
+%} 
+%solidorum componuntur\LB{acqua}{componuntur} ex similibus conicis
+%superficiebus.\LB{fuoco}{superficiebus}
+%\par
+%\Unit Questo \`e un caso 
+%inevitabile\note{visto che l'esempio non c'\`e, 
+%me lo sono inventato}.
+\section{Trasposizioni - Capitolo 8}
+\par
+\TV{
+    {B:Sit coni vertex}
+    {A:Vertex coni sit}
+   }
+\par
+\TV{
+    {B:Sit coni vertex}
+    {A1:\DES{sic disposuit}:}
+    {A:\DES{priore ordine}:Vertex coni sit}
+   }    
+\par
+\TV{
+    {*:\ED{sic disposui}:Sit coni vertex}
+    {A:Vertex coni sit}
+   }    
+\par
+\Unit \TV[longa]{
+                {*:\CR{acqua}\ED{sic disposui}:Namque}
+                {A:Namque superficies ex similibus
+                   conicis superficiebus talium
+                   solidorum componuntur}
+                } superficies talium solidorum componuntur ex similibus 
+conicis \LB{acqua}{superficiebus}.
+\par
+\Unit ...\TV[duplex]{
+                    {A:\CR{pane}\DES{hoc loco}:perfectus}
+                    {B:\CR{burro}:}
+                    } numerus producitur
+ex multiplicatione ultimi in serie pariter parium
+ab unitate \LB{pane}{dispositorum}, in totum
+aggregatum ipsorum, dum tamen tale aggregatum
+sit numerus primus, hoc est a nullo, preterquam
+ab unitate, \LB{burro}{numeratus}. \Unit ...
+\par
+\Unit Campanus matematicus pro libidine 
+sua \TV[duplex]{
+               {A1:\CR{sole}\DES{huc transp.}:et}
+               {A:\CR{luna}:}
+               } multa mutavit ex sententia
+\LB{sole}{Euclidis}, et multa
+\LB{luna}{addidit}. \Unit ...
+\par
+\Unit Namque superficies \TV[duplex]{
+                        {*:\CR{acqua1}\ED{huc transposui}:talium}
+                        {A:\CR{fuoco}:}
+                                     } solidorum
+\LB{acqua1}{componuntur} ex similibus conicis
+\LB{fuoco}{superficiebus}. 
+\par
+{\Unit[cervo1]}\TV[unit]{
+             {*:\ED{hoc ordine disposui}:\UN{cervo1}-\UN{cervo5}}
+             {C:\UN{cervo1}-\UN{cervo2} \UN{cervo4}-\UN{cervo5}}
+             {A:\UN{cervo5} \UN{cervo4} \UN{cervo3} \UN{cervo2} \UN{cervo1}}
+             {B:\UN{cervo2} \UN{cervo1} \UN{cervo5} \UN{cervo3}}
+} Centrum uniformis figurae in puncto axis medio constituitur.
+{\Unit[cervo2]} Centrum trianguli rectilinei trientem axis ad basim relinquit. 
+{\Unit[cervo3]} \VV[longa]{
+                     {*:\CR{foca}:Centrum}
+                     {C:\OM}
+} totius interiacet centris partium in eadem recta
+\LB{foca}{constitutum}.
+{\Unit[cervo4]} \VV[longa]{
+       {*:\CR{delfino}:Centrum}
+       {C:\OM}
+} partialium distantiae a centro
+totius reciprocae sunt \LB{delfino}{partibus}.
+{\Unit[cervo5]} Centrum nunquam cadit extra rei gravis
+ambitum. \Unit ...
+\section{Casi eccezionali - Capitolo 9}
+\par
+musica est \VV{
+              {A:\ABBR{anima} mundi}
+              {B:\ED{signa mihi incognita}:\LACs}
+              }.
+\par
+\section{Casi problematici}
+\par
+\VV{
+   {A/B:\VV{
+           {A:litera}
+           {B:\DES{vel}\LEC{litura}:litera}
+           }
+   }
+}
+\par
+\VV{{A:\DES{litteris}\LEC{-ris}\DES{ex alio correptis}:decembris}}
+\par
+\VV{{A:\DES{litteris}\LEC{-ris}\EX{\PL{alio}}\DES{correptis}:decembris}}
+\par
+decemb\VV{{A:\EX{\PL{alio}}:-ris}}
+\par
+\VV{
+  {*:semicirculum}
+  {A:\DESCOMPL{ex}{addito in interl.}{semi}:circulum}
+  {U:\DES{supra}\LEC{recta}\DES{erasit}\LEC{\PL{quoddam verbum}}:recta}
+  {V:\DESCOMPL{supra}{erasit}{\PL{quoddam verbum}}:recta}
+}
+\par
+\VV{
+  {A:\EX{circulum}:semicirculum}
+}
+\par
+\VV{
+  {A:\EX{circulum}\INTERL:semicirculum}
+}
+\par
+\VV{
+  {A:\EX{circulum}\INTERL\LEC{semi}:semicirculum}
+}
+\par
+\VV{
+  {A:\EX{circulum}\DES{addito}\INTERL\LEC{semi}:semicirculum}
+}
+\par
+\VV{
+{A:\DES{ex}\LEC{circulum}\DES{addito in interl.}\LEC{semi}:semicirculum}
+}
+\par
+\Unit \VV[longa]{
+    {*:\CR{focax}:Item}
+    {C:\BIS:}
+          }
+\VV{
+  {S:2\Sup{us} et 3\Sup{us}}
+  {C:\VV{
+    {*:2\Sup{us}}
+    {*:\REP[2]:\OM}
+  } et 3\Sup{us} et 4\Sup{us}}
+} trianguli, scilicet 3 et 6 faciunt
+\VB{{C:tertium}{S:3\Sup{um}}} \QDR\Sup{tum}
+\LB{focax}{scilicet 9}.
+\par
+\Unit \VV[longa]{
+          {S:\CR{ape}\BIS:Omnis}
+         } columna quadrata secunda cum duplo
+\VV{
+    {*:\ED{correxi}:collateralis}
+    {S:coll.}
+    {C:collaterali}
+   } quadrati primi, facit triplum suae \LB{ape}{pyramidis}.
+\par
+\Unit \VV[longa]{
+          {*:\CR{ape1}:Omnis}
+          {S:\BIS:}
+         } columna quadrata secunda cum duplo
+\VV{
+    {*:\ED{correxi}:collateralis}
+    {S:coll.}
+    {C:collaterali}
+   } quadrati primi, facit triplum suae \LB{ape1}{pyramidis}.
+\par
+\Unit \Cit{
+     {postremo problematum \VB{{S:mechanicorum}{C:meccanicorum}}}
+     }.
+\par
+\Prop{}
+\begin{Enunciatio}
+Propositio 5\Sup{a}
+\end{Enunciatio}
+%
+\Unit His praelibatis, ponatur unitas \(a\), quilibet autem
+numerus \(b\), ipse autem \(c\) unitate maior quam \(b\).
+\Unit Deinde \(b\) in se faciat \(d\), \(b\) in \(c\) faciat
+\(e\) et \(c\) in 
+\VV[longa]{
+       {S:\CR{yak}:se faciat \(f\)}
+       {C:\OM}
+}
+se faciat \(f\). 
+\Unit Post haec
+\(b\) in \(d\) faciat \(g\). 
+\LB{yak}{Item \Math{b}\Sup{2} in}
+\(e\) faciat \(h\).
+\VB{{S:Adhuc}{C:Ad huc}} 
+\(b\) in \Math{f} faciat \(k\). Demum
+\(c\) in \(f\) faciat \(l\). 
+\Unit Tandem \(b\) in \(g\)
+faciat \(m\). Item \(b\) in \(h\) faciat \(n\).
+\VB{{S:Necnon}{C:Nec non}} 
+\(b\) in \(k\) faciat \(o\). Sic
+\(b\) in \(l\) faciat \(p\). Denique \(c\) in \(l\) faciat
+\(q\). Quibus dispositis.
+\par
+\Unit Omnis pyramis pentagona conflatur
+\TV[duplex]{
+    {S:\CR{cane9}\DES{hoc loco}:ex}
+    {C:\CR{orsa}:}
+} pyramide quadrata
+\LB{cane9}{collaterali} et ex pyramide
+\LB{orsa}{\VB{{C:triangula}{S:\TRN\Sup{la}}} praecedenti}.
+\par
+\Unit
+\TV[duplex]{
+      {*:\CR{circe}\ED{huc transposui}:quare pyramis}
+      {S/C:\CR{arturo}:}
+}
+quinta \TRN\Sup{la} scilicet 35 cum praecedenti pyramide
+\TRN\Sup{la} scilicet 20 construunt 55 pyramidem
+\LB{circe}{quadratam quintam}.
+\Unit Idemque similiter, in omni exemplo, cuiuslibet pyramidis
+\VV{{*:\ED{conieci}:\TRN\Sup{lae}}{S/C:\TRN\Sup{li}}} et
+\VV{{C:praecedentis}{S:praecedenti}} demonstrabo per
+{\Cit{{\VB{{C:undecimam}{S:11\Sup{am}}} huius}}} arguendo
+toties, quoties
+\LB{arturo}{combinantur trianguli}.
+\par
+\VV{
+    {A+:\POSTDEL{\PL{aliquot litteras}}:mexxanica}
+   }
+\par
+\VV{
+    {A+:\ANTEDEL{\PL{aliquot litteras}}:mexxanica}
+   }
+\par
+prima \VV{
+  {*:cane}
+  {*:\MARG:}
+} dopo
+\par
+\VV{
+    {A:existimatur}
+    {B/C:\VV{
+      {B:habetur}
+      {C:abetur}
+    }}
+}     
+\par
+\VV{
+    {A:existimatur}
+    {B/C:\VB{{B:habetur}
+             {C:abetur}
+    }}
+}
+\par
+la macro \Comm{ceci est un commentaire} me donne:
+\par
+\Unit Quoniam per \Cit{{quintam huius}{}}, quantitatis $ab$ ad quantitatem $ef$ ratio componitur  
+ \VV[longa]{
+{*:\CR{circe6}:\VV{{S:ex}{C:et ex}}}{C:\BIS:}
+}
+ ratione \VV{{S/C:numeri}{C:\REP[2]:numerus}} 
+$a$ ad numerum \LB{circe6}{$e$}, et ex ratione \VV{{S:numeri}{C:numerus}} $f$ ad numerum $b$. \Unit Ac 
+\par
+\Date{{Hic complet numeros
+fertilis ENNA meos {\DB} 24 dec. 1553.}}
+o anche
+\Date{{Hic complet numeros
+fertilis ENNA meos 24\Sup{o} dec. 1553.}}
+danno degli errori.
+\par
+in eodem plano \VV{{A:\OM}{B:cum}} lineis, cuius summitas sit punctum,
+\par
+questo \`e un \Tit{titolo di un'opera} codificato secondo il manuale.
+\par
+\begin{titmarg}
+questo \`e un titolo a margine.
+\end{titmarg}
+\par
+\Personaggio{Paolo} ha detto che funziona.
+\par
+Prova \VV{{A:\DES{omisso \UN[OPERETTA]{cervo1}}:questa}} e stai felice.
+\par
+Prova esponente\Sup{sup}, deponente\Sub{sub}
+ed entrambi\SupSub{sup}{sub}.
+\par
+Prove di markup opera\Opera{{prova}},
+proposizione\Prop{prova}, 
+argomento\Arg{prova},
+libro\Libro{prova},
+beginnm\BeginNM{},
+endnm\EndNM{}
+e generico\Markup{markup: }{generico}.
+Compare solo se viene richiesto il markup nel testo.
+\par
+Prove di congetture \Cong{Serve per formulare delle congetture}.
+\par
+(\Cit{{per 2.XI}})
+\par
+Bisogna che accetti commenti\Comm{prima riga \par seconda riga}
+su pi{\`u} paragrafi.
+\begin{Enunciatio}
+Ci sono dei problemi \INTE{\VB{{*:\ED{correxi}:quando}{B:quanto}} si inserisce} un commento dell'editore
+in una variante banale.
+\end{Enunciatio}
+\par
+... prima \VV{{A:\POSTDEL{\TRN\RTT\QDR}:21}} dopo ...
+\par
+... prima \VV{{A:\DESCOMPL{miao}{bau}{\TRN\RTT\QDR}:21}} dopo ...
+\par
+esempio di frazione: $\frac{2}{3}$
+\par
+%%%
+\begin{Enunciatio}
+MUSICAE TRADITIONES CARPTIM COLLECTAE
+\par
+Vel Musica elementa Maurolyci studio congesta
+\end{Enunciatio}
+%%%%
+\par Prova con tabula. Dovrebbe andare.
+
+\par Prova adnotatio in una
+\VV{{A:variante\Adnotatio{annotazione}}{B:variazione}}. Prova
+adnotazio finita.  \par
+\section{Macro di semplificazione}
+\par
+\NomeTestimone{A} Per semplificare: \Smarg{questa lezione} \`e a
+margine, mentre \Smarg[A1]{questa} \`e stata aggiunta da un'altra
+mano.  \par
+ Per semplificare: \Smargsign{questa lezione} \`e a margine
+(con segnodi richiamo), mentre \Smargsign[A1]{questa} \`e stata
+aggiunta da un'altra mano.  \par
+ Per semplificare: \Sinterl{questa
+lezione} \`e in interlinea, mentre \Sinterl[A1]{questa} \`e stata
+aggiunta da un'altra mano.  \par
+ Per semplificare: \Sinterl{questa
+lezione} \`e in interlinea, mentre \Ssupra[A1]{questa} \`e stata
+aggiunta da un'altra mano.  \par
+ Per semplificare: \Spc{questa
+lezione} \`e dopo una correzione, mentre \Spc[A1]{questa} \`e stata
+aggiunta da un'altra mano.  \par
+ Per semplificare: \Sbis{questa
+lezione} \`e ripetuta, mentre \Sbis[A1]{questa} \`e stata aggiunta da
+un'altra mano.  \par
+ \VV{{A+:\MARG:questa lezione}{A:\DES{ante
+corr.}:sta roba}} Per semplificare: \Smargcorr{sta roba}{questa
+lezione} \`e corretta in margine, mentre \Smargcorr[A1]{sta
+qui}{questa} \`e stata aggiunta da un'altra mano.  \par
+ Per
+semplificare: \Smargsigncorr{sta roba}{questa lezione} \`e corretta in
+margine con segno di richiamo, mentre \Smargsigncorr[A1]{sta
+qui}{questa} \`e stata aggiunta da un'altra mano.  \par
+ Per
+semplificare: \Sintcorr{sta roba}{questa lezione} \`e corretta in
+interlinea, mentre \Sintcorr[A1]{sta qui}{questa} \`e stata aggiunta
+da un'altra mano.  Questa, invece, \Sintcorr[A+]{premier}{deuxieme}
+non ha senso.  \par
+ Per semplificare: \Santedel{sta roba}{questa
+lezione} \`e stata corretta, mentre \Santedel[A1]{sta qui}{questa} \`e
+stata aggiunta da un'altra mano.  \par
+ Per semplificare: \Spostdel{sta
+roba}{questa lezione} \`e stata corretta, mentre \Spostdel[A1]{sta
+qui}{questa} \`e stata aggiunta da un'altra mano.  \par
+ Per
+semplificare: \Sex{sta roba}{questa lezione} \`e stata corretta,
+mentre \Sex[A1]{sta qui}{questa} \`e stata aggiunta da un'altra mano.
+\par
+ \NomeTestimone{Clavius} Per semplificare: \Smarg{questa lezione}
+\`e a margine, mentre \Smarg[A1]{questa} \`e stata aggiunta da
+un'altra mano.  \par
+ triangulum \VV{{A:\DESCOMPL{prima di}{Clavio
+ha cancellato}{primum}:secundum} } erit \par
+ triangulum \VV{
+{A:\EDCOMPL{prima di}{ho cancellato}{primum}:secundum} } erit \par
+questa {\`e} un'\VV{ {*:abbreviazione} {A:\CONTR{abb.ne}}
+{B:\CONTR{a.ne}} {C:abbr.}  }
+
+\section{Macro speciali}
+
+\par Macro per \href{http://www.w3c.org}{link ipertestuali} in
+\voidhref{HTML}.
+
+\section{POSTSCRIPT}
+
+\par prima della variante
+\VV{{*:Vizinii}{A:\DES{contraxit}\POSTSCRIPT\DES{de quo loco vide
+      \Tit{Fragm. Arith} x.\UN{cervo1}}:Viz.}} dopo la variante.
+\par
+Sit recta $ab$ parallela ipsae $cd$ et \VV[longa]{
+{*:\CR{unicorno}:recta}
+{H:\POSTSCRIPT\DES{qui}\LEC{non}\DES{add. post }\LEC{et}:\OM}
+}
+$mn$ parallela ipsae $kl$ (tangens, ut
+supra dictum est, circulum $rsv$)
+\LB{unicorno}{quae est} perpendicularis
+$cd$ et describatur ...
+
+\par
+
+\textcircled{1 }
+\textcircled{2 }
+\textcircled{3 }
+\textcircled{4 }
+\textcircled{5 }
+\textcircled{6 }
+\textcircled{7 }
+\textcircled{8 }
+\textcircled{9 }
+\textcircled{10}
+\textcircled{11} 
+\textcircled{12} 
+\textcircled{13} 
+\textcircled{14} 
+\textcircled{15} 
+\textcircled{16} 
+\textcircled{17} 
+\textcircled{18} 
+\textcircled{19} 
+\textcircled{20}
+\textcircled{21}
+
+\par
+
+%\section{Messaggi dell'analizzatore}
+%
+%SOL
+%BeginNM
+%
+%{
+%1
+%2
+%3
+%4
+%5
+%6
+%7
+%8
+%9
+%10
+%11
+%12
+%13
+%14
+%15
+%16
+%17
+%18
+%19
+%20
+%}
+%
+%[
+%1
+%2
+%3
+%4
+%5
+%6
+%7
+%8
+%9
+%10
+%11
+%12
+%13
+%14
+%15
+%16
+%17
+%18
+%19
+%20
+%]
+%
+%(
+%1
+%2
+%3
+%4
+%5
+%6
+%7
+%8
+%9
+%10
+%11
+%12
+%13
+%14
+%15
+%16
+%17
+%18
+%19
+%20
+%)
+%%
+%\begin{pippo}
+%  ciao ciao ciao
+%\end{pluto}
+
+%\VV[x]{
+%}
+%
+%\Cit[y]{
+%}
+%
+%[prova quadre]
+%pippo[]
+%pappa []
+%
+%Punto interrogativo?
+%
+%{
+%[
+%(
+
+\section{bug}
+
+\subsection{VV con lezione vuota}
+
+\VV{{B/F/V:quod}{U:\INTERL:}}
+
+\subsection{VV senza altri testimoni}
+
+\VV{{*:cane}{A:gatto}}
+
+\VV{{*:\DES{ut vid. An}\LEC{cane}\DES{?}:cene}}
+
+\VV{{*:\DES{ut vid. An}\LEC{cane}\DES{?}:cene}{A:gatto}}
+
+\VV{{A:\DES{ut vid. An}\LEC{cane}\DES{?}:cene}}
+
+\VV{{A:\DES{ut vid. An}\LEC{cane}\DES{?}:cene}{B:cena}}
+
+\VV{{*:\ED{conieci ex}\LEC{cene}:cane}}
+
+\htmlcut Un'altra pagina numerata.
+\Unit[lince]Pagina di prova della unit per lince.
+\htmlcut[epilogo] Ed una con descrizione.
+
+\Commenti
+
+\Annotazioni
+
+\end{document}

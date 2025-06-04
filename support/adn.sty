@@ -1,0 +1,339 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Save file as: ADNNOTES.STY
+% modified by --bg (B.Gaulle) 09/14/94 for:
+%               1) replace » (why a 8bit char here?) by ^ as a default. 
+%               2) force \catcode of > to be 12 (implied by \@doananot).
+%          by --bg again 03/22/95 for:
+%               3) reseting appropriate catcode of > in case it were
+%                  used as an active char before \@endananote (was
+%                  pointed by Ch. Pallier).
+%%%% free to distribute by John_Lavagnino@Brown.edu on Thu, 23 Mar 1995 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%       ****************************************
+%       *              ADNNOTES                *
+%       ****************************************
+%
+%  Date of this version: 24 September 1991.
+%
+%  Based on the FOOTNOTES section of
+%  LATEX.TEX (VERSION 2.09 - RELEASE OF 19 April 1986), with
+%  "footnote" changed to "adnnote" and "fn" changed to "en" (where
+%  appropriate), with all the minipage stuff pulled out, and with
+%  some small changes for the different operation of adnnotes.
+%
+%  Uses an extra external file, with .ADN extension, to hold the
+%  text of the adnnotes.  This may be deleted after the run; a new
+%  version is generated each time.
+%
+%  This code does not obey \nofiles.  Perhaps it should.
+%
+%   John Lavagnino (lav@brandeis.bitnet), 9/23/88
+%   Department of English and American Literature,
+%      Brandeis University
+%
+%  To turn all the footnotes in your documents into adnnotes, say
+%
+%     \let\footnote=\adnnote
+%
+%  in your preamble, and then add something like
+%
+%     \newpage
+%     \begingroup
+%     \parindent 0pt
+%     \parskip 2ex
+%     \def\anotesize{\normalsize}
+%     \theadnnotes
+%     \endgroup
+%
+% as the last thing in your document.
+%
+%       ****************************************
+%       *            CHANGE LOG                *
+%       ****************************************
+%
+% JL  Modified to include \addtoadnnotes.  JL, 10/22/89.
+%
+% JK  Modification by J"org Knappen 25. 2. 1991:
+% JK
+% JK  Introduced \notesname in the spirit of international \LaTeX.
+% JK  \notesname is set per default to be {Notes}, but can easily
+% JK  be redifined, e.g. for german language
+% JK  \renewcommand{\notesname}{Anmerkungen}
+%
+% DW Modification by Dominik Wujastyk, London, 19 September 1991:
+% DW
+% DW Moved the line
+% DW         \edef\@currentlabel{\csname p@adnnote\endcsname\@theenmark}
+% DW out of the definition of \@adnnotetext and into the definition
+% DW of \@doananote so that \label and \ref commands work correctly in
+% DW adnnotes.  Otherwise, the \label just pointed to the last section
+% DW heading (or whatever) preceding the \theadnnotes command.
+%
+% JL Revised documentation and macros.  24 Sept 1991.
+%
+%       ****************************************
+%       *        ADNNOTE COMMANDS              *
+%       ****************************************
+%
+%
+%   \adnnote{NOTE}       : User command to insert a adnnote.
+%
+%   \adnnote[NUM]{NOTE}  : User command to insert a adnnote numbered
+%                           NUM, where NUM is a number -- 1, 2,
+%                           etc.  For example, if adnnotes are numbered
+%                           *, **, etc. within pages, then  \adnnote[2]{...}
+%                           produces adnnote '**'.  This command does  not
+%                           step the adnnote counter.
+%
+%   \adnnotemark[NUM]    : Command to produce just the adnnote mark in
+%                           the text, but no adnnote.  With no argument,
+%                           it steps the adnnote counter before  generating
+%                           the mark.
+%
+%   \adnnotetext[NUM]{TEXT} : Command to produce the adnnote but no
+%                              mark.  \adnnote is equivalent to
+%                              \adnnotemark \adnnotetext .
+%
+%   \addtoadnnotes{TEXT} : Command to add text or commands to current
+%                              adnnotes file: for inserting headings,
+%                              pagebreaks, and the like into adnnotes
+%                              sections.  TEXT a moving argument:
+%                              \protect required for fragile commands.
+%
+%       ****************************************
+%       *        ADNNOTE USER COMMANDS         *
+%       ****************************************
+%
+%   Adnnotes use the following parameters, similar to those relating
+%   to footnotes:
+%
+%   \anotesize   : Size-changing command for adnnotes.
+%
+%   \theadnnote : In usual LaTeX style, produces the adnnote number.
+%
+%   \@theenmark : Holds the current adnnote's mark--e.g., \dag or '1' or 'a'.
+%
+%   \@makeenmark : A macro to generate the adnnote marker from  \@theenmark
+%                  The default definition is \hbox{$^\@theenmark$}.
+%
+%   \@makeentext{NOTE} :
+%        Must produce the actual adnnote, using \@theenmark as the mark
+%        of the adnnote and NOTE as the text.  It is called when effectively
+%        inside a \parbox, with \hsize = \columnwidth.  For example, it might
+%        be as simple as
+%               $^{\@theenmark}$ NOTE
+%
+%
+%       ****************************************
+%       *        ADNNOTE PSEUDOCODE            *
+%       ****************************************
+%
+% \adnnote{NOTE}  ==
+%  BEGIN
+%    \stepcounter{adnnote}
+%    \@theenmark :=G eval (\theadnnote)
+%    \@adnnotemark
+%    \@adnnotetext{NOTE}
+%  END
+%
+% \adnnote[NUM]{NOTE} ==
+%  BEGIN
+%    begingroup
+%       counter adnnote :=L NUM
+%       \@theenmark :=G eval (\theadnnote)
+%    endgroup
+%    \@adnnotemark
+%    \@adnnotetext{NOTE}
+%  END
+%
+% \@adnnotetext{NOTE} ==
+%  BEGIN
+%    write to \@anotes file: "\@doananote{ADNNOTE MARK}"
+%    begingroup
+%       \next := NOTE
+%       set \newlinechar for \write to \space
+%       write to \@anotes file: \meaning\next
+%               (that is, "macro:->NOTE)
+%    endgroup
+%  END
+%
+% \addtoadnnotes{TEXT} ==
+%  BEGIN
+%    open adnnotes file if not already open
+%    begingroup
+%       let \protect to \string
+%       set \newlinechar for \write to \space
+%       write TEXT to \@anotes file
+%    endgroup
+%  END
+%
+% \adnnotemark      ==
+%  BEGIN \stepcounter{adnnote}
+%        \@theenmark :=G eval(\theadnnote)
+%        \@adnnotemark
+%  END
+%
+% \adnnotemark[NUM] ==
+%   BEGIN
+%       begingroup
+%         adnnote counter :=L NUM
+%        \@theenmark :=G eval(\theadnnote)
+%       endgroup
+%       \@adnnotemark
+%   END
+%
+% \@adnnotemark ==
+%   BEGIN
+%    \leavevmode
+%    IF hmode THEN \@x@sf := \the\spacefactor FI
+%    \@makeenmark          % put number in main text
+%    IF hmode THEN \spacefactor := \@x@sf FI
+%   END
+%
+% \adnnotetext      ==
+%    BEGIN \@theenmark :=G eval (\theadnnote)
+%          \@adnnotetext
+%    END
+%
+% \adnnotetext[NUM] ==
+%    BEGIN begingroup  counter adnnote :=L NUM
+%                      \@theenmark :=G eval (\theadnnote)
+%          endgroup
+%          \@adnnotetext
+%    END
+%
+%       ****************************************
+%       *           ADNNOTE MACROS             *
+%       ****************************************
+%
+
+\@definecounter{adnnote}
+\def\theadnnote{\arabic{adnnote}}
+
+% Default definition
+\def\@makeenmark{\hbox{$^{\@theenmark}$}}
+
+\newdimen\adnnotesep
+
+\def\adnnote{\@ifnextchar[{\@xadnnote}{\stepcounter
+   {adnnote}\xdef\@theenmark{\theadnnote}\@adnnotemark\@adnnotetext}}
+
+\def\@xadnnote[#1]{\begingroup \c@adnnote=#1\relax
+   \xdef\@theenmark{\theadnnote}\endgroup
+   \@adnnotemark\@adnnotetext}
+
+%  Here begins adnnote code that's really different from the footnote
+% code of LaTeX.
+
+\let\@doananote=0
+\let\@endananote=0
+
+\newwrite\@anotes
+\newif\if@anotesopen \global\@anotesopenfalse
+
+\def\@openanotes{\immediate\openout\@anotes=\jobname.adn\relax
+      \global\@anotesopentrue}
+
+%  The stuff with \next and \meaning is a trick from the TeXbook, 382,
+% there intended for setting verbatim text, but here used to avoid
+% macro expansion when the footnote text is written.  \next will have
+% the entire text of the footnote as one long line, which might well
+% overflow limits on output line length; the business with \newlinechar
+% makes every space become a newline in the \@anotes file, so that all
+% of the lines wind up being quite short.
+
+\long\def\@adnnotetext#1{%
+     \if@anotesopen \else \@openanotes \fi
+     \immediate\write\@anotes{\@doananote{\@theenmark}}%
+     \begingroup
+        \def\next{#1}%
+        \newlinechar='40
+        \immediate\write\@anotes{\meaning\next}%
+     \endgroup
+     \immediate\write\@anotes{\@endananote}}
+
+% \addtoadnnotes works the way the other adnnote macros probably should
+% have, requiring the use of \protect for fragile commands.
+
+\long\def\addtoadnnotes#1{%
+     \if@anotesopen \else \@openanotes \fi
+     \begingroup
+        \newlinechar='40
+        \let\protect\string
+        \immediate\write\@anotes{#1}%
+     \endgroup}
+
+%  End of unique adnnote code
+
+\def\adnnotemark{\@ifnextchar[{\@xadnnotemark
+    }{\stepcounter{adnnote}\xdef\@theenmark{\theadnnote}\@adnnotemark}}
+
+\def\@xadnnotemark[#1]{\begingroup \c@adnnote #1\relax
+   \xdef\@theenmark{\theadnnote}\endgroup \@adnnotemark}
+
+\def\@adnnotemark{\leavevmode\ifhmode
+  \edef\@x@sf{\the\spacefactor}\fi \@makeenmark
+   \ifhmode\spacefactor\@x@sf\fi\relax}
+
+\def\adnnotetext{\@ifnextchar
+    [{\@xadnnotenext}{\xdef\@theenmark{\theadnnote}\@adnnotetext}}
+
+\def\@xadnnotenext[#1]{\begingroup \c@adnnote=#1\relax
+   \xdef\@theenmark{\theadnnote}\endgroup \@adnnotetext}
+
+
+%  \theadnnotes actually prints out the adnnotes.
+
+%  The user may want separate adnnotes for each chapter, or a big
+% block of them at the end of the whole document.  As it stands,
+% either will work; you just say \theadnnotes wherever you want the
+% adnnotes so far to be inserted.  However, you must add
+% \setcounter{adnnote}{0} after that if you want subsequent adnnotes
+% to start numbering at 1 again.
+
+%  \anoteformat is provided so user can specify some special formatting
+% for the adnnotes.  It needs to set up the paragraph parameters, start
+% the paragraph, and print the label.  The \leavemode stuff is to make
+% and undo a dummy paragraph, to get around the games \section*
+% plays with paragraph indenting.
+
+\def\anotesname{Annotazioni}% <------ JK
+\def\anoteheading{\section*{\anotesname
+  \@mkboth{\uppercase{\anotesname}}{\uppercase{\anotesname}}}%
+     \leavevmode\par\vskip-\baselineskip}
+
+\def\anoteformat{\rightskip\z@ \leftskip\z@ \parindent=1.8em
+     \leavevmode\llap{\hbox{$^{\@theenmark}$}}}
+
+\def\anotesize{\footnotesize}
+
+% The definition of \ETC. is needed only for versions of TeX prior
+% to 2.992.  Those versions limited \meaning expansions to 1000
+% characters; in 2.992 and beyond there is no limit.  At Brandeis the
+% BIGLATEX program changed the code in the token_show procedure of
+% TeX to eliminate this problem, but most ``big'' versions of TeX
+% will not solve this problem.
+
+\def\theadnnotes{\immediate\closeout\@anotes \global\@anotesopenfalse
+  \begingroup
+    \makeatletter
+% the following is to save catcode of ``>'' and restore it in \@endananote
+\edef\@tempa{`\string >}%
+\ifnum\catcode\@tempa=11\let\@ResetGT\relax% accepts also that > were active
+  \else\edef\@ResetGT{\noexpand\catcode\@tempa=\the\catcode\@tempa}%
+\fi%
+    \catcode`>=12% char > will be read as char so force it to \catcode 12 --bg\edef\GOfrench{`\string @}% temp def futher correctly defined
+    \def\@doananote##1##2>{\def\@theenmark{##1}\par\begingroup
+        \@ResetGT%\catcode`>=13
+        \edef\@currentlabel{\csname p@adnnote\endcsname\@theenmark} %DW
+        \anoteformat}
+    \def\@endananote{\par\endgroup}%
+    \def\ETC.{\errmessage{Some long adnnotes will be truncated; %
+                            use BIGLATEX to avoid this}%
+          \def\ETC.{\relax}}
+    \anoteheading
+    \anotesize
+    \input{\jobname.adn}%
+  \endgroup}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

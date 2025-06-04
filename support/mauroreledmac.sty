@@ -1,0 +1,270 @@
+\ProvidesPackage{mauroreledmac}[2022/04/11 v0.0.6]
+
+\RequirePackage{reledmac}
+\RequirePackage{stmaryrd}
+
+\newlength\MAU@before@title
+\newlength\MAU@after@title
+\newlength\MAU@before@sec@level@one
+\newlength\MAU@after@sec@level@one
+\newlength\MAU@before@sec@level@two
+\newlength\MAU@after@sec@level@two
+\newlength\MAU@after@protasis
+\setlength\MAU@before@title{18pt plus 3pt minus 2pt}
+\setlength\MAU@after@title{0pt}
+\setlength\MAU@before@sec@level@one{18pt plus 3pt minus 2pt}
+\setlength\MAU@after@sec@level@one{12pt plus 3pt minus 2pt}
+\setlength\MAU@before@sec@level@two{12pt plus 3pt minus 2pt}
+\setlength\MAU@after@sec@level@two{12pt plus 3pt minus 2pt}
+\setlength\MAU@after@protasis{6pt plus 1pt minus 2pt}
+
+\def\MAU@sec@title@hook{}
+\def\MAU@sec@level@one@hook{}
+\def\MAU@sec@level@two@hook{}
+
+\newcommand{\Title}[2]{%
+  \vspace*{\MAU@before@title}
+  {\centering\Large\scshape\MAU@sec@title@hook\pstart#1\pend\ifblank{#2}{}{\par\pstart#2\pend}\par}%
+  \addvspace{\MAU@after@title}
+}
+
+\newcommand{\MAU@sec@level@one}[1]{%
+  \addvspace{\MAU@before@sec@level@one}
+  {\centering\nointerlineskip\large\scshape%
+  \MAU@sec@level@one@hook%  
+  \pstart#1\pend
+  \par}%
+  \nobreak%
+  \addvspace{\MAU@after@sec@level@one}
+  \@afterindentfalse%
+  \nobreak%
+}
+
+\newcommand{\MAU@sec@level@two}[1]{%
+  \addvspace{\MAU@before@sec@level@two}
+  {\centering\nointerlineskip\scshape%
+  \MAU@sec@level@two@hook%  
+  \pstart#1\pend
+  \par}%
+  \nobreak%
+  \addvspace{\MAU@after@sec@level@two}
+  \@afterindentfalse%
+  \nobreak%
+}
+\let\Capitolo\MAU@sec@level@one
+\let\Teorema\MAU@sec@level@one
+\let\LEDlemma\lemma
+\let\Sottocapitolo\MAU@sec@level@two
+\let\Corollario\MAU@sec@level@two
+\let\lemma\MAU@sec@level@two
+\let\Lemma\MAU@sec@level@two
+\let\Scolio\MAU@sec@level@two
+\let\Aliter\MAU@sec@level@two
+\let\Additio\MAU@sec@level@two
+
+\newenvironment{protasis}%
+{\large\pstart}{%
+  \par\pend\par\vspace{\MAU@after@protasis}%
+  \aftergroup\@afterindentfalse%
+}
+
+\newcommand\tagid[1]{%
+  \textsf{\textsl{#1}}}
+
+\newcommand\taged[1]{%
+  \textsf{\textsl{#1}}}
+
+\newcommand\tagdes[1]{%
+  \textsf{\textsl{#1}}}
+
+\newcommand\tagcit[1]{%
+  \textsf{\textsl{#1}}}
+
+\newcommand\subnote[1]{%
+  \sn@delim@left#1\sn@delim@right}
+
+\newcommand\notamarg[1]{%
+  {\small\nm@delim@left{\itshape#1}\nm@delim@right}}
+
+\newcommand\sn@delim@left{\textsf{(}}
+\newcommand\sn@delim@right{\textsf{)}}
+
+\newcommand\nm@delim@left{\ensuremath{\llbracket}}
+\newcommand\nm@delim@right{\ensuremath{\rrbracket}}
+
+\newcommand\variantsep{\hspace{1em plus .1em minus .1em}}
+\newcommand\halfvariantsep{\hspace{.25em}}
+
+\newcommand\footnotevv[1]{\Afootnote{\normalfont#1}}%% Varianti
+\newcommand\footnotecit[1]{\xdef\unitpar{\theunit}\Bfootnote{\normalfont#1}}%% Apparato delle fonti
+\let\Adnotatio\footnoteA
+
+\renewcommand*{\thefootnoteA}{\alph{footnoteA}}
+\renewcommand*{\bodyfootmarkA}{\textsuperscript{\bfseries\thefootnoteA}}
+\renewcommand*{\footfootmarkA}{\textsuperscript{\bfseries\thefootnoteA}\hspace{3pt}}
+\renewcommand\@makefntext[1]{%
+    \parindent=3mm%
+    \textsuperscript{\@thefnmark}\kern4dd#1}
+
+\newskip\OriginalFootins
+\setlength{\skip\OriginalFootins}{7mm plus 10dd minus 2dd}
+\setlength{\skip\footins}{7mm plus 10dd minus 2dd}
+%\setlength{\skip\Afootins}{7mm}
+\setlength{\skip\Bfootins}{7mm}
+\renewcommand{\footnoterule}{}
+\renewcommand{\Afootnoterule}{}
+\renewcommand{\Bfootnoterule}{\kern -2mm \hrule \@height .2\p@ \@width 24dd \kern 5\p@}
+\let\footnoteruleA\Bfootnoterule
+\let\footnoteruleB\footnoteruleA
+
+\Xarrangement[A]{paragraph}
+\Xarrangement[B]{paragraph}
+
+\renewcommand*{\Afootfmt}[4]{%
+  \Xstorelineinfo{#1}{#4}%
+  \Xinsertparafootsep{#4}%
+  \ledsetnormalparstuff@common%
+  \printlinefootnote{#1}{#4}\nobreak%
+%  \print@lemma{#1}{#2}{#4}%
+  \nobreak\csuse{Xwrapcontent@#4}{#3}%
+  \penalty-10 }
+\Xnumberonlyfirstinline[A]
+\Xnumberonlyfirstintwolines[A]
+\Xsymlinenum[A]{\ensuremath{\diamond}}
+
+\renewcommand*{\Bfootfmt}[4]{%
+  \Xstorelineinfo{#1}{#4}%
+  \Xinsertparafootsep{#4}%
+  \ledsetnormalparstuff@common%
+  \textbf{\unitpar}~%
+  \print@lemma{#1}{#2}{#4}%
+  \csuse{Xwrapcontent@#4}{#3}%
+  \penalty-10 }
+\Xlemmaseparator[B]{\taged{:}}
+
+\fnpos{critical-familiar}
+
+\newcommand\AliaManus[2]{\MAU@AliaManus{#2}}
+\newcommand\MAU@AliaManus[1]{\ensuremath{\llbracket}#1\ensuremath{\rrbracket}}
+
+%% Divisione in paragrafi
+\newcounter{unit}
+\setcounter{unit}{0}
+\newcounter{thisunit}
+\setcounter{thisunit}{0}
+\newcommand\Unit{%
+  \refstepcounter{unit}%
+  \setcounter{thisunit}{\value{unit}}%
+  {\normalsize\textsuperscript{\bfseries\theunit}\,}%}
+}
+
+%% Simboli e macro varie
+\newcommand{\CRUX}[1]{\hbox{\textdagger}#1\hbox{\textdagger}}
+\newcommand\EXPU[1]{[#1]}
+\newcommand\INTE[1]{\ensuremath{\langle}#1\ensuremath{\rangle}}
+\newcommand{\LACc}{\LACUNA}
+\newcommand{\LACm}{\LACUNA}
+\newcommand{\LACs}{\LACUNA}
+\newcommand{\Nota}{}
+\newcommand{\AltraVar}{\hspace{1em}}
+\newcommand{\Abbr}[1]{#1}
+\newcommand{\mtilde}{$\widetilde{\hbox{m}}$}
+\newcommand{\ptilde}{$\widetilde{\hbox{p}}$}
+\newcommand{\RUBR}[1]{#1}
+\def\supersubscript#1#2{\hbox{$^{\rm #1}_{\rm #2}$}}
+\def\textsubscript#1{\hbox{$_{\rm #1}$}}
+\let\Sub\textsubscript
+\let\Sup\textsuperscript
+\let\SupSub\supersubscript
+\newcommand\regula{\rule{1cm}{.4pt}}
+\newcommand\Tit[1]{\emph{#1}}
+\newcommand\IMP{\tag{imp}\ }
+\newcommand*\DB{//}
+\newcommand*\SB{/}
+\newcommand\Date[2]{\begin{flushright}#1\end{flushright}}
+\newcommand\ABBR[1]{#1}
+\let\UnitEmpty\relax
+\def\Prop#1{}
+
+\newcommand\Folium[1]{\ensuremath{|}\ledsidenote{\normalfont#1}}
+
+\font\mauro=mauro
+
+% SISTEMA SOLARE
+\def\SOL{{\mauro\char0}}  % SOLE
+\def\MER{{\mauro\char1}}  % MERCURIO
+\def\VEN{{\mauro\char2}}  % VENERE
+\def\TER{{\mauro\char3}}  % TERRA
+\def\MAR{{\mauro\char4}}  % MARTE
+\def\GIO{{\mauro\char5}}  % GIOVE
+\def\SAT{{\mauro\char6}}  % SATURNO
+\def\LUN{{\mauro\char10}} % LUNA
+
+% SEGNI ZODIACALI
+\def\ARS{{\mauro\char11}} % ARIETE
+\def\TRS{{\mauro\char12}} % TORO
+\def\GMN{{\mauro\char13}} % GEMELLI
+\def\CNC{{\mauro\char14}} % CANCRO
+\def\LEO{{\mauro\char15}} % LEONE
+\def\VRG{{\mauro\char16}} % VERGINE
+\def\LBR{{\mauro\char17}} % BILANCIA
+\def\SCR{{\mauro\char18}} % SCORPIONE
+\def\SGT{{\mauro\char19}} % SAGITTARIO
+\def\CPR{{\mauro\char20}} % CAPRICORNO
+\def\AQR{{\mauro\char21}} % ACQUARIO
+\def\PSC{{\mauro\char22}} % PESCI
+\def\CNJ{{\mauro\char52}} % CONGIUNZIONE
+\def\OPP{{\mauro\char53}} % OPPOSIZIONE
+
+% SIMBOLI ASTRONOMICI EXTRA
+\def\Stella{{\Huge$\ast$}}
+\def\Terra{{\Huge$\bullet$}}
+
+% SIMBOLI MATEMATICI
+\def\QDR{{\mauro\char30}} % QUADRATO
+\def\TRN{{\mauro\char31}} % TRIANGOLO
+\def\RTT{{\mauro\char32}} % RETTANGOLO
+\def\PRL{{\mauro\char33}} % PARALLELOGRAMMA
+\def\TRP{{\mauro\char34}} % TRAPEZIO
+\def\DRTT{{\mauro\char35}} % DOPPIO RETTANGOLO
+\def\RDX{{\mauro\char40}} % RADIX MAIUSCOLA
+\def\rdx{{\mauro\char41}} % RADIX MINUSCOLA
+\def\CUB{{\mauro\char42}} % CUBO
+\def\PPD{{\mauro\char43}} % PARALLELEPIPEDO
+\def\PEN{{\mauro\char44}} % PENTAGONO
+\def\HEX{{\mauro\char45}} % ESAGONO
+\def\PYR{{\mauro\char46}} % PIRAMIDE
+\def\HEXC{\mbox{\Large$\ast$\normalsize}} % ESAGONO CENTRALE
+
+\def\PER{{\lower1.5ex\hbox{$\mathchar'26$}\mkern-6mu p}}
+\def\CUM{{\rotatebox[origin=c]{180}{c}}}
+
+% SCANSIONE RAGIONAMENTO
+\def\DB{{\mauro\char50}}  % BARRA DOPPIA
+\def\SB{{\mauro\char51}}  % BARRA SINGOLA
+
+\long\def\Comm#1{%
+  \ifx\COMMINTXT\YES%
+    \textbf{[}#1\textbf{]}%
+  \else%
+    \endnote{#1}%
+  \fi%
+}
+\AtBeginDocument{\def\theendnote{[\ensuremath{\bullet}\arabic{endnote}]}}
+\def\Commenti{\newpage%
+             \begingroup%
+             \parindent 0pt%
+             \parskip 2ex%
+             \def\enotesize{\normalsize}%
+             \theendnotes%
+             \endgroup}
+
+\def\COMMINTXT{NO}
+\def\CommentiNelTesto{\def\COMMINTXT{YES}}
+\def\maurocite#1#2{#2}
+
+\def\lbracket{[}
+\def\rbracket{]}
+\def\texthash{\#}
+
+\endinput

@@ -1,0 +1,151 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{fib4mtex}[2025/02/25 v0.0.3. Macro per l'edizione del Liber Abbaci, da usare con MauroTeX]
+\RequirePackage{amsmath}
+\RequirePackage{tikz}
+\RequirePackage{etoolbox,xstring}
+
+% define "struts", as suggested by Claudio Beccari in
+%    a piece in TeX and TUG News, Vol. 2, 1993. Adapted to our needs
+\newcommand\Tstrut{\setbox0\hbox{$\scriptstyle \mathstrut$}\rule{0pt}{\dimexpr\ht0+.5pt}}         % = `top' strut
+\newcommand\Bstrut{\setbox0\hbox{$\scriptstyle \mathstrut$}\rule[\dimexpr.5pt-\dp0]{0pt}{0pt}}   % = `bottom' strut
+\newcommand\TStrut{\setbox0\hbox{$\mathstrut$}\rule{0pt}{\dimexpr\ht0+4pt}}         % = `top' strut
+\newcommand\BStrut{\setbox0\hbox{$\mathstrut$}\rule[\dimexpr4pt-\dp0]{0pt}{0pt}}   % = `bottom' strut
+
+\newlength\oradius
+\newlength\oraise
+\setlength\oradius{0.323ex}%{1.5pt}
+\setlength\oraise{0.25ex}%{1.25pt}
+\newcounter{num}
+\newcommand\mfrac[2]{%
+  \typeout{#1}%
+  \typeout{#2}%
+  \setcounter{num}{0}%
+  \addtocounter{num}{-1}%
+  \LAtemplate#1\empty%
+  \typeout{\thenum}%
+  \def\LAnumerator{\StrSubstitute{\@firstofone#1}{,}{&}}%
+  \def\LAdenominator{\StrSubstitute{\@firstofone#2}{,}{&}}%
+  \begingroup%
+  \renewcommand\arraystretch{0}%
+  \arraycolsep=2pt%
+%  \def\sep{&}%
+  \begin{array}{@{}*{\value{num}}{c}c@{}}%
+    \Tstrut\LAnumerator\Bstrut\\\hline
+    \Tstrut\LAdenominator\Bstrut
+  \end{array}%
+  \endgroup%
+}
+\newcommand\xmfrac[2]{%
+  \setcounter{num}{0}%
+  \addtocounter{num}{-1}%
+  \LAtemplate#1\empty%
+  \def\LAnumerator{\StrSubstitute{\@firstofone#1}{,}{&}}%
+  \def\LAdenominator{\StrSubstitute{\@firstofone#2}{,}{&}}%
+  \mbox{%
+  \renewcommand\arraystretch{0}%
+  \arraycolsep=1pt%
+  \def\sep{&}%
+  \begin{array}{@{}*{\value{num}}{c}c@{}}%
+    \Tstrut\LAnumerator\Bstrut\\\hline
+    \Tstrut\LAdenominator\Bstrut
+  \end{array}%
+  }%
+}
+\newcommand\tmfrac[2]{%
+  \setcounter{num}{0}%
+  \addtocounter{num}{-1}%
+  \LAtemplate#1\empty%
+  \def\LAnumerator{\LAparset#1\empty}%
+  \def\LAdenominator{\LAparset#2\empty}%
+  \begingroup%
+  \renewcommand\arraystretch{1.2}%
+  \arraycolsep=2pt%
+  \def\sep{&}%
+  \begin{array}{@{}*{\value{num}}{c}c@{}}%
+    \Tstrut\LAnumerator\Bstrut\\\hline
+    \Tstrut\LAdenominator\Bstrut
+  \end{array}%
+  \endgroup%
+}
+\newcommand\omfrac[2]{%
+  \setcounter{num}{0}%
+  \addtocounter{num}{-1}%
+  \LAtemplate#1\empty%
+  \def\LAnumerator{\StrSubstitute{\@firstofone#1}{,}{&}}%
+  \def\LAdenominator{\StrSubstitute{\@firstofone#2}{,}{&}}%
+  \begingroup%
+  \renewcommand\arraystretch{0}%
+  \arraycolsep=2pt%
+  \def\sep{&}%
+  \raisebox{\oraise}{\tikz \draw (0,0) circle (\oradius);}\begin{array}{@{}*{\value{num}}{c}c@{}}%
+    \Tstrut\LAnumerator\Bstrut\\\hline
+    \Tstrut\LAdenominator\Bstrut
+  \end{array}%
+  \endgroup%
+}
+\newcommand\oxmfrac[2]{%
+  \setcounter{num}{0}%
+  \addtocounter{num}{-1}%
+  \LAtemplate#1\empty%
+  \def\LAnumerator{\StrSubstitute{\@firstofone#1}{,}{&}}%
+  \def\LAdenominator{\StrSubstitute{\@firstofone#2}{,}{&}}%
+  \begingroup%
+  \renewcommand\arraystretch{0}%
+  \arraycolsep=1pt%
+  \def\sep{&}%
+  \raisebox{\oraise}{\tikz \draw (0,0) circle (\oradius);}\begin{array}{@{}*{\value{num}}{c}c@{}}%
+    \Tstrut\LAnumerator\Bstrut\\\hline
+    \Tstrut\LAdenominator\Bstrut
+  \end{array}%
+  \endgroup%
+}
+\newcommand\mfraco[2]{%
+  \setcounter{num}{0}%
+  \addtocounter{num}{-1}%
+  \LAtemplate#1\empty%
+  \def\LAnumerator{\StrSubstitute{\@firstofone#1}{,}{&}}%
+  \def\LAdenominator{\StrSubstitute{\@firstofone#2}{,}{&}}%
+  \mbox{%
+  \renewcommand\arraystretch{0}%
+  \arraycolsep=2pt%
+  \def\sep{&}%
+  \begin{array}{@{}*{\value{num}}{c}c@{}}%
+    \Tstrut\LAnumerator\Bstrut\\\hline
+    \Tstrut\LAdenominator\Bstrut
+  \end{array}\raisebox{\oraise}{\tikz \draw (0,0) circle (\oradius);}%
+  }%
+}
+% \def\LAtemplate#1 #2 {\stepcounter{num}\ifx#2\empty\relax\else\LAtemplate#2\empty\fi}
+% \def\LAparse#1 #2\empty{#1\ifx#2\empty\relax\else&\LAparse#2 \empty\fi}
+\def\LAtemplate#1\empty{%
+  \@for\@LAitem:=#1\do{\stepcounter{num}}%
+}
+% \def\LAparse#1,#2\empty{%
+%   \scriptstyle#1\forcsvlist{\sep\scriptstyle}{#2}%
+% }
+% \def\LAparset#1,#2\empty{%
+%   #1\forcsvlist{\sep}{#2}%
+% }
+
+\usepackage{tikz}
+\usetikzlibrary{backgrounds,tikzmark,shapes.misc,positioning,calc}
+\newcommand*\circled[1]{\tikz[baseline=(char.base)]{
+            \node[shape=circle,draw,inner sep=1pt] (char) {\relsize{-}#1};}}
+
+\newcommand\con{9}
+
+\newcommand{\pbar}{%
+  \vphantom{$\m@th p$}%
+  \ooalign{%
+    $\m@th p$\cr
+    \hidewidth\kern-.2em\smash{\raisebox{-0.75ex}{$\m@th\mathchar'55$}}\hidewidth\cr}%
+}
+\newcommand{\bbar}{%
+  \vphantom{$\m@th \text{b}$}%
+  \ooalign{%
+    $\m@th \text{b}$\cr
+    \hidewidth\kern-.2em\smash{\raisebox{0.75ex}{$\m@th\mathchar'55$}}\hidewidth\cr}%
+}
+\newcommand*{\textoverline}[1]{$\overline{\hbox{#1}}\m@th$}
+
+\endinput

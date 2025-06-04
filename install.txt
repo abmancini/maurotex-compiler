@@ -1,0 +1,41 @@
+Scaricare l'ultima versione di sviluppo direttamente dal repository svn del progetto, aprendo un terminale ed eseguendo il comando
+
+    svn checkout https://svn.elabor.biz/maurotex
+
+Il comando precedente crea una cartella maurotex nella cartella corrente.
+
+La compilazione del progetto MauroTeX richiede l' installazione di alcuni pacchetti. Sono infatti necessari il generatore di parser Bison, l'analizzatore di sintassi Flex ed un ambiente di base LaTeX. L'installazione di tali pacchetti può essere eseguita da terminale tramite il comando:
+
+    sudo apt install flex-old bison texlive texlive-lang-greek texlive-lang-italian texlive-latex-extra texlive-xetex texlive-metapost gcc g++
+
+Una volta installati bison e flex, è necessario portarsi nella directory maurotex/m2x, tramite il comando
+
+    cd  maurotex/m2x
+
+quindi eseguire i comandi (questi comandi vanno usati anche su sistemi non linux purché dotati di un sistema di sviluppo compatibile):
+
+    make linux
+    sudo make install
+
+Fatto ciò, per installare MauroTeX nelle cartelle di sistema, bisogna:
+
+    * portarsi nella directory maurotex
+    * portarsi nella directory support
+    * eseguire i comandi: 
+
+        sudo mkdir -p /usr/local/share/texmf/tex/latex/maurotex
+        sudo cp mauro.sty mauroreledmac.sty adn.sty fib4mtex.sty /usr/local/share/texmf/tex/latex/maurotex
+        sudo mkdir -p /usr/local/share/texmf/fonts/source/public/maurotex
+        sudo cp mauro.mf /usr/local/share/texmf/fonts/source/public/maurotex
+        sudo texhash
+
+Attenzione: le cartelle indicate vanno bene per la distribuzione Ubuntu 18.04 / 20.04 e potrebbero variare in altre distribuzioni o versioni. Eseguendo il comando "sudo texhash" si possono vedere le cartelle effettivamente usate dal sistema corrente.
+
+Su Macintosh, con distribuzione MacTeX-2009, i comandi da dare sono:
+
+        sudo mkdir /usr/local/texlive/texmf-local/tex/latex/maurotex
+        sudo cp mauro.sty mauroreledmac.sty adn.sty fib4mtex.sty /usr/local/texlive/texmf-local/tex/latex/maurotex
+        sudo mkdir /usr/local/texlive/texmf-local/fonts/source/maurotex
+        sudo cp mauro.mf /usr/local/texlive/texmf-local/fonts/source/maurotex
+        sudo texhash
+
