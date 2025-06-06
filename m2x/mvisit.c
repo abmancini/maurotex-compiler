@@ -749,12 +749,44 @@ void visitVF(struct testo *testo, PARAMETRI *parametri, struct testo *sigle)
   }
 }
 
+void recur(struct testo *myt, char *tag, PARAMETRI *param) {
+  if(myt != NULL) {
+    fprintf(stdout, "%s lexema |%s|\n",tag,myt->lexema != NULL ? myt->lexema : "");
+
+    //fprintf(stdout,"\n");
+    printLexema(myt->key, myt->lexema, param);
+    //fprintf(stdout,"\n");
+
+    char ltag[1024];
+    strcpy (ltag, tag);
+    strcat (ltag, "<L>");
+    recur(myt->testo1,ltag, param);
+
+    char rtag[1024];
+    strcpy (rtag, tag);
+    strcat (rtag, "<R>");
+    recur(myt->testo2,rtag, param);
+  }
+}
+
+
+
 // FUNZIONE DI STAMPA DI UNA NOTA
 void visitVV(short key,
              struct testo *testo,
              PARAMETRI *parametri,
              struct testo *sigle)
 { // CONTROLLO GESTIONE ESTERNA VARIANTI
+
+  fprintf(stdout,"\necchilo\n");
+  //se non e' hack questo
+  FILE *sve = parametri->outFile;
+  parametri->outFile = stdout;
+  recur(testo,"", parametri);
+  parametri->outFile = sve;
+  fprintf(stdout,"\nfinito\n");
+
+
   if (checkVV(key, testo, parametri, sigle))
   { // INDIVIDUAZIONE DEL TIPO DI NOTA
     if (key != SCHOLKEY)
@@ -920,7 +952,7 @@ short visitSigle(struct testo *sigle, bool noNota, FILE *outFile)
     {
       if (noNota)
       {
-        printNota(":", outFile);
+        printNota(": \\starref", outFile);
       }
     }
     else
