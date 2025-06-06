@@ -1,0 +1,19 @@
+*.o
+*~
+.DS_Store
+
+# generated files
+m2x/mparsey.output
+m2x/mparsey.c
+m2x/mparsey.h
+
+# executables
+m2x/m2hv
+m2x/m2ledmac
+m2x/m2lv
+m2x/m2m
+m2x/m2tei
+m2x/m2unit
+m2x/m2web
+m2x/m2xml
+m2x/mmerge
