@@ -1021,7 +1021,7 @@ void printSigla(const char *sigla, FILE *outFile)
     default: // STANDARD
       strcpy(str, sigla);
     }
-    delete tmp;
+    delete[] tmp;
 
     // STAMPA DELLA SIGLA FORMATTATA
     printNota(str, outFile);
