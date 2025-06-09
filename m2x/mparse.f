@@ -31,7 +31,8 @@
   Cambridge, MA 02139, USA".
 
 */
-
+%option noyywrap
+      
 %{
 
 #include "mparse.h"   // IMPORTANTE:
