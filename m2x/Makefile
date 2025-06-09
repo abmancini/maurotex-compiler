@@ -1,7 +1,7 @@
 WC	= i586-mingw32msvc-gcc
 WCPP	= i586-mingw32msvc-c++
 WLFLAGS	=
-CFLAGS	= -Wall -O2 -DYY_NO_UNPUT
+CFLAGS	= -Wall -O2 -DYY_NO_UNPUT -Werror 
 LFLAGS	= -lfl
 INSTDIR	= /usr/local/bin
 
