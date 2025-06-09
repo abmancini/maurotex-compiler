@@ -778,13 +778,14 @@ void visitVV(short key,
              struct testo *sigle)
 { // CONTROLLO GESTIONE ESTERNA VARIANTI
 
-  fprintf(stdout,"\necchilo\n");
-  //se non e' hack questo
-  FILE *sve = parametri->outFile;
-  parametri->outFile = stdout;
-  recur(testo,"", parametri);
-  parametri->outFile = sve;
-  fprintf(stdout,"\nfinito\n");
+  // fprintf(stdout,"\necchilo\n");
+  // //se non e' hack questo
+  // FILE *sve = parametri->outFile;
+  // parametri->outFile = stdout;
+  // char st[] = "";
+  // recur(testo,st, parametri);
+  // parametri->outFile = sve;
+  // fprintf(stdout,"\nfinito\n");
 
 
   if (checkVV(key, testo, parametri, sigle))
