@@ -143,7 +143,7 @@ void printMTeX(const char * outFileName, struct testo * testo) {
   if (outFile) {
     printTesto(outFile, testo);
   } else {
-    fprintf(stderr, "impossibile aprire il file %s\n", outFileName);
+    fprintf(stderr, "impossibile aprire il file %s\n", outFileName ? outFileName : "NULL");
   }
 
   if (outFileName) {

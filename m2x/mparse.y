@@ -713,7 +713,7 @@ testonospace: {
       char * envmsg = new char[strlen($1.testo->lexema)+100];
       sprintf(envmsg, "ambiente <%s> sconosciuto", $1.testo->lexema);
       yywmessage($1.ln, envmsg);
-      delete(envmsg);
+      delete[](envmsg);
     }
   }
 }
@@ -2129,7 +2129,7 @@ void checkEnv(const char * inizio, short lni, const char * fine, short lnf) {
     yyemessage(lni, message);
     sprintf(message, "chiuso con %s", fine);
     yywmessage(lnf, message);
-    delete(message);
+    delete[](message);
   }
 }
 
