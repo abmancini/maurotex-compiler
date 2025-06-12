@@ -1,0 +1,40 @@
+# Build and run:
+#   docker build -t maurotex-dev -f Dockerfile.dev .
+
+FROM debian:bookworm
+
+RUN DEBIAN_FRONTEND="noninteractive" apt-get update && apt-get -y install tzdata
+
+RUN apt-get update \
+  && apt-get install -y build-essential \
+      gcc \
+      g++ \
+      gdb \
+      clang \
+      make \
+      ninja-build \
+      cmake \
+      autoconf \
+      automake \
+      libtool \
+      valgrind \
+      locales-all \
+      dos2unix \
+      rsync \
+      tar \
+      python3 \
+      python3-dev \
+  && apt-get clean
+
+
+RUN   apt-get install -y bison
+
+##questo e' quello da rivedere
+RUN   apt-get install -y flex
+
+
+RUN apt-get install -y emacs-nox less
+
+RUN apt-get install -y texlive texlive-full
+
+RUN apt-get clean
