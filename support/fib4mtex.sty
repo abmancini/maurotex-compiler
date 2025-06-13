@@ -1,5 +1,5 @@
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{fib4mtex}[2025/02/25 v0.0.3. Macro per l'edizione del Liber Abbaci, da usare con MauroTeX]
+\ProvidesPackage{fib4mtex}[2025/06/12 v0.0.4. Macro per l'edizione del Liber Abbaci, da usare con MauroTeX]
 \RequirePackage{amsmath}
 \RequirePackage{tikz}
 \RequirePackage{etoolbox,xstring}
@@ -17,12 +17,12 @@
 \setlength\oraise{0.25ex}%{1.25pt}
 \newcounter{num}
 \newcommand\mfrac[2]{%
-  \typeout{#1}%
-  \typeout{#2}%
+  % \typeout{#1}%
+  % \typeout{#2}%
   \setcounter{num}{0}%
   \addtocounter{num}{-1}%
   \LAtemplate#1\empty%
-  \typeout{\thenum}%
+  % \typeout{\thenum}%
   \def\LAnumerator{\StrSubstitute{\@firstofone#1}{,}{&}}%
   \def\LAdenominator{\StrSubstitute{\@firstofone#2}{,}{&}}%
   \begingroup%
@@ -147,5 +147,72 @@
     \hidewidth\kern-.2em\smash{\raisebox{0.75ex}{$\m@th\mathchar'55$}}\hidewidth\cr}%
 }
 \newcommand*{\textoverline}[1]{$\overline{\hbox{#1}}\m@th$}
+
+
+\RequirePackage[user]{zref}
+\newcounter{notacit}
+\setcounter{notacit}{0}
+\newcounter{notacitapp}
+\setcounter{notacitapp}{0}
+
+\zref@newprop{UnitPar}[0]{\unitpar}
+\zref@addprops{main}{UnitPar}
+
+\@ifpackageloaded{mauroreledmac}{
+\renewcommand\footnotecit[1]{%
+  \xdef\unitpar{\theunit}%
+  \stepcounter{notacit}%
+  \zlabel{nota-\thenotacit}
+%  \setvalue{\thenotacit}{\theunit}%
+  \Bfootnote{\normalfont#1}}%% Apparato delle fonti
+
+\newcounter{forcenumber}
+\setcounter{forcenumber}{0}
+\newcommand{\forcenumber}{\setcounter{forcenumber}{1}}
+\newcommand{\restorenumber}{\setcounter{forcenumber}{0}}
+\newcommand*{\previous@Bparnum}{-1}
+% \def\printpar{\begingroup%
+%   \ifnumequal{\csuse{Bprevpage@num}}{\page@num}{%
+%   \ifnum\previous@Bparnum=\the\c@unit% not a new paragraph
+%     \ifnum\c@forcenumber=0\hspace{-1.5mm plus .4em minus .3em}\ensuremath{\diamond}\hspace{1.5mm plus .4em minus .3em}\else\textsuperscript{\normalfont\textbf{\unitpar}}\fi%
+%   \else% new paragraph, print, and update the check
+%     \textsuperscript{\normalfont\textbf{\unitpar}}%
+%   \fi}%
+%   {\textsuperscript{\normalfont\textbf{\unitpar}}}%
+%   \xdef\previous@Bparnum{\the\c@unit}%
+%   \global\csname Bprevpage@num\endcsname=\page@num%
+%   \endgroup\setcounter{forcenumber}{0}}
+\def\printpar{\begingroup%
+  \ifnumequal{\csuse{Bprevpage@num}}{\page@num}{%
+  \ifnum\previous@Bparnum=\unitpar% not a new paragraph
+    \ifnum\c@forcenumber=0\hspace{-1.5mm plus .4em minus .3em}\ensuremath{\diamond}\hspace{1.5mm plus .4em minus .3em}\else\textsuperscript{\normalfont\textbf{\unitpar}}\fi%
+  \else% new paragraph, print, and update the check
+    \textsuperscript{\normalfont\textbf{\unitpar}}%
+  \fi}%
+  {\textsuperscript{\normalfont\textbf{\unitpar}}}%
+  \xdef\previous@Bparnum{\unitpar}%
+  \global\csname Bprevpage@num\endcsname=\page@num%
+  \endgroup\setcounter{forcenumber}{0}}
+\newcommand\fib@printlemma{\print@lemma}
+\newcommand\fib@suppress@lemma[3]{}
+\renewcommand*{\Bfootfmt}[4]{%
+  \Xstorelineinfo{#1}{#4}%
+%  \Xinsertparafootsep{#4}%
+  \ledsetnormalparstuff@common%
+  %\printpar~%\textbf{\unitpar}~%
+  % \textsuperscript{\normalfont\textbf{\theunit}}~%
+  \stepcounter{notacitapp}\zref@def@extract{\unitpar}{nota-\thenotacitapp}{UnitPar}%
+  \iftoggle{nosep@}{}{\printpar~}%
+  \fib@printlemma{#1}{#2}{#4}%
+  \csuse{Xwrapcontent@#4}{#3}%
+  \penalty-10 }
+
+\newcommand\footnotecitlonga[1]{%
+  \xdef\unitpar{\theunit}%
+  \stepcounter{notacit}%
+  \zlabel{nota-\thenotacit}%
+%  \setvalue{\thenotacit}{\theunit}%
+  \LEDlemma{}\Bfootnote[nonum,nosep]{\normalfont\unskip\ignorespaces#1}}%% Apparato delle fonti
+}{}
 
 \endinput
