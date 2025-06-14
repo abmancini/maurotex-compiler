@@ -48,6 +48,8 @@ typedef struct yystype {
 // FILE SORGENTE
 extern FILE * yyin;
 
+extern "C" int yylex();
+
 // NUMERO DELLA LINEA ATTUALE DEL SORGENTE
 void resetnumbers (void);
 int getlinenumber (void);
