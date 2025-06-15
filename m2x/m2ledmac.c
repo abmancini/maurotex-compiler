@@ -2331,10 +2331,9 @@ void printFig(short key, struct testo *testo, PARAMETRI *param)
 	{
 	case FIGURAKEY:
 		fprintf(parametri->outFile, "\n");
-		fprintf(parametri->outFile, "\\includegraphics{");
+		fprintf(parametri->outFile, "\\includegraphics");
 		parametri->noPar = true;
 		visitTesto(testo->testo2, parametri, NULL);
-		fprintf(parametri->outFile, "}");
 		parametri->noPar = false;
 		break;
 	case FIGSKIPKEY:
