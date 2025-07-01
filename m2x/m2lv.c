@@ -2142,15 +2142,15 @@ void printFig(short key, struct testo *testo, PARAMETRI *parametri)
 	switch (key)
 	{
 	case FIGURAKEY:
-		fprintf(parametri->outFile, "\\includegraphics{");
+		fprintf(parametri->outFile, "\\includegraphics");
 		visitTesto(testo->testo2, parametri, NULL);
-		fprintf(parametri->outFile, "}\n");
+		fprintf(parametri->outFile, "\n");
 		break;
 	case FIGSKIPKEY:
 		fprintf(parametri->outFile,
-				"\\fbox{\\rule{2cm}{0cm}\\rule{0cm}{");
+				"\\fbox{\\rule{2cm}{0cm}\\rule{0cm}");
 		visitTesto(testo->testo2, parametri, NULL);
-		fprintf(parametri->outFile, "}figura\\rule{2cm}{0cm}}\n");
+		fprintf(parametri->outFile, "figura\\rule{2cm}{0cm}}\n");
 		break;
 	case FMARGKEY:
 		fprintf(parametri->outFile, "Fig.{");
