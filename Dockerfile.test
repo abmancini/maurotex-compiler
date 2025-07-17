@@ -1,0 +1,13 @@
+# Build and run:
+#   docker build -t maurotex-dev -f Dockerfile.dev .
+
+FROM debian:bookworm
+
+RUN DEBIAN_FRONTEND="noninteractive" apt-get update && apt-get -y install tzdata
+
+RUN apt-get install -y emacs-nox less
+RUN apt-get install -y texlive texlive-full
+RUN apt-get clean
+
+
+

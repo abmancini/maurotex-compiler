@@ -3,9 +3,9 @@
 /m2x/m2ledmac /usr/bin
 /m2x/m2web /usr/bin
 
-/support/mauro.sty /usr/share/texmf/tex/latex/maurotex
-/support/mauroreledmac.sty /usr/share/texmf/tex/latex/maurotex
-/support/adn.sty /usr/share/texmf/tex/latex/maurotex
-/support/fib4mtex.sty /usr/share/texmf/tex/latex/maurotex
+/support/mauro.sty /var/lib/texmf/tex/latex/maurotex
+/support/mauroreledmac.sty /var/lib/texmf/tex/latex/maurotex
+/support/adn.sty /var/lib/texmf/tex/latex/maurotex
+/support/fib4mtex.sty /var/lib/texmf/tex/latex/maurotex
 
-/support/mauro.mf /usr/share/texmf/fonts/source/public/maurotex
+/support/mauro.mf /var/lib/texmf/fonts/source/public/maurotex
