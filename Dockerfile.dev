@@ -38,3 +38,11 @@ RUN apt-get install -y emacs-nox less
 RUN apt-get install -y texlive texlive-full
 
 RUN apt-get clean
+
+# to generate a debian package
+RUN apt-get install -y build-essential devscripts
+RUN apt-get install -y debhelper dh-make diffutils patch cdbs quilt gnupg fakeroot lintian
+RUN apt-get install -y piuparts
+#RUN apt-get install -y pbuilder ubuntu-dev-tools
+
+
