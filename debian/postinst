@@ -1,0 +1,3 @@
+#!/bin/bash
+echo "Post install script is running now"
+texhash

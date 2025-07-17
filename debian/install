@@ -1,0 +1,9 @@
+/m2x/m2hv /usr/bin
+/m2x/m2lv /usr/bin
+
+/support/mauro.sty /usr/share/texmf/tex/latex/maurotex
+/support/mauroreledmac.sty /usr/share/texmf/tex/latex/maurotex
+/support/adn.sty /usr/share/texmf/tex/latex/maurotex
+/support/fib4mtex.sty /usr/share/texmf/tex/latex/maurotex
+
+/support/mauro.mf /usr/share/texmf/fonts/source/public/maurotex
