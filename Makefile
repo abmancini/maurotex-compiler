@@ -2,7 +2,7 @@ INSTDIR	= /usr/bin
 
 all:
 	make -C m2x
-	make -C test 
+#	make -C test  #test funziona dopo install, vedremo come integrarlo
 	make -C support
 
 clean:
