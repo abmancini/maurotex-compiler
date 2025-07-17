@@ -1,5 +1,7 @@
 /m2x/m2hv /usr/bin
 /m2x/m2lv /usr/bin
+/m2x/m2ledmac /usr/bin
+/m2x/m2web /usr/bin
 
 /support/mauro.sty /usr/share/texmf/tex/latex/maurotex
 /support/mauroreledmac.sty /usr/share/texmf/tex/latex/maurotex
