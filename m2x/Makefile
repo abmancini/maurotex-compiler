@@ -11,6 +11,7 @@ TARGETS	= $(CTARGETS) afronte
 WTARGETS= m2hv.exe m2lv.exe m2ledmac.exe m2m.exe m2xml.exe m2unit.exe mmerge.exe
 
 # REGOLE AD ALTO LIVELLO
+default: linux
 
 
 

@@ -1,4 +1,9 @@
-INSTDIR	= /usr/local/bin
+INSTDIR	= /usr/bin
+
+all:
+	make -C m2x
+	make -C test 
+	make -C support
 
 clean:
 	make -C m2x clean
@@ -6,6 +11,7 @@ clean:
 	make -C support clean
 	rm -f *~ core
 
-install:
-	cp -f *.sh *.py $(INSTDIR)
+##l' install e' gestito dal pacchetto debian
+#install:
+#	cp -f *.sh *.py $(INSTDIR)
 
