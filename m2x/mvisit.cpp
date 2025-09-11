@@ -831,6 +831,14 @@ short visitVarianti(
     if (visitVariante(testo->testo1, lezione, parametri, sigle, nested, duplex, multiplex, numero, &nTest) && testo->testo2)
     {
       printSepVarianti(parametri);
+
+      //SE IL TESTIMONE E` IL PRIMO ed e' *
+      if(numero == 1 && (strcmp(testo->testo1->testo1->lexema, "*") == 0))
+      {
+        //caso in cui NON vogliamo contare un testimone
+      } else {
+        nTest++;
+      }
     }
     // VERIFICA SE SI TRATTA DI UNA TRASPOSIZIONE "DUPLEX"
     if (testo->lexema)
@@ -889,8 +897,10 @@ bool visitVariante(
       {
         printNota("post ", parametri->outFile);
       }
-      // SE LA NOTA NON E` INNESTATA OPPURE SE IL TESTIMONE E` IL PRIMO ED E` *
-      if (!nested || (numero == 1 && (strcmp(testo->testo1->lexema, "*") == 0)))
+
+      // SE LA NOTA NON E` INNESTATA OPPURE SE IL TESTIMONE E` IL PRIMO
+      //if (!nested || (numero == 1 && (strcmp(testo->testo1->lexema, "*") == 0)))
+      if (!nested || numero == 1)
       {
         *nTest = printCorpoVariante(
             lezione,

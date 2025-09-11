@@ -3,7 +3,7 @@
 \usepackage{mauro}
 \usepackage[demo]{graphicx}
 
-\ElencoTestimoni{A/B}
+\ElencoTestimoni{A/B/C}
 
 \begin{document}
 \htmlcut
@@ -16,22 +16,38 @@
 
 \Figura{{figura1}}
 
-\Unit Testo di riempimento.
+\Unit Testo di riempimento testimone *.
 
 \Figskip{{2cm}[\VF{{*:$Y$}{B:$V$}}]}
 
-\Unit Testo di riempimento.
+\Unit Testo di riempimento testimone *.
 
 \Figura{{figura1}[\VF{{*:$Y$}{B:$V$}}]}
 
-\Unit Testo di riempimento.
+\Unit Testo di riempimento con due testimoni.
 
 \Figskip{{2cm}[\VF{{A:$Y$}{B:$V$}}]}
 
-\Unit Testo di riempimento.
+\Unit Testo di riempimento con due testimoni.
 
 \Figura{{figura1}[\VF{{A:$Y$}{B:$V$}}]}
 
-\Unit Testo di riempimento.
+\Unit Testo di riempimento con tre testimoni.
+
+\Figskip{{2cm}[\VF{{A:$Y$}{B:$V$}{C:$Z$}}]}
+
+\Unit Testo di riempimento con tre testimoni.
+
+\Figura{{figura1}[\VF{{A:$Y$}{B:$V$}{C:$Z$}}]}
+
+\Unit Testo di riempimento con tre testimoni (primo *).
+
+\Figskip{{2cm}[\VF{{*:$Y$}{B:$V$}{C:$Z$}}]}
+
+\Unit Testo di riempimento con tre testimoni (primo *).
+
+\Figura{{figura1}[\VF{{*:$Y$}{B:$V$}{C:$Z$}}]}
+
+\Unit Testo di riempimento end.
 
 \end{document}
