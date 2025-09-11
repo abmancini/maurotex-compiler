@@ -12,6 +12,9 @@ WTARGETS= m2hv.exe m2lv.exe m2ledmac.exe m2m.exe m2xml.exe m2unit.exe mmerge.exe
 
 # REGOLE AD ALTO LIVELLO
 
+#il taget linux funziona correttamentr anche su OSX
+default: linux
+
 all: linux win
 
 linux: $(TARGETS)
@@ -141,7 +144,6 @@ yywrap.w: yywrap.cpp
 
 %.o: %.cpp mparse.h mparsein.h mparsey.hpp mvisit.h comp.h plugin.h standard.h epistolario.h
 	c++ -c $(CFLAGS) $< -o $@
-
 
 %.w: %.cpp mparse.h mparsein.h mparsey.hpp mvisit.h comp.h
 	$(WCPP) -c $(CFLAGS) $< -o $@

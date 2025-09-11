@@ -4,6 +4,8 @@
 
 # generated files
 m2x/mparsey.output
+m2x/mparsey.cpp
+m2x/mparsey.hpp
 m2x/mparsey.c
 m2x/mparsey.h
 
