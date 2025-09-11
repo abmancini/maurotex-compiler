@@ -41,7 +41,7 @@
 #include "comp.h"
 
 #include "mparse.h"
-#include "mparsey.h"
+#include "mparsey.hpp"
 #include "mvisit.h"
 
 #define HTMLEST ".htm"

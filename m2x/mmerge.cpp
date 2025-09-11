@@ -37,7 +37,7 @@
 #include <string.h>
 
 #include "mparse.h"
-#include "mparsey.h"
+#include "mparsey.hpp"
 
 // VARIABILI LOCALI
 static struct testo * rifer = NULL;

@@ -1,8 +1,9 @@
 WC	= i586-mingw32msvc-gcc
 WCPP	= i586-mingw32msvc-c++
 WLFLAGS	=
-CFLAGS	= -Wall -O2 -DYY_NO_UNPUT -Werror 
-LFLAGS	= -lfl
+CFLAGS	= -Wall -O2 -DYY_NO_UNPUT -Werror -Wno-deprecated-declarations -Wno-unused-but-set-variable -Wno-unneeded-internal-declaration -Wno-memsize-comparison
+#LFLAGS	= -lfl
+LFLAGS	= -ll
 INSTDIR	= /usr/local/bin
 
 CTARGETS = m2web m2hv m2lv m2ledmac m2m m2xml m2tei m2unit mmerge
@@ -28,7 +29,7 @@ prova%: prova%-a.tex prova%-b.tex
 	mmerge $^
 
 clean:
-	rm -fr mparsef.c mparsey.c mparsey.h *.o *.w $(CTARGETS) $(WTARGETS) *.output *.htm* *.m.* *.rtf *.log core *~ mauro.*pk mauro.tfm *.ppm *.jpg *.ps *.pdf mmerge.tex *.flc *.unit *.json 1.* 2.* 3.* 4.*
+	rm -fr mparsef.cpp mparsey.cpp mparsey.hpp *.o *.w $(CTARGETS) $(WTARGETS) *.output *.htm* *.m.* *.rtf *.log core *~ mauro.*pk mauro.tfm *.ppm *.jpg *.ps *.pdf mmerge.tex *.flc *.unit *.json 1.* 2.* 3.* 4.*
 
 mmerge.tex: mmerge1.tex mmerge2.tex mmerge
 	./mmerge mmerge1.tex mmerge2.tex
@@ -100,10 +101,10 @@ m2rtf.exe: m2rtf.w yywrap.w mparsef.w mparsey.w mvisit.w
 
 # REGOLE INDIPENDENTI DALLA PIATTAFORMA TARGET
 
-%y.c %y.h: %.y
-	bison -v -d -o $*y.c $<
+%y.cpp %y.hpp %y.h: %.y
+	bison -v -d -o $*y.cpp $<
 
-%f.c: %.f
+%f.cpp: %.f
 	flex -o$@ $<
 
 %.jpg: %.ppm
@@ -126,19 +127,23 @@ m2rtf.exe: m2rtf.w yywrap.w mparsef.w mparsey.w mvisit.w
 
 # REGOLE DIPENDENTI DALLA PIATTAFORMA TARGET
 
-mvisit.o: mvisit.c mvisit.h mparse.h mparsein.h mparsey.h comp.h
+mvisit.o: mvisit.cpp mvisit.h mparse.h mparsein.h mparsey.hpp comp.h
 	c++ -c $(CFLAGS) $< -o $@
 
-mvisit.w: mvisit.c mvisit.h mparse.h mparsein.h mparsey.h comp.h
+mvisit.w: mvisit.cpp mvisit.h mparse.h mparsein.h mparsey.hpp comp.h
 	$(WCPP) -c $(CFLAGS) $< -o $@
 
-yywrap.w: yywrap.c
+yywrap.w: yywrap.cpp
 	$(WC) -c $(CFLAGS) $< -o $@
 
-%.o: %.c mparse.h mparsein.h mparsey.h mvisit.h comp.h plugin.h standard.h epistolario.h
+#%.o: %.c mparse.h mparsein.h mparsey.hpp mvisit.h comp.h plugin.h standard.h epistolario.h
+#	c++ -c $(CFLAGS) $< -o $@
+
+%.o: %.cpp mparse.h mparsein.h mparsey.hpp mvisit.h comp.h plugin.h standard.h epistolario.h
 	c++ -c $(CFLAGS) $< -o $@
 
-%.w: %.c mparse.h mparsein.h mparsey.h mvisit.h comp.h
+
+%.w: %.cpp mparse.h mparsein.h mparsey.hpp mvisit.h comp.h
 	$(WCPP) -c $(CFLAGS) $< -o $@
 
 .SUFFIXES:

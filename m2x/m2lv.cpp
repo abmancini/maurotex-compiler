@@ -40,7 +40,7 @@
 #include <string.h>
 
 #include "mparse.h"
-#include "mparsey.h"
+#include "mparsey.hpp"
 #include "mvisit.h"
 
 #define LATEXEST ".m.tex"

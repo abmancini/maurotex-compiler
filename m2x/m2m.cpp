@@ -1,13 +1,15 @@
-#define VERSIONSTRING "versione 1.16b1 del 25 giugno 2023"
+#define VERSIONSTRING "versione 1.15b1 del 24 agosto 2022"
 
 /*
-  file "m2ledmac.c"
+
+  file "m2m.c"
   PROGRAMMA PRINCIPALE
 
-  m2ledmac: traduttore da M-TeX a Reledmac basato su mvisit
+  m2lv: traduttore da M-TeX a M-TEX basato mvisit
 
   eLabor sc
-  via Enrico Fermi 19, Pisa - Italia
+  (ex. Laboratorio Informatico del Consorzio Sociale "Polis")
+  via Ponte a Piglieri 8, 56121 Pisa - Italia
   <https://elabor.biz>
   <info@elabor.biz>
 
@@ -38,10 +40,10 @@
 #include <string.h>
 
 #include "mparse.h"
-#include "mparsey.h"
+#include "mparsey.hpp"
 #include "mvisit.h"
 
-#define LATEXEST ".m.tex"
+#define LATEXEST ".m.m.tex"
 
 // GESTIONE PLUGIN
 
@@ -83,19 +85,11 @@ class PARAMETRIm2l : public PARAMETRI
 public:
 	short nOM;
 	bool justify;
-	bool noPar;
-	bool parStarted;
-	bool endnumbering;
-	int numero;
 
 	PARAMETRIm2l() : PARAMETRI()
 	{
 		this->nOM = 0;
 		this->justify = true;
-		this->noPar = false;
-		this->parStarted = false;
-		this->endnumbering = false;
-		this->numero = 0;
 	}
 };
 
@@ -141,29 +135,7 @@ bool verboseWarning()
 
 // FUNZIONI SPECIFICHE DEL TRADUTTORE LATEX
 
-void printVF(struct testo *testo, PARAMETRI *parametri, struct testo *sigle) {
-	fprintf(parametri->outFile, "\\par\n\\ApparatoFigure{");
-	visitVarianti(testo, parametri, sigle, true, false, false, 1, NULL);
-	fprintf(parametri->outFile, "}\n");
-}
-
-void startParagraph(PARAMETRIm2l *parametri)
-{
-	if (!parametri->parStarted && !parametri->noPar)
-	{
-		fprintf(parametri->outFile, "\\pstart\n");
-		parametri->parStarted = true;
-	}
-}
-
-void endParagraph(PARAMETRIm2l *parametri)
-{
-	if (parametri->parStarted)
-	{
-		fprintf(parametri->outFile, "\\pend");
-		parametri->parStarted = false;
-	}
-}
+void printVF(struct testo *testo, PARAMETRI *parametri, struct testo *sigle) {}
 
 bool checkLexema(const char *lex1, const char *lex2)
 {
@@ -292,33 +264,26 @@ char *opzioneTestEx()
 	return testEx;
 }
 
-// FUNZIONE CHE STAMPA IL PROLOGO DI UNA TABELLA
-void printTableStart(int key, struct testo *testo, PARAMETRI *param, struct testo *sigle)
+// FUNZIONE CHE STAMPA IN outFile UN String
+void echo_string(
+	PARAMETRI *P,
+	const char *C)
 {
-	PARAMETRIm2l *parametri = (PARAMETRIm2l *)param;
-	if (!parametri->parStarted)
-	{
-		fprintf(parametri->outFile, "\\pstart");
-		parametri->parStarted = true;
-	}
-	const char *type = (key == TABLEKEY ? "tabular" : "longtable");
-	fprintf(parametri->outFile, "\\begin{%s}{rcl}\n", type);
-	visitTesto(testo, parametri, sigle);
-	fprintf(parametri->outFile, " & ");
+	fprintf(P->outFile, "%s", C);
 }
 
-// FUNZIONE CHE STAMPA L'EPILOGO DI UNA TABELLA
-void printTableFinish(int key, struct testo *tabella, PARAMETRI *parametri, struct testo *sigle)
+// FUNZIONE CHE STAMPA IN outFile UN Digit
+void outFile_digit(
+	PARAMETRI *P,
+	int D)
 {
-	struct testo * testo = tabella->testo1->testo1;
-	const char *type = (key == TABLEKEY ? "tabular" : "longtable");
-	fprintf(parametri->outFile, " & ");
-	visitTesto(testo, parametri, sigle);
-	fprintf(parametri->outFile, "\\end{%s} ", type);
+	fprintf(P->outFile, "%d", D);
 }
 
 // FUNZIONE CHE STAMPA LO HEADER DI RIGA DI UNA TABELLA
-void printRowHeader(short key, PARAMETRI *parametri)
+void printRowHeader(
+	short key,
+	PARAMETRI *parametri)
 {
 	if (key == HLINEKEY)
 	{
@@ -327,24 +292,66 @@ void printRowHeader(short key, PARAMETRI *parametri)
 }
 
 // FUNZIONE CHE STAMPA IL FOOTER DI RIGA DI UNA TABELLA
-void printRowFooter(short key, PARAMETRI *parametri)
+void printRowFooter(
+	short key,
+	PARAMETRI *parametri)
 {
-	fprintf(parametri->outFile, "\\\\");
-	fprintf(parametri->outFile, "\n");
+	if (key != HLINEKEY)
+	{
+		echo_string(parametri, "\\\\");
+	}
+	echo_string(parametri, "\n");
 }
 
 // FUNZIONE CHE STAMPA LO HEADER DI UNA TABELLA
-void printTableHeader(int key, const char *colonne, PARAMETRI *parametri)
+void printTableHeader(
+	int key,
+	const char *colonne,
+	PARAMETRI *parametri)
 {
-	const char *type = (key == TABLEKEY ? "tabular" : "longtable");
-	fprintf(parametri->outFile, "\\begin{%s}{%s}\n", type, colonne);
+	const char *CT_EM_0 = "tabula";
+	const char *CT_EM_1 = colonne;
+	echo_string(parametri, "\\begin");
+	echo_string(parametri, "{");
+	echo_string(parametri, CT_EM_0);
+	echo_string(parametri, "}");
+	echo_string(parametri, "{");
+	echo_string(parametri, CT_EM_1);
+	echo_string(parametri, "}");
 }
 
 // FUNZIONE CHE STAMPA IL FOOTER DI UNA TABELLA
-void printTableFooter(int key, PARAMETRI *parametri)
+void printTableFooter(
+	int key,
+	PARAMETRI *parametri)
 {
-	const char *type = (key == TABLEKEY ? "tabular" : "longtable");
-	fprintf(parametri->outFile, "\\end{%s}", type);
+	const char *CT_EM_0 = "tabula";
+	echo_string(parametri, "\\end");
+	echo_string(parametri, "{");
+	echo_string(parametri, CT_EM_0);
+	echo_string(parametri, "}");
+	echo_string(parametri, "\n");
+}
+
+// FUNZIONE CHE STAMPA IL PROLOGO DI UNA TABELLA
+void printTableStart(
+	int key,
+	struct testo *testo,
+	PARAMETRI *parametri,
+	struct testo *sigle)
+{
+	printTableHeader(key, "rcl", parametri);
+	visitTesto(testo, parametri, sigle);
+	echo_string(parametri, " & ");
+}
+
+// FUNZIONE CHE STAMPA L'EPILOGO DI UNA TABELLA
+void printTableFinish(int key, struct testo *tabella, PARAMETRI *parametri, struct testo *sigle)
+{
+  	struct testo * testo = tabella->testo1->testo1;
+	echo_string(parametri, " & ");
+	visitTesto(testo, parametri, sigle);
+	printTableFooter(key, parametri);
 }
 
 // FUNZIONE CHE STAMPA UN CAMPO DI UNA TABELLA
@@ -355,24 +362,26 @@ void printCampo(short nRow,
 				PARAMETRI *parametri,
 				struct testo *sigle)
 {
+
 	if (nCol > 1)
 	{
-		fprintf(parametri->outFile, " & ");
+		echo_string(parametri, " & ");
 	}
+
 	if (campo != NULL)
 	{
+
 		// GESTIONE INIZIALE MULTIROW E MULTICOL
 		switch (campo->key)
 		{
 		case MULTICOLKEY:
-			if (strchr(colonne, '|') == NULL)
-			{
-				fprintf(parametri->outFile, "\\multicolumn{%d}{c}{", atoi(campo->lexema));
-			}
-			else
-			{
-				fprintf(parametri->outFile, "\\multicolumn{%d}{|c|}{", atoi(campo->lexema));
-			}
+			const char *CT_EM_0 = "mcol";
+			int CT_EM_1 = atoi(campo->lexema);
+			echo_string(parametri, "\\");
+			echo_string(parametri, CT_EM_0);
+			echo_string(parametri, "{");
+			outFile_digit(parametri, CT_EM_1);
+			echo_string(parametri, "}");
 			break;
 		}
 
@@ -392,7 +401,7 @@ void printCampo(short nRow,
 		switch (campo->key)
 		{
 		case MULTICOLKEY:
-			fprintf(parametri->outFile, "}");
+			echo_string(parametri, "}");
 			break;
 		}
 	}
@@ -404,7 +413,9 @@ void printCasi(struct testo *testo, PARAMETRI *parametri, struct testo *sigle)
 	if (testo != NULL)
 	{
 		visitTesto(testo->testo1, parametri, sigle);
-		fprintf(parametri->outFile, "\\\\\n");
+		echo_string(parametri, "\\");
+		echo_string(parametri, "\\");
+		echo_string(parametri, "\n");
 		printCasi(testo->testo2, parametri, sigle);
 	}
 }
@@ -418,87 +429,51 @@ void printCases(short key, struct testo *testo, PARAMETRI *parametri, struct tes
 	if (strcmp(testo->lexema, "\\Rcases") == 0 ||
 		strcmp(testo->lexema, "\\RLcases") == 0)
 	{
-		fprintf(parametri->outFile, "\\langle ");
+		fprintf(parametri->outFile, "\\langle\n");
 	}
 	if (strcmp(testo->lexema, "\\Lcases") == 0 ||
 		strcmp(testo->lexema, "\\Lbracecases") == 0 ||
 		strcmp(testo->lexema, "\\Voidcases") == 0)
 	{
-		fprintf(parametri->outFile, ".");
+		fprintf(parametri->outFile, ".\n");
 	}
 	if (strcmp(testo->lexema, "\\Rbracecases") == 0 ||
 		strcmp(testo->lexema, "\\RLbracecases") == 0)
 	{
-		fprintf(parametri->outFile, "\\{");
+		fprintf(parametri->outFile, "\\{\n");
 	}
-	fprintf(parametri->outFile, "\n\\begin{tabular}{l}\n");
+	fprintf(parametri->outFile, "\\begin{tabular}{l}\n");
 	printCasi(testo->testo2, parametri, sigle);
-	fprintf(parametri->outFile, "\\end{tabular}");
-	fprintf(parametri->outFile, "\\right ");
+	fprintf(parametri->outFile, "\\end{tabular}\n");
+	fprintf(parametri->outFile, "\\right");
 	if (strcmp(testo->lexema, "\\Rcases") == 0 ||
 		strcmp(testo->lexema, "\\Rbracecases") == 0 ||
 		strcmp(testo->lexema, "\\Voidcases") == 0)
 	{
-		fprintf(parametri->outFile, ".");
+		fprintf(parametri->outFile, ".\n");
 	}
 	if (strcmp(testo->lexema, "\\Lcases") == 0 ||
 		strcmp(testo->lexema, "\\RLcases") == 0)
 	{
-		fprintf(parametri->outFile, "\\rangle ");
+		fprintf(parametri->outFile, "\\rangle\n");
 	}
 	if (strcmp(testo->lexema, "\\Lbracecases") == 0 ||
 		strcmp(testo->lexema, "\\RLbracecases") == 0)
 	{
-		fprintf(parametri->outFile, "\\}");
+		fprintf(parametri->outFile, "\\}\n");
 	}
-	fprintf(parametri->outFile, "\\)");
-}
-
-void printTagDES(FILE *outFile, bool inizio)
-{
-	if (inizio)
-	{
-		fprintf(outFile, "\\tagdes{");
-	}
-	else
-	{
-		fprintf(outFile, "}");
-	}
-}
-
-void printTagED(FILE *outFile, bool inizio)
-{
-	if (inizio)
-	{
-		fprintf(outFile, "\\taged{");
-	}
-	else
-	{
-		fprintf(outFile, "}");
-	}
+	fprintf(parametri->outFile, "\\)\n");
 }
 
 void printTagNota(FILE *outFile, bool inizio)
 {
 	if (inizio)
 	{
-		fprintf(outFile, "\\tagid{ ");
+		fprintf(outFile, "\\textlatin{\\textsl{\\textsf{");
 	}
 	else
 	{
-		fprintf(outFile, "}");
-	}
-}
-
-void printTagCit(FILE *outFile, bool inizio)
-{
-	if (inizio)
-	{
-		fprintf(outFile, "\\tagcit{");
-	}
-	else
-	{
-		fprintf(outFile, "}");
+		fprintf(outFile, "}}}");
 	}
 }
 
@@ -507,15 +482,9 @@ void printPhantom(struct testo *testo, PARAMETRI *parametri, struct testo *sigle
 }
 
 // STAMPA I TITOLI DELLE OPERE
-void printTitleWork(struct testo *testo, PARAMETRI *param, struct testo *sigle)
+void printTitleWork(struct testo *testo, PARAMETRI *parametri, struct testo *sigle)
 {
-	PARAMETRIm2l *parametri = (PARAMETRIm2l *)param;
-	if (parametri->parStarted)
-	{
-		fprintf(parametri->outFile, "\\pend");
-	}
-	parametri->parStarted = true;
-	fprintf(parametri->outFile, "\n\\Title{");
+	fprintf(parametri->outFile, "\\Title{");
 	visitTesto(testo->testo1, parametri, sigle);
 	fprintf(parametri->outFile, "}");
 	fprintf(parametri->outFile, "{");
@@ -524,7 +493,6 @@ void printTitleWork(struct testo *testo, PARAMETRI *param, struct testo *sigle)
 		visitTesto(testo->testo2, parametri, sigle);
 	}
 	fprintf(parametri->outFile, "}");
-	parametri->parStarted = false;
 }
 
 // FUNZIONE DI STAMPA DELLE FRAZIONI
@@ -537,7 +505,7 @@ void printFrac(struct testo *testo, PARAMETRI *parametri, struct testo *sigle)
 	fprintf(parametri->outFile, "}");
 }
 
-// FUNZIONE DI STAMPA DELLE FRAZIONI
+// FUNZIONE DI STAMPA DELLE FRAZIONI MULTIPLE
 void printMFrac(short key, struct testo *testo, PARAMETRI *parametri, struct testo *sigle)
 {
 	fprintf(parametri->outFile, "\\mfrac{");
@@ -632,9 +600,7 @@ void printSigla(const char *sigla, FILE *outFile)
 		delete[] tmp;
 
 		// STAMPA DELLA SIGLA FORMATTATA
-		printNota(str, outFile); /*
-		 // STAMPA DELLA SIGLA NON FORMATTATA
-		 printNota(sigla, outFile);*/
+		printNota(str, outFile);
 	}
 }
 
@@ -744,26 +710,6 @@ void printTestoNota(struct testo *testo,
 	printTagNota(parametri->outFile, false);
 }
 
-// STAMPA DES
-void printDES(struct testo *testo,
-			  PARAMETRIm2l *parametri,
-			  struct testo *sigle)
-{
-	printTagDES(parametri->outFile, true);
-	visitTesto(testo, parametri, sigle);
-	printTagDES(parametri->outFile, false);
-}
-
-// STAMPA ED
-void printED(struct testo *testo,
-			 PARAMETRIm2l *parametri,
-			 struct testo *sigle)
-{
-	printTagED(parametri->outFile, true);
-	visitTesto(testo, parametri, sigle);
-	printTagED(parametri->outFile, false);
-}
-
 // STAMPA IL CORPO DI UNA VARIANTE
 bool printNotaVariante(struct testo *lezione,
 					   struct testo *nota,
@@ -814,45 +760,41 @@ bool printNotaVariante(struct testo *lezione,
 			visitTesto(nota->testo1, parametri, sigle);
 			break;
 		case TRKEY:
-			visitTesto(lezione, parametri, sigle);
-			fprintf(parametri->outFile, " ");
-			printDES(nota->testo1, parametri, sigle);
-			break;
 		case EDKEY:
 			visitTesto(lezione, parametri, sigle);
 			fprintf(parametri->outFile, " ");
-			printED(nota->testo1, parametri, sigle);
+			printTestoNota(nota->testo1, parametri, sigle);
 			break;
 		case POSTSCRIPTKEY:
 			visitTesto(lezione, parametri, sigle);
 			break;
 		case BISKEY:
 			visitTesto(lezione, parametri, sigle);
-			printNota("bis", parametri->outFile);
+			printNota(" bis", parametri->outFile);
 			break;
 		case INTERLKEY:
 			visitTesto(lezione, parametri, sigle);
-			printNota("supra lineam", parametri->outFile);
+			printNota(" supra lineam", parametri->outFile);
 			break;
 		case SUPRAKEY:
 			visitTesto(lezione, parametri, sigle);
-			printNota("supra lineam", parametri->outFile);
+			printNota(" supra lineam", parametri->outFile);
 			break;
 		case MARGKEY:
 			visitTesto(lezione, parametri, sigle);
-			printNota("in marg.", parametri->outFile);
+			printNota(" in marg.", parametri->outFile);
 			break;
 		case MARGSIGNKEY:
 			visitTesto(lezione, parametri, sigle);
-			printNota("signo posito in marg.", parametri->outFile);
+			printNota(" signo posito in marg.", parametri->outFile);
 			break;
 		case PCKEY:
 			visitTesto(lezione, parametri, sigle);
-			printNota("post corr.", parametri->outFile);
+			printNota(" post corr.", parametri->outFile);
 			break;
 		case EXKEY:
 			visitTesto(lezione, parametri, sigle);
-			printNota("ex ", parametri->outFile);
+			printNota(" ex ", parametri->outFile);
 			visitTesto(nota->testo1, parametri, sigle);
 			break;
 		case REPKEY:
@@ -860,10 +802,10 @@ bool printNotaVariante(struct testo *lezione,
 			switch (*nota->lexema)
 			{
 			case '1':
-				printNota("priore loco", parametri->outFile);
+				printNota(" priore loco", parametri->outFile);
 				break;
 			default:
-				printNota("altero loco", parametri->outFile);
+				printNota(" altero loco", parametri->outFile);
 				break;
 			}
 			break;
@@ -933,8 +875,9 @@ short printCorpoVariante(
 {
 	bool noNota = true; // INDICATORE DI NOTA VUOTA
 	short nTest;
+
 	PARAMETRIm2l *parametri = (PARAMETRIm2l *)param;
-	parametri->numero = nVar;
+
 	if (note)
 	{
 		noNota = printNoteVariante(lezione, note, sigle, parametri, duplex, multiplex);
@@ -951,10 +894,13 @@ short printCorpoVariante(
 			fprintf(parametri->outFile, "$");
 		}
 	}
+
 	// STAMPA DELLE SIGLE
 	nTest = visitSigle(sigle, noNota, parametri->outFile);
+
 	// STAMPA EVENTUALI POSTSCRIPT
 	visitPostscript(sigle, note, parametri, false);
+
 	// RITORNA IL NUMERO DI TESTIMONI
 	return nTest;
 }
@@ -993,14 +939,7 @@ void printOptions(struct testo *testo, FILE *outFile, bool sep)
 		{
 			fprintf(outFile, ", ");
 		}
-		if (strcmp(testo->lexema, "mauro") == 0)
-		{
-			fprintf(outFile, "mauroreledmac");
-		}
-		else
-		{
-			fprintf(outFile, "%s", testo->lexema);
-		}
+		fprintf(outFile, "%s", testo->lexema);
 		printOptions(testo->testo2, outFile, testo->lexema[0] != '=');
 	}
 }
@@ -1017,48 +956,46 @@ void printFoliumCommon(const char *testimone, const char *pagina, PARAMETRI *par
 	fprintf(parametri->outFile, "%s", pagina);
 }
 
-void printFolium(const char *testimone, const char *pagina, PARAMETRI *param, struct testo *sigle)
+void printFolium(const char *testimone, const char *pagina, PARAMETRI *parametri, struct testo *sigle)
 {
-	PARAMETRIm2l *parametri = (PARAMETRIm2l *)param;
-	if (parametri->nota) {
-		if (parametri->numero > 1) {
-			fprintf(parametri->outFile, "[");
-			printFoliumCommon(testimone, pagina, parametri);
-			fprintf(parametri->outFile, "]");
-		}
-	} else {
-		startParagraph(parametri);
-		fprintf(parametri->outFile, "\\Folium{");
+	if (foliummarg && !parametri->nota)
+	{
+		fprintf(parametri->outFile, "$|$\\marginpar{[");
 		printFoliumCommon(testimone, pagina, parametri);
-		fprintf(parametri->outFile, "}");
+		fprintf(parametri->outFile, "]}");
+	}
+	if (foliumtesto || (foliummarg && parametri->nota))
+	{
+		fprintf(parametri->outFile, "[");
+		// fprintf(parametri->outFile, "[Fol.~");
+		printFoliumCommon(testimone, pagina, parametri);
+		fprintf(parametri->outFile, "]");
 	}
 }
 
 // FUNZIONE DI STAMPA DELLE DATE
 void printDate(struct testo *testo, PARAMETRI *param, struct testo *sigle)
 {
-	startParagraph((PARAMETRIm2l *)param);
 	visitTesto(testo->testo1, param, sigle);
 }
 
 // FUNZIONE DI STAMPA DELLE CITAZIONI
 void printCit(struct testo *testo, PARAMETRI *param, struct testo *sigle)
 {
+
+	// RECUPERA I PARAMETRI
 	PARAMETRIm2l *parametri = (PARAMETRIm2l *)param;
+
 	short iConf = -1;
 	const char *libro = NULL;
 	const char *prop = NULL;
-	if (!parametri->nota)
-	{
-		fprintf(parametri->outFile, "\\edtext{");
-		parametri->noPar = true;
-	}
+
 	visitTesto(testo->testo1, parametri, sigle);
 	if (!parametri->nota)
 	{
-		fprintf(parametri->outFile, "}");
-		fprintf(parametri->outFile, "{");
+
 		fprintf(parametri->outFile, "\\footnotecit{");
+
 		// STAMPA DELL'OPZIONE
 		if (testo->lexema != NULL)
 		{
@@ -1071,8 +1008,10 @@ void printCit(struct testo *testo, PARAMETRI *param, struct testo *sigle)
 		if (testo->testo2)
 		{
 			trovaRiferimento(testo->testo2->testo1, &iConf, &libro, &prop);
+
 			if (iConf >= 0)
 			{
+
 				// STAMPA RIFERIMENTO DELLA CITAZIONE
 				printTagNota(parametri->outFile, true);
 				printRiferimento(parametri, iConf, libro, prop);
@@ -1087,9 +1026,9 @@ void printCit(struct testo *testo, PARAMETRI *param, struct testo *sigle)
 			}
 			else
 			{
-				printTagCit(parametri->outFile, true);
+				printTagNota(parametri->outFile, true);
 				visitTesto(testo->testo2->testo1, parametri, sigle);
-				printTagCit(parametri->outFile, false);
+				printTagNota(parametri->outFile, false);
 			}
 
 			// COMMENTO DELLA CITAZIONE
@@ -1099,26 +1038,16 @@ void printCit(struct testo *testo, PARAMETRI *param, struct testo *sigle)
 				printTestoNota(testo->testo2->testo2, parametri, sigle);
 			}
 		}
+
 		fprintf(parametri->outFile, "}");
-	}
-	if (!parametri->nota)
-	{
-		fprintf(parametri->outFile, "}");
-		parametri->noPar = false;
 	}
 }
 
-void printEnv(PARAMETRI *param, const char *env, bool inizio)
+void printEnv(PARAMETRI *parametri, const char *env, bool inizio)
 {
-	PARAMETRIm2l *parametri = (PARAMETRIm2l *)param;
 	if (inizio)
 	{
-		if (parametri->parStarted)
-		{
-			fprintf(parametri->outFile, "\\pend");
-			parametri->parStarted = false;
-		}
-		fprintf(parametri->outFile, "\n\\begin{%s}\n", env);
+		fprintf(parametri->outFile, "\\begin{%s}\n", env);
 	}
 	else
 	{
@@ -1160,9 +1089,14 @@ void printKey(bool inizio,
 			  PARAMETRI *param,
 			  struct testo *sigle)
 {
+
+	// RECUPERA I PARAMETRI
 	PARAMETRIm2l *parametri = (PARAMETRIm2l *)param;
+
 	if (parametri->label == NULL || parametri->nota)
 	{
+
+		// IDENTIFICAZIONE DELLA MACRO
 		switch (key)
 		{
 		default:
@@ -1190,7 +1124,7 @@ void printKey(bool inizio,
 			{
 				fprintf(parametri->outFile, "{");
 				visitTesto(testo, parametri, sigle);
-				fprintf(parametri->outFile, "}");
+				fprintf(parametri->outFile, "}\n");
 			}
 			break;
 		case HLINEKEY:
@@ -1242,39 +1176,19 @@ void printKey(bool inizio,
 		case COMMENTKEY:
 			if (inizio)
 			{
-				if (parametri->parStarted)
-				{
-					fprintf(parametri->outFile, "\n\\pend\n");
-					parametri->parStarted = false;
-				}
-				if (!parametri->endnumbering)
-				{
-					fprintf(parametri->outFile, "\n\\endnumbering\n");
-					parametri->endnumbering = true;
-				}
 				fprintf(parametri->outFile, "\\Commenti");
 			}
 			break;
 		case ANNOTAZKEY:
 			if (inizio)
 			{
-				if (parametri->parStarted)
-				{
-					fprintf(parametri->outFile, "\n\\pend\n");
-					parametri->parStarted = false;
-				}
-				if (!parametri->endnumbering)
-				{
-					fprintf(parametri->outFile, "\n\\endnumbering\n");
-					parametri->endnumbering = true;
-				}
 				fprintf(parametri->outFile, "\\Annotazioni");
 			}
 			break;
 		case COMMKEY:
 			if (inizio)
 			{
-				fprintf(parametri->outFile, "\\pstart\\Comm{");
+				fprintf(parametri->outFile, "\\Comm{");
 				visitTesto(testo, parametri, sigle);
 				fprintf(parametri->outFile, "}");
 			}
@@ -1298,7 +1212,7 @@ void printKey(bool inizio,
 		case MAKETITLEKEY:
 			if (inizio)
 			{
-				fprintf(parametri->outFile, "\\maketitle");
+				fprintf(parametri->outFile, "\\maketitle\n\n");
 			}
 			break;
 		case PLKEY:
@@ -1307,32 +1221,31 @@ void printKey(bool inizio,
 		case CLASSKEY:
 			if (inizio)
 			{
-				fprintf(parametri->outFile, "\\documentclass");
-				if (testo && strcmp(testo->lexema, "") != 0)
-				{
-					fprintf(parametri->outFile, "[");
-					printOptions(testo, parametri->outFile, false);
-					fprintf(parametri->outFile, "]");
-				}
-				parametri->noPar = true;
+				fprintf(parametri->outFile, "\\documentclass[");
+				printOptions(testo, parametri->outFile, false);
+				fprintf(parametri->outFile, "]");
 			}
 			break;
 		case DOCENVKEY:
 			if (inizio)
 			{
 				visitTesto(testo->testo1, parametri, sigle);
-				fprintf(parametri->outFile, "\n\\begin{document}\n");
-				fprintf(parametri->outFile, "\\beginnumbering");
-				parametri->parStarted = false;
-				parametri->noPar = false;
-				visitTesto(testo->testo2, parametri, sigle);
-				endParagraph(parametri);
-				fprintf(parametri->outFile, "\\clearpage\n");
-				if (!parametri->endnumbering)
+				fprintf(parametri->outFile, "\\usepackage[scaled=0.9]{helvet}\n");
+				fprintf(parametri->outFile, "\\usepackage{longtable}\n");
+				fprintf(parametri->outFile, "\\usepackage{graphics}\n");
+				fprintf(parametri->outFile, "\\usepackage{titleps}\n");
+				fprintf(parametri->outFile, "\\usepackage{etoolbox}\n");
+				fprintf(parametri->outFile, "\\makeatletter\n");
+				fprintf(parametri->outFile, "\\patchcmd{\\@makechapterhead}{\\Huge}{\\centering\\Huge}{}{}\n");
+				fprintf(parametri->outFile, "\\patchcmd{\\@makeschapterhead}{\\Huge}{\\centering\\Huge}{}{}\n");
+				fprintf(parametri->outFile, "\\makeatother\n");
+				for (int index = 0; index < numPlugin; index++)
 				{
-					fprintf(parametri->outFile, "\n\\endnumbering\n");
+					lPlugins[index]->printPrologue(parametri);
 				}
-				fprintf(parametri->outFile, "\\end{document}\n");
+				fprintf(parametri->outFile, "\\begin{document}\n");
+				visitTesto(testo->testo2, parametri, sigle);
+				fprintf(parametri->outFile, "\n\n\\end{document}\n");
 			}
 			break;
 		case USEPACKAGE:
@@ -1346,15 +1259,8 @@ void printKey(bool inizio,
 					fprintf(parametri->outFile, "]");
 				}
 				fprintf(parametri->outFile, "{");
-				if (strcmp(testo->testo2->lexema, "mauro") == 0)
-				{
-					fprintf(parametri->outFile, "mauroreledmac");
-				}
-				else
-				{
-					printOptions(testo->testo2, parametri->outFile, false);
-				}
-				fprintf(parametri->outFile, "}\n");
+				printOptions(testo->testo2, parametri->outFile, false);
+				fprintf(parametri->outFile, "}\n\n");
 			}
 			break;
 		case GEOMETRY:
@@ -1362,7 +1268,7 @@ void printKey(bool inizio,
 			{
 				fprintf(parametri->outFile, "\\geometry{");
 				printOptions(testo, parametri->outFile, false);
-				fprintf(parametri->outFile, "}\n");
+				fprintf(parametri->outFile, "}\n\n");
 			}
 			break;
 		case MANUSKEY:
@@ -1397,145 +1303,122 @@ void printKey(bool inizio,
 		case CAPITOLOKEY:
 			if (inizio)
 			{
-				endParagraph(parametri);
-				fprintf(parametri->outFile, "\n\\Capitolo{");
-				parametri->noPar = true;
+				fprintf(parametri->outFile, "\n\n\\Capitolo{");
 			}
 			else
 			{
-				fprintf(parametri->outFile, "}");
-				parametri->noPar = false;
+				fprintf(parametri->outFile, "}\n\n");
 			}
 			break;
 		case SOTTOCAPITOLOKEY:
 			if (inizio)
 			{
-				endParagraph(parametri);
-				fprintf(parametri->outFile, "\n\\Sottocapitolo{");
-				parametri->noPar = true;
+				fprintf(parametri->outFile, "\n\n\\Sottocapitolo{");
 			}
 			else
 			{
-				fprintf(parametri->outFile, "}");
-				parametri->noPar = false;
+				fprintf(parametri->outFile, "}\n\n");
 			}
 			break;
 		case TEOREMAKEY:
 			if (inizio)
 			{
-				endParagraph(parametri);
-				fprintf(parametri->outFile, "\n\\Teorema{");
-				parametri->noPar = true;
+				fprintf(parametri->outFile, "\n\n\\Teorema{");
 			}
 			else
 			{
-				fprintf(parametri->outFile, "}");
-				parametri->noPar = false;
+				fprintf(parametri->outFile, "}\n\n");
 			}
 			break;
 		case ALITERKEY:
 			if (inizio)
 			{
-				fprintf(parametri->outFile, "\\Aliter{");
+				fprintf(parametri->outFile, "\n\n\\Aliter{");
 			}
 			else
 			{
-				fprintf(parametri->outFile, "}");
+				fprintf(parametri->outFile, "}\n\n");
 			}
 			break;
 		case LEMMAKEY:
 			if (inizio)
 			{
-				parametri->noPar = true;
-				fprintf(parametri->outFile, "\\Lemma{");
+				fprintf(parametri->outFile, "\n\n\\Lemma{");
 			}
 			else
 			{
-				fprintf(parametri->outFile, "}");
-				parametri->noPar = false;
+				fprintf(parametri->outFile, "}\n\n");
 			}
 			break;
 		case COROLLARIOKEY:
 			if (inizio)
 			{
-				if (parametri->parStarted)
-				{
-					fprintf(parametri->outFile, "\\pend");
-				}
-				parametri->parStarted = true;
-				fprintf(parametri->outFile, "\\Corollario{");
+				fprintf(parametri->outFile, "\n\n\\Corollario{");
 			}
 			else
 			{
-				fprintf(parametri->outFile, "}");
-				parametri->parStarted = false;
+				fprintf(parametri->outFile, "}\n\n");
 			}
 			break;
 		case SCOLIOKEY:
 			if (inizio)
 			{
-				if (parametri->parStarted)
-				{
-					fprintf(parametri->outFile, "\\pend");
-				}
-				parametri->parStarted = true;
-				fprintf(parametri->outFile, "\\Scolio{");
+				fprintf(parametri->outFile, "\n\n\\Scolio{");
 			}
 			else
 			{
-				fprintf(parametri->outFile, "}");
-				parametri->parStarted = false;
+				fprintf(parametri->outFile, "}\n\n");
 			}
 			break;
 		case ADDITIOKEY:
 			if (inizio)
 			{
-				fprintf(parametri->outFile, "\\Additio{");
+				fprintf(parametri->outFile, "\n\n\\Additio{");
 			}
 			else
 			{
-				fprintf(parametri->outFile, "}");
+				fprintf(parametri->outFile, "}\n\n");
 			}
 			break;
 		case SECTIONKEY:
 			if (inizio)
 			{
 				descrizioni = NULL;
-				fprintf(parametri->outFile, "\\section*{");
+				fprintf(parametri->outFile, "\n\n\\section*{");
 			}
 			else
 			{
-				fprintf(parametri->outFile, "}");
+				fprintf(parametri->outFile, "}\n\n");
 			}
 			break;
 		case SUBSECTIONKEY:
 			if (inizio)
 			{
-				fprintf(parametri->outFile, "\\subsection*{");
+				fprintf(parametri->outFile, "\n\n\\subsection*{");
 			}
 			else
 			{
-				fprintf(parametri->outFile, "}");
+				fprintf(parametri->outFile, "}\n\n");
 			}
 			break;
 		case SSSECTIONKEY:
 			if (inizio)
 			{
-				fprintf(parametri->outFile, "\\subsubsection*{");
+				fprintf(parametri->outFile, "\n\n\\subsubsection*{");
 			}
 			else
 			{
-				fprintf(parametri->outFile, "}");
+				fprintf(parametri->outFile, "}\n\n");
 			}
 			break;
 		case PARAGRAPHKEY:
 			if (inizio)
 			{
-				fprintf(parametri->outFile, "\\paragraph{");
+				fprintf(parametri->outFile, "\n\n\\paragraph{");
 			}
 			else
 			{
-				fprintf(parametri->outFile, "}");
+				fprintf(parametri->outFile, "}\n\n");
 			}
 			break;
 		case LABELKEY:
@@ -1637,7 +1520,6 @@ void printKey(bool inizio,
 			}
 			break;
 		case BEGINMATHKEY:
-			startParagraph(parametri);
 			fprintf(parametri->outFile, "$");
 			if (!inizio)
 			{
@@ -1914,15 +1796,11 @@ void printKey(bool inizio,
 		case ENUNCIATIO:
 			if (inizio)
 			{
-				fprintf(parametri->outFile, "\n\\begin{large}\n");
-				fprintf(parametri->outFile, "\\begingroup\\centering\\pstart\n");
-				parametri->parStarted = true;
+				fprintf(parametri->outFile, "\\begin{large}\\begin{center}\n");
 			}
 			else
 			{
-				fprintf(parametri->outFile, "\n\\pend\\endgroup\n");
-				fprintf(parametri->outFile, "\\end{large}");
-				parametri->parStarted = false;
+				fprintf(parametri->outFile, "\\end{center}\\end{large}");
 			}
 			break;
 		case ITEMKEY:
@@ -1952,80 +1830,59 @@ void printKey(bool inizio,
 		case PROTASIS:
 			if (inizio)
 			{
-				if (parametri->parStarted)
-				{
-					fprintf(parametri->outFile, "\\pend");
-				}
-				parametri->parStarted = true;
-				fprintf(parametri->outFile, "\n\\begin{protasis}");
+				fprintf(parametri->outFile, "\\begin{large}\n");
 			}
 			else
 			{
-				fprintf(parametri->outFile, "\\end{protasis}\n");
-				parametri->parStarted = false;
+				fprintf(parametri->outFile, "\\end{large}\\par\n\n");
 			}
 			break;
 		case CENTERKEY:
 			if (inizio)
 			{
-				endParagraph(parametri);
-				fprintf(parametri->outFile, "\n\\begingroup\\centering\\pstart\n");
-				parametri->parStarted = true;
+				fprintf(parametri->outFile, "\\begin{center}\n");
 			}
 			else
 			{
-				fprintf(parametri->outFile, "\n\\pend\\endgroup\n");
-				parametri->parStarted = false;
+				fprintf(parametri->outFile, "\\end{center}\n");
 			}
 			break;
 		case PARAGRAPH:
 			if (inizio)
 			{
-				endParagraph(parametri);
+				fprintf(parametri->outFile, "\\par\n\n");
 			}
 			break;
 		case PARAGRAPHEND:
 			if (inizio)
 			{
-				if (parametri->parStarted)
-				{
-					fprintf(parametri->outFile, "\\pend");
-					parametri->parStarted = false;
-				}
+				fprintf(parametri->outFile, "\n\\pend\n\n");
 			}
 			break;
 		case PARAGRAPHSTART:
 			if (inizio)
 			{
-				fprintf(parametri->outFile, "\\pstart");
-				parametri->parStarted = true;
+				fprintf(parametri->outFile, "\n\n\\pstart\n");
 			}
 			break;
 		case TITLEKEY:
 			if (inizio)
 			{
-				if (parametri->parStarted)
-				{
-					fprintf(parametri->outFile, "\\pend");
-					parametri->parStarted = false;
-				}
 				fprintf(parametri->outFile, "\\title{");
-				parametri->parStarted = true;
 			}
 			else
 			{
-				fprintf(parametri->outFile, "}");
-				parametri->parStarted = false;
+				fprintf(parametri->outFile, "}\n");
 			}
 			break;
 		case TITLEDATEKEY:
 			if (inizio)
 			{
-				fprintf(parametri->outFile, "\\date{");
+				fprintf(parametri->outFile, "\\date{\n");
 			}
 			else
 			{
-				fprintf(parametri->outFile, "}");
+				fprintf(parametri->outFile, "}\n");
 			}
 			break;
 		case ROMAN:
@@ -2080,7 +1937,7 @@ void printKey(bool inizio,
 				else
 				{
 					nSpaces = 0;
-					fprintf(parametri->outFile, "\n");
+					fprintf(parametri->outFile, " ");
 				}
 			}
 			break;
@@ -2196,7 +2053,6 @@ void printKey(bool inizio,
 		case LEFTANG:
 			if (inizio)
 			{
-				startParagraph(parametri);
 				fprintf(parametri->outFile, "\\INTE{");
 			}
 			else
@@ -2305,42 +2161,35 @@ void printKey(bool inizio,
 }
 
 // FUNZIONE DI STAMPA DI UNA FIGURA
-void printFig(short key, struct testo *testo, PARAMETRI *param)
+void printFig(short key, struct testo *testo, PARAMETRI *parametri)
 {
-	PARAMETRIm2l *parametri = (PARAMETRIm2l *)param;
+
 	// APERTURA
-	bool parStarted = parametri->parStarted;
 	if (key == FMARGKEY)
 	{
 		fprintf(parametri->outFile, "\\marginpar{");
 	}
-	else
+	else if (key == FIGURAKEY)
 	{
-		if (parametri->parStarted)
-		{
-			fprintf(parametri->outFile, "\\pend");
-		}
-		parametri->parStarted = true;
-		parStarted = false;
-		fprintf(parametri->outFile, "\n\\pausenumbering\n");
-		fprintf(parametri->outFile, "\\begin{figure}[h]\n");
-		fprintf(parametri->outFile, "\\centering\n");
+		fprintf(parametri->outFile, "\\begin{figure}[h]");
 	}
+
+	// CENTRATURA
+	fprintf(parametri->outFile, "\\begin{center}\n");
+
 	// TRATTAMENTO SPECIFICO
 	switch (key)
 	{
 	case FIGURAKEY:
-		fprintf(parametri->outFile, "\n");
-		fprintf(parametri->outFile, "\\includegraphics");
-		parametri->noPar = true;
+		fprintf(parametri->outFile, "\\includegraphics{");
 		visitTesto(testo->testo2, parametri, NULL);
-		parametri->noPar = false;
+		fprintf(parametri->outFile, "}\n");
 		break;
 	case FIGSKIPKEY:
-		fprintf(parametri->outFile, "\\fbox{\\rule{2cm}{0cm}\\rule{0cm}{");
-		visitTesto(testo->testo2->testo1, parametri, NULL);
+		fprintf(parametri->outFile,
+				"\\fbox{\\rule{2cm}{0cm}\\rule{0cm}{");
+		visitTesto(testo->testo2, parametri, NULL);
 		fprintf(parametri->outFile, "}figura\\rule{2cm}{0cm}}\n");
-		visitTesto(testo->testo2->testo2, parametri, NULL);
 		break;
 	case FMARGKEY:
 		fprintf(parametri->outFile, "Fig.{");
@@ -2350,28 +2199,31 @@ void printFig(short key, struct testo *testo, PARAMETRI *param)
 	case FORMULAKEY:
 		fprintf(parametri->outFile, "\\begin{large}[Formula ");
 		visitTesto(testo->testo2, parametri, NULL);
-		fprintf(parametri->outFile, "]\\end{large}");
+		fprintf(parametri->outFile, "]\\end{large}\n");
 		break;
 	case TAVOLAKEY:
 		fprintf(parametri->outFile, "\\begin{large}[Tavola ");
 		visitTesto(testo->testo2, parametri, NULL);
-		fprintf(parametri->outFile, "]\\end{large}");
+		fprintf(parametri->outFile, "]\\end{large}\n");
 		break;
 	}
+
 	// DIDASCALIA
+	fprintf(parametri->outFile, "\\par\n");
 	visitTesto(testo->testo1, parametri, NULL);
+
+	// FINE CENTRATURA
+	fprintf(parametri->outFile, "\\end{center}\n\n");
 
 	// CHIUSURA
 	if (key == FMARGKEY)
 	{
 		fprintf(parametri->outFile, "}");
 	}
-	else
+	else if (key == FIGURAKEY)
 	{
-		fprintf(parametri->outFile, "\n\\end{figure}\n");
-		fprintf(parametri->outFile, "\\resumenumbering\n");
+		fprintf(parametri->outFile, "\\end{figure}");
 	}
-	parametri->parStarted = parStarted;
 }
 
 // FUNZIONE DI STAMPA DI UN RIFERIMENTO AD UNA UNIT
@@ -2387,42 +2239,37 @@ void printUnitRef(const char *opera, const char *etichetta, PARAMETRI *parametri
 }
 
 /* void printUnitRef(short nUnit, PARAMETRI * parametri) { */
-void printUnitRef(short nUnit, PARAMETRI *param)
+void printUnitRef(short nUnit, PARAMETRI *parametri)
 {
 	/* fprintf(parametri->outFile, "\n\\textlatin{\\small\\textbf{%d}}", nUnit); */
-
-	PARAMETRIm2l *parametri = (PARAMETRIm2l *)param;
-
-	if (!parametri->parStarted)
-	{
-		fprintf(parametri->outFile, "\\pstart");
-		parametri->parStarted = true;
-	}
 	fprintf(parametri->outFile, "\\Unit");
 }
 
 // FUNZIONE DI STAMPA DI UNA PAROLA
 void printLexema(short key, const char *lexema, PARAMETRI *param)
 {
+
 	PARAMETRIm2l *parametri = (PARAMETRIm2l *)param;
+
 	if (lexema != NULL)
 	{
+
+		// CONTROLLO INIBIZIONE DELLA STAMPA
 		if (parametri->label == NULL || parametri->nota)
 		{
-			if (!parametri->parStarted && !parametri->noPar)
-			{
-				fprintf(parametri->outFile, "\\pstart\n");
-				parametri->parStarted = true;
-			}
+
 			switch (key)
 			{
+
 			case TEXTCIRCLEDKEY:
 				fprintf(parametri->outFile, "\\textcircled{%s}", lexema);
 				break;
+
 				// DOCUMENTCLASS
 			case CLASSKEY:
-				fprintf(parametri->outFile, "{%s}\n", lexema);
+				fprintf(parametri->outFile, "{%s}\n\n", lexema);
 				break;
+
 				// ACCENTI
 			case GRAVE:
 				printAccento(lexema, "\\`", parametri->outFile);
@@ -2436,9 +2283,10 @@ void printLexema(short key, const char *lexema, PARAMETRI *param)
 			case CIRC:
 				printAccento(lexema, "\\^", parametri->outFile);
 				break;
+
 				// SIMBOLI E MACRO
 			case PARSKIP:
-				fprintf(parametri->outFile, "\\parskip{%s}\n", lexema);
+				fprintf(parametri->outFile, "\\parskip{%s}\n\n", lexema);
 				break;
 			case EXTERNALDOCUMENT:
 				fprintf(parametri->outFile, "\\externaldocument[%s]", lexema);
@@ -2447,16 +2295,17 @@ void printLexema(short key, const char *lexema, PARAMETRI *param)
 				fprintf(parametri->outFile, "\\label{%s}", lexema);
 				break;
 			case PARINDENT:
-				fprintf(parametri->outFile, "\\parindent{%s}\n", lexema);
+				fprintf(parametri->outFile, "\\parindent{%s}\n\n", lexema);
 				break;
 			case PRELOADKEY:
-				fprintf(parametri->outFile, "\\PreloadUnicodePage{%s}\n", lexema);
+				fprintf(parametri->outFile, "\\PreloadUnicodePage{%s}\n\n", lexema);
 				break;
 			case SYMBOL:
 			case MACRO:
-				startParagraph(parametri);
 				fprintf(parametri->outFile, "{%s}", lexema);
 				break;
+
+				// PAROLA GENERICA
 			default:
 				fprintf(parametri->outFile, "%s", lexema);
 				break;
@@ -2484,7 +2333,7 @@ void printAuthors(struct testo *testo,
 {
 	fprintf(parametri->outFile, "\\author{");
 	internalPrintAuthors(testo, parametri, sigle);
-	fprintf(parametri->outFile, "}");
+	fprintf(parametri->outFile, "}\n");
 }
 
 // FUNZIONE DI STAMPA DEL FRONTESPIZIO
@@ -2498,7 +2347,7 @@ void printFrontespizio(struct testo *testo,
 	visitTesto(testo->testo2->testo1, parametri, sigle);
 	fprintf(parametri->outFile, "}{");
 	internalPrintAuthors(testo->testo2->testo2, parametri, sigle);
-	fprintf(parametri->outFile, "}");
+	fprintf(parametri->outFile, "}\n");
 }
 
 // FUNZIONE DI STAMPA DI UNA ANNOTAZIONE
@@ -2512,17 +2361,10 @@ void printFootnote(struct testo *testo,
 }
 
 // FUNZIONE DI STAMPA DI UN COMMENTO
-void printCommento(struct testo *testo, PARAMETRI *param, struct testo *sigle)
+void printCommento(struct testo *testo,
+				   PARAMETRI *param,
+				   struct testo *sigle)
 {
-	PARAMETRIm2l *parametri = (PARAMETRIm2l *)param;
-	if (parametri->parStarted)
-	{
-		fprintf(parametri->outFile, "\n\\pend\n");
-	}
-	parametri->parStarted = true;
-	fprintf(parametri->outFile, "\n\\pstart\\Comm{");
-	visitTesto(testo, parametri, sigle);
-	fprintf(parametri->outFile, "}");
 }
 
 // FUNZIONE DI STAMPA DI UNA ANNOTAZIONE
@@ -2538,53 +2380,35 @@ void printAdnotatio(
 }
 
 // FUNZIONE DI MARCATURA DEL TESTO CRITICO
-void printInizioTestoCritico(short key, PARAMETRI *param)
+void printInizioTestoCritico(short key, PARAMETRI *parametri)
 {
-	PARAMETRIm2l *parametri = (PARAMETRIm2l *)param;
-	if (!parametri->banale && !parametri->nota && (key != VBKEY || opzioneBanale()))
-	{
-		startParagraph(parametri);
-		fprintf(parametri->outFile, "\\edtext{");
-	}
 }
 
 void printFineTestoCritico(short key, PARAMETRI *parametri)
 {
-	if (!parametri->banale && !parametri->nota && (key != VBKEY || opzioneBanale()))
-	{
-		fprintf(parametri->outFile, "}");
-	}
 }
 
 // FUNZIONE DI MARCATURA DELLE VARIANTI
 void printInizioVarianti(PARAMETRI *parametri)
 {
-	if (!parametri->nota)
+	if (parametri->math)
 	{
-		if (parametri->math)
-		{
-			fprintf(parametri->outFile, "{");
-			fprintf(parametri->outFile, "\\footnotemarkvvmath{");
-		}
-		else
-		{
-			fprintf(parametri->outFile, "{");
-			fprintf(parametri->outFile, "\\footnotevv{");
-		}
+		fprintf(parametri->outFile, "\\footnotemarkvvmath{");
+	}
+	else
+	{
+		fprintf(parametri->outFile, "\\footnotevv{");
 	}
 }
+
 void printSepVarianti(PARAMETRI *parametri)
 {
-	fprintf(parametri->outFile, "\\variantsep ");
+	fprintf(parametri->outFile, "\\hspace{3mm}");
 }
 
 void printFineVarianti(PARAMETRI *parametri)
 {
-	if (!parametri->nota)
-	{
-		fprintf(parametri->outFile, "}");
-		fprintf(parametri->outFile, "}");
-	}
+	fprintf(parametri->outFile, "}");
 }
 
 // FUNZIONE CHE ACCODA LE NOTE CHE NON PUO` ESSERE STAMPATA
@@ -2620,6 +2444,7 @@ void printVVPrincipale(short key,
 					   PARAMETRI *param,
 					   struct testo *sigle)
 {
+
 	bool nota = param->nota;
 	if (key == SCHOLKEY)
 	{
@@ -2636,13 +2461,16 @@ void printVVPrincipale(short key,
 	{
 		visitVarianti(testo, param, sigle, false, false, false, 1, NULL);
 	}
+
 	param->nota = nota;
 }
 
 // STAMPA LA CODA DELLE NOTE
 void printCodaVV(PARAMETRIm2l *parametri, struct testo *sigle)
 {
+
 	bool math = parametri->math;
+
 	parametri->math = true;
 	if (firstVV)
 	{
@@ -2668,19 +2496,24 @@ void printVV(short key,
 			 PARAMETRI *param,
 			 struct testo *sigle)
 {
+
 	// RECUPERO DEI PARAMETRI
 	PARAMETRIm2l *parametri = (PARAMETRIm2l *)param;
+
 	// SALVATAGGIO PARAMETRI
 	bool nota = parametri->nota;
+
 	if (parametri->nota)
 	{
+
 		// STAMPA DI UNA SOTTONOTA
-		fprintf(parametri->outFile, " \\subnote{");
+		fprintf(parametri->outFile, " (");
 		visitVarianti(testo, parametri, sigle, true, false, false, 1, NULL);
-		fprintf(parametri->outFile, "}");
+		fprintf(parametri->outFile, ")");
 	}
 	else
 	{
+
 		if (key == VBKEY)
 		{
 			fprintf(parametri->outFile, " (banale) ");
@@ -2695,6 +2528,7 @@ void printVV(short key,
 			printVVPrincipale(key, testo, parametri, sigle);
 		}
 	}
+
 	// RIPRISTINO DEI PARAMETRI
 	parametri->nota = nota;
 }
@@ -2712,6 +2546,10 @@ void printDocumento(struct testo *testo)
 		leggiConfigurazione(confFileName);
 
 		latexFileName = new char[strlen(fileName) + 10];
+		if (opzioneTestEx())
+		{
+			sprintf(latexFileName, "%s-%s%s", fileName, opzioneTestEx(), LATEXEST);
+		}
 		sprintf(latexFileName, "%s%s", fileName, LATEXEST);
 		parametri = new PARAMETRIm2l();
 		parametri->setFileName(latexFileName);

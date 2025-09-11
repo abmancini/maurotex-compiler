@@ -34,7 +34,7 @@
 */
 
 #include "mparse.h"
-#include "mparsey.h"
+#include "mparsey.hpp"
 #include <ctype.h>
 #include <stdlib.h>
 #include <string.h>
