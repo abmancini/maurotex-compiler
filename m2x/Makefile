@@ -2,8 +2,8 @@ WC	= i586-mingw32msvc-gcc
 WCPP	= i586-mingw32msvc-c++
 WLFLAGS	=
 CFLAGS	= -Wall -O2 -DYY_NO_UNPUT -Werror -Wno-deprecated-declarations -Wno-unused-but-set-variable -Wno-unneeded-internal-declaration -Wno-memsize-comparison
-#LFLAGS	= -lfl
-LFLAGS	= -ll
+LFLAGS	= -lfl
+
 INSTDIR	= /usr/local/bin
 
 CTARGETS = m2web m2hv m2lv m2ledmac m2m m2xml m2tei m2unit mmerge
@@ -12,14 +12,21 @@ WTARGETS= m2hv.exe m2lv.exe m2ledmac.exe m2m.exe m2xml.exe m2unit.exe mmerge.exe
 
 # REGOLE AD ALTO LIVELLO
 
-#il taget linux funziona correttamentr anche su OSX
-default: linux
+
+
+
+default:
+	@echo please select target: linux win osx
 
 all: linux win
 
 linux: $(TARGETS)
 
 win: $(WTARGETS)
+
+osx: LFLAGS = -ll 
+
+osx: $(TARGETS)
 
 afronte:
 
