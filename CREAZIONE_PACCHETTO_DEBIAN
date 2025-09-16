@@ -1,0 +1,35 @@
+## il pacchetto debian viene creato nel docker per lo sviluppo (a cui abbiamo aggiunto dei pacchetti per produrre pacchetit debian)
+
+La versione viene selezionata automaticamente dal changelog file che
+si trova nella directory debian.
+
+La versione dovrebbe corrispondere all'ultimo tag sul repository git.
+
+#eseguire il docker
+docker run -v .:/dest -it --rm -t maurotex-dev
+
+git clone https://github.com/abmancini/maurotex-compiler
+cd maurotex-compiler/
+
+export CURRENT_TAG=XXX.YY.ZZ 
+git checkout $CURRENT_TAG
+export LOGNAME=root
+
+
+dh_make -p maurotex_${CURRENT_TAG} --createorig -s -y
+debuild
+cp ../maurotex_${CURRENT_TAG}-1_arm64.deb /dest
+
+il pacchetto debian nella directory corrente 
+
+
+----- test pacchetto debian --------------------------
+
+## testing
+docker build -t maurotex-test -f Dockerfile.test .
+docker run -v .:/src -it --rm -t maurotex-test
+
+# nel docker eseguo
+dpkg -i /src/maurotex_0.0.1-1_arm64.deb
+
+

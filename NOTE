@@ -1,42 +1,11 @@
-
---- sviluppo ----------------------------------------------
-## costruisco il docker per lo sviluppo con
+## costruzione docker image per lo sviluppo 
 docker build -t maurotex-dev -f Dockerfile.dev .
 
-## eseguo il docker per lo sviluppo con
+## esecuzione docker per lo sviluppo con
 docker run -v .:/code -it --rm -t maurotex-dev
 
 
------ creazione pacchetto debian --------------------------
-## eseguo il docker per lo sviluppo (a cui abbiamo aggiunto dei pacchetti per produrre pacchetit debian)
-docker run -v .:/dest -it --rm -t maurotex-dev
-
-## nel docker eseguo
-git clone https://github.com/abmancini/maurotex-compiler
-cd maurotex-compiler/
-git checkout feature/debianizing
-export LOGNAME=root
-git tag    #prendiamo il nome del tag
-CURRENT_TAG=$(git tag)
-dh_make -p maurotex_${CURRENT_TAG} --createorig -s -y
-debuild
-cp ../maurotex_0.0.1-1_arm64.deb /dest
-
-## e mi trovo il pacchetto debian nella directory corrente 
-
-
------ test pacchetto debian --------------------------
-
-## testing
-docker build -t maurotex-test -f Dockerfile.test .
-docker run -v .:/src -it --rm -t maurotex-test
-
-# nel docker eseguo
-dpkg -i /src/maurotex_0.0.1-1_arm64.deb
-
-
-
-## files da copiare
+## tex files (sty,mf) da copiare  
 cd support
 mkdir -p /usr/local/share/texmf/tex/latex/maurotex
 cp mauro.sty mauroreledmac.sty adn.sty fib4mtex.sty /usr/local/share/texmf/tex/latex/maurotex
