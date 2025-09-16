@@ -1,5 +1,10 @@
+maurotex (2025.09.15-1) UNRELEASED; urgency=medium
+
+  * \Figura and \ApparatoFigure. (Closes: #nnnn)  <nnnn is the bug number of your ITP>
+
+ -- root <root@localhost>  Wed, 16 Jul 2025 20:42:32 +0000
 maurotex (0.0.1-1) UNRELEASED; urgency=medium
 
   * Initial release. (Closes: #nnnn)  <nnnn is the bug number of your ITP>
 
- -- root <root@localhost>  Wed, 16 Jul 2025 20:42:32 +0000
+ -- root <alberto@localhost>  Wed, 16 Jul 2025 20:42:32 +0000
