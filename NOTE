@@ -16,7 +16,9 @@ git clone https://github.com/abmancini/maurotex-compiler
 cd maurotex-compiler/
 git checkout feature/debianizing
 export LOGNAME=root
-dh_make -p maurotex_0.0.1 --createorig -s -y
+git tag    #prendiamo il nome del tag
+CURRENT_TAG=$(git tag)
+dh_make -p maurotex_${CURRENT_TAG} --createorig -s -y
 debuild
 cp ../maurotex_0.0.1-1_arm64.deb /dest
 
