@@ -2333,14 +2333,28 @@ void printFig(short key, struct testo *testo, PARAMETRI *param)
 		fprintf(parametri->outFile, "\n");
 		fprintf(parametri->outFile, "\\includegraphics");
 		parametri->noPar = true;
-		visitTesto(testo->testo2, parametri, NULL);
+		//sintassi alternativa per \Figura{{k}} e \\Figura{k}
+		if (testo->lexema != NULL) { //OLD SYNTAX
+			fprintf(parametri->outFile, "{");
+			printLexema(key,testo->lexema,parametri);
+			fprintf(parametri->outFile, "}");
+		} else {
+			visitTesto(testo->testo2, parametri, NULL);
+		}
 		parametri->noPar = false;
 		break;
 	case FIGSKIPKEY:
 		fprintf(parametri->outFile, "\\fbox{\\rule{2cm}{0cm}\\rule{0cm}{");
-		visitTesto(testo->testo2->testo1, parametri, NULL);
-		fprintf(parametri->outFile, "}figura\\rule{2cm}{0cm}}\n");
-		visitTesto(testo->testo2->testo2, parametri, NULL);
+		//sintassi alternativa per \Figskip{{k}} e \\Figskip{k}
+		if (testo->lexema != NULL) { //OLD SYNTAX
+			printLexema(key, testo->lexema, parametri);
+			visitTesto(testo->testo1, parametri, NULL);
+			fprintf(parametri->outFile, "}figura\\rule{2cm}{0cm}}\n");
+		} else {
+			visitTesto(testo->testo2->testo1, parametri, NULL);
+			fprintf(parametri->outFile, "}figura\\rule{2cm}{0cm}}\n");
+			visitTesto(testo->testo2->testo2, parametri, NULL);
+		}
 		break;
 	case FMARGKEY:
 		fprintf(parametri->outFile, "Fig.{");

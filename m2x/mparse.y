@@ -1818,10 +1818,18 @@ tavola: TAVOLAKEY opttestosquare testobra {
 
 figskip: FIGSKIPKEY opttestosquare figuraevariante {
   $$.testo = makeTesto($1.ln, NOKEY, NULL, $2.testo, $3.testo);
+}
+|
+FIGSKIPKEY opttestosquare wordbra {
+      $$.testo = makeTesto($1.ln, NOKEY, $3.lexema, $2.testo, NULL);
 };
 
 figura: FIGURAKEY opttestosquare figuraevariante {
   $$.testo = makeTesto($1.ln, NOKEY, NULL, $2.testo, $3.testo);
+}
+|
+FIGURAKEY opttestosquare wordbra {
+  $$.testo = makeTesto($1.ln, NOKEY, $3.lexema, $2.testo, NULL);
 };
 
 figuraevariante: LEFTBRA testobra opttestosquare RIGHTBRA {
