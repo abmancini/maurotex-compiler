@@ -807,6 +807,179 @@ void visitVV(short key,
   }
 }
 
+
+void recur(struct testo *myt, char *tag, PARAMETRI *param) {
+  if(myt != NULL) {
+    fprintf(stdout, "key %ld, %s lexema: %s\n",myt->key, tag,myt->lexema != NULL ? myt->lexema : "null");
+
+    //printLexema(myt->key, myt->lexema, param);
+
+    char ltag[1024];
+    strcpy (ltag, tag);
+    strcat (ltag, "L");
+    recur(myt->testo1,ltag, param);
+
+    char rtag[1024];
+    strcpy (rtag, tag);
+    strcat (rtag, "R");
+    recur(myt->testo2,rtag, param);
+  }
+}
+
+struct testo *findLBByLexema(const char *lexema,struct testo *myt, char *tag, PARAMETRI *param) {
+  if(myt != NULL) {
+    fprintf(stdout, "-- key %ld, %s lexema: %s\n",myt->key, tag,myt->lexema != NULL ? myt->lexema : "null");
+    //printLexema(myt->key, myt->lexema, param);
+
+    if (myt->key == LBKEY) {
+      fprintf(stdout, "-- key found\n");
+      //il lexema da matchare e in testo1
+      if (myt->testo1 != nullptr && myt->testo1->lexema != nullptr && strncmp(lexema,myt->testo1->lexema,strlen(lexema)) == 0) {
+        return myt;
+      }
+    }
+
+    char ltag[1024];
+    strcpy (ltag, tag);
+    strcat (ltag, "L");
+    struct testo * res1 = findLBByLexema(lexema, myt->testo1,ltag, param);
+    if (res1 != NULL)
+      return res1;
+
+    char rtag[1024];
+    strcpy (rtag, tag);
+    strcat (rtag, "R");
+    return findLBByLexema(lexema, myt->testo2,rtag, param);
+  }
+  return NULL;
+}
+
+
+
+// FUNZIONE DI STAMPA DI UNA CITLONGA
+void visitCITLONGA(short key,
+               struct testo *testo,
+               struct testo *rest,
+               PARAMETRI *parametri,
+               struct testo *sigle)
+  { // CONTROLLO GESTIONE ESTERNA VARIANTI
+
+    //se non e' hack questo
+    fprintf(stdout, "starting with key: %d", key);
+    FILE *sve = parametri->outFile;
+    parametri->outFile = stdout;
+    char c[] = "";
+    recur(testo,c, parametri);
+    parametri->outFile = sve;
+
+    printInizioTestoCritico(key, parametri);
+    visitTesto(testo->testo2->testo1, parametri, sigle);
+    printFineTestoCritico(key, parametri);
+
+		fprintf(parametri->outFile, "{");
+    fprintf(parametri->outFile, "\\footnotecitlonga{");
+
+    visitTesto(testo->testo2->testo1, parametri, sigle);
+    fprintf(parametri->outFile, "$\\sim$ ");
+    fprintf(parametri->outFile, "\\ref{%s}",testo->lexema);
+
+    //fprintf(parametri->outFile, "===ANCORA-DA-TROVARE===");
+
+    {
+      fprintf(stdout, "SEARCHING for %d lexema %s\n", LBKEY, testo->lexema);
+      FILE *sve2 = parametri->outFile;
+      parametri->outFile = stdout;
+      char c2[] = "";
+      struct ::testo *xx = findLBByLexema(testo->lexema,rest,c2,parametri);
+      char c2x[] = "";
+      fprintf(stdout, "THE FIND %p\n", xx);
+      fprintf(stdout, "THE FIND %ld lexema %s\n", xx->key, xx->lexema);
+      recur(xx->testo1, c2x, parametri);
+      parametri->outFile = sve2;
+
+      visitTesto(xx->testo1->testo2, parametri, sigle);
+    }
+
+    fprintf(parametri->outFile, "\\tagcit{");
+    visitTesto(testo->testo2->testo2, parametri, sigle);
+    fprintf(parametri->outFile, "}");
+
+    fprintf(parametri->outFile, "}");
+    fprintf(parametri->outFile, "}");
+
+    fprintf(stdout, "THE REST");
+    FILE *sve2 = parametri->outFile;
+    parametri->outFile = stdout;
+    char c2[] = "";
+    recur(rest,c2, parametri);
+    parametri->outFile = sve2;
+
+
+
+    return;
+
+    if (checkVV(key, testo, parametri, sigle))
+    { // INDIVIDUAZIONE DEL TIPO DI NOTA
+      if (key != SCHOLKEY)
+      {
+        if (key != NOTEKEY)
+        {
+          if (key != NMARGKEY &&
+              ((key == VBKEY && !opzioneBanale()) ||
+               (testo->lexema == NULL || (strcmp(testo->lexema, "unit") != 0))))
+          { // TESTO CRITICO
+
+            fprintf(stdout, "printing testo critico\n");
+            printInizioTestoCritico(key, parametri);
+            fprintf(stdout, "1 printing testo critico\n");
+            bool banale = parametri->banale;
+            parametri->banale = (opzioneTestEx() == NULL);
+            fprintf(stdout, "2 printing testo critico\n");
+            estrazioneVariante(testo, parametri, sigle);
+            fprintf(stdout, "3 printing testo critico\n");
+
+            parametri->banale = banale;
+            printFineTestoCritico(key, parametri);
+
+            fprintf(stdout, "/printing testo critico\n");
+          }
+        }
+      }
+      // GESTIONE DELLA NOTA
+      if (key != SCHOLKEY)
+      {
+        if ((key != VBKEY || opzioneBanale()) && !parametri->banale)
+        {
+          // VERIFICA CHE ESISTANO DELLE VARIANTI DA STAMPARE
+          if (checkVarianti(testo, opzioneTestEx()))
+          {
+            // STAMPA LE VARIANTI
+            if (!parametri->nota)
+            {
+              printInizioVarianti(parametri);
+            }
+            printVV(key, testo, parametri, sigle);
+            if (!parametri->nota)
+            {
+              printFineVarianti(parametri);
+            }
+          }
+        }
+      }
+      else
+      {
+        // VERIFICA CHE ESISTANO DELLA VARIANTI DA STAMPARE
+        if (checkVarianti(testo, opzioneTestEx()))
+        {
+          // STAMPA LE VARIANTI
+          printVV(key, testo, parametri, sigle);
+        }
+      }
+    }
+
+}
+
+
 // VISITA DI UNA LISTA DI VARIANTI E RITORNA IL NUMERO DI TESTIMONI
 short visitVarianti(
     struct testo *testo,
@@ -1315,6 +1488,9 @@ void visitTesto(struct testo *testo,
       }
       visitVV(testo->key, testo->testo1, parametri, sigle);
       break;
+    case CITLONGAKEY:
+        visitCITLONGA(testo->key, testo->testo1,testo->testo2, parametri, sigle);
+
     case NOMTESTKEY:
       parametri->testimone = testo->lexema;
       break;

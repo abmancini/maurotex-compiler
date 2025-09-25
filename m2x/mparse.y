@@ -160,6 +160,7 @@
 %token TEOREMAKEY CAPITOLOKEY
 %token ALITERKEY LEMMAKEY COROLLARIOKEY SCOLIOKEY ADDITIOKEY SOTTOCAPITOLOKEY
 %token CITKEY DATEKEY
+%token CITLONGAKEY
 %token FORMULAKEY FIGSKIPKEY FIGURAKEY TAVOLAKEY COMMKEY CONGKEY ADNOTKEY NOTEKEY PROPKEY
 %token OPERAKEY LIBROKEY NOMEKEY LUOGOKEY
 %token CASES
@@ -875,6 +876,9 @@ testonospace: {
 }
 | varseria testo {
   $$.testo = makeTesto($1.ln, VVKEY, NULL, $1.testo, $2.testo);
+}
+| citlonga testo {
+  $$.testo = makeTesto($1.ln, CITLONGAKEY, NULL, $1.testo, $2.testo);
 }
 | varfigura testo {
   $$.testo = makeTesto($1.ln, VFKEY, NULL, $1.testo, $2.testo);
@@ -1614,6 +1618,11 @@ varseria: VVKEY variante {
   $$.testo = $2.testo;
 };
 
+citlonga: CITLONGAKEY  clvariante {
+  $$.testo = $2.testo;
+};
+
+
 varbanale: VBKEY variante {
   $$.testo = $2.testo;
 };
@@ -1627,6 +1636,11 @@ variante: option listacampibra {
   $2.testo->lexema = $1.lexema;
   $$.testo = $2.testo;
 };
+
+clvariante: cllistacampibra {
+  $$.testo = $1.testo;
+};
+
 
 trasposizioneseria: TVKEY trasposizione {
   $$.testo = $2.testo;
@@ -1666,6 +1680,48 @@ listacampibra: LEFTBRA listacampi RIGHTBRA {
   yyemessage($1.ln, "dopo questo punto");
 };
 
+cllistacampibra: LEFTBRA cllistacampi RIGHTBRA {
+  if ($2.testo) {
+//    yyemessage($2.ln, "lexema");
+//    yyemessage($2.ln, $2.testo->lexema);
+
+    $$.testo = $2.testo;
+  } else {
+    $$.testo = makeTesto($1.ln, NOKEY, NULL, NULL, NULL);
+    yyerror("nessun campo nella lista");
+  }
+}
+| LEFTBRA error {
+  $$.testo = makeTesto($1.ln, NOKEY, NULL, NULL, NULL);
+  yyemessage($1.ln, "dopo questo punto");
+};
+
+
+//listacampicitl: optspaces {
+//  $$.testo = NULL;
+//}
+//| optspaces campobra listacampi {
+//  $$.testo = makeTesto($1.ln, NOKEY, NULL, $2.testo,$3.testo);
+//};
+
+//listacampicitl: wordbra testobra campobra {
+//  if ($3.testo) {
+//    //$$.lexema = $2.lexema;
+//    $3.testo->lexema = $2.lexema;
+//    $$.testo = $3.testo;
+//  } else {
+//    $$.testo = makeTesto($1.ln, NOKEY, NULL, NULL, NULL);
+//    yyerror("nessun campo nella lista");
+//  }
+//}
+//| LEFTBRA error {
+//  $$.testo = makeTesto($1.ln, NOKEY, NULL, NULL, NULL);
+//  yyemessage($1.ln, "X dopo questo punto");
+//};
+
+
+
+
 listacampi: optspaces {
   $$.testo = NULL;
 }
@@ -1673,12 +1729,39 @@ listacampi: optspaces {
   $$.testo = makeTesto($1.ln, NOKEY, NULL, $2.testo,$3.testo);
 };
 
+cllistacampi: optspaces {
+  $$.testo = NULL;
+}
+| optspaces wordbra cllistacampi2 {
+//  yyemessage($1.ln, "lexema*");
+//  yyemessage($1.ln, $2.lexema);
+  $$.testo = makeTesto($1.ln, NOKEY, $2.lexema, $2.testo,$3.testo);
+};
+
+cllistacampi2: optspaces {
+  $$.testo = NULL;
+}
+| optspaces testobra cllistacampi3 {
+//  yyemessage($1.ln, "lexema*");
+//  yyemessage($1.ln, $2.lexema);
+  $$.testo = makeTesto($1.ln, NOKEY, NULL, $2.testo,$3.testo);
+};
+
+cllistacampi3: optspaces {
+  $$.testo = NULL;
+}
+| optspaces campobra cllistacampi3 {
+  $$.testo = makeTesto($1.ln, NOKEY, NULL, $2.testo,$3.testo);
+};
+
+
+
 campobra: LEFTBRA campo RIGHTBRA {
   $$.testo = $2.testo;
 }
 | LEFTBRA error {
   $$.testo = makeTesto($1.ln, NOKEY, NULL, NULL, NULL);
-  yyemessage($1.ln, "dopo questo punto");
+  yyemessage($1.ln, "Y dopo questo punto");
 };
 
 campo:

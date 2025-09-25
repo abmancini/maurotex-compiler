@@ -27,7 +27,7 @@ win: $(WTARGETS)
 
 osx: LFLAGS = -ll 
 
-osx: $(TARGETS)
+osx: m2ledmac #$(TARGETS)
 
 afronte:
 
