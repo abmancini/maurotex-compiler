@@ -245,6 +245,7 @@ notamacro       "\\"(({alfa})+|{segno})
 \\Additio              { initlval(NULL); return ADDITIOKEY;                     }
 \\Sottocapitolo        { initlval(NULL); return SOTTOCAPITOLOKEY;               }
 \\Cit                  { initlval(NULL); return CITKEY;                         }
+\\Citlonga             { initlval(NULL); return CITLONGAKEY;                    }
 \\Date                 { initlval(NULL); return DATEKEY;                        }
 \\Formula              { initlval(NULL); return FORMULAKEY;                     }
 \\Tavola               { initlval(NULL); return TAVOLAKEY;                      }
