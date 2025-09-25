@@ -1,3 +1,8 @@
+maurotex (2025.09.25-1) UNRELEASED; urgency=medium
+
+  * sintassi altenrativa (retrocompatibile) per \Figura e \Figskip. (Closes: #nnnn)  <nnnn is the bug number of your ITP>
+
+ -- root <root@localhost>  Thu, 25 Sep 2025 17:42:32 +0000
 maurotex (2025.09.15-1) UNRELEASED; urgency=medium
 
   * \Figura and \ApparatoFigure. (Closes: #nnnn)  <nnnn is the bug number of your ITP>
