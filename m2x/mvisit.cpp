@@ -828,11 +828,11 @@ void recur(struct testo *myt, char *tag, PARAMETRI *param) {
 
 struct testo *findLBByLexema(const char *lexema,struct testo *myt, char *tag, PARAMETRI *param) {
   if(myt != NULL) {
-    fprintf(stdout, "-- key %ld, %s lexema: %s\n",myt->key, tag,myt->lexema != NULL ? myt->lexema : "null");
+    //fprintf(stdout, "-- key %ld, %s lexema: %s\n",myt->key, tag,myt->lexema != NULL ? myt->lexema : "null");
     //printLexema(myt->key, myt->lexema, param);
 
     if (myt->key == LBKEY) {
-      fprintf(stdout, "-- key found\n");
+      //fprintf(stdout, "-- key found\n");
       //il lexema da matchare e in testo1
       if (myt->testo1 != nullptr && myt->testo1->lexema != nullptr && strncmp(lexema,myt->testo1->lexema,strlen(lexema)) == 0) {
         return myt;
@@ -865,12 +865,12 @@ void visitCITLONGA(short key,
   { // CONTROLLO GESTIONE ESTERNA VARIANTI
 
     //se non e' hack questo
-    fprintf(stdout, "starting with key: %d", key);
-    FILE *sve = parametri->outFile;
-    parametri->outFile = stdout;
-    char c[] = "";
-    recur(testo,c, parametri);
-    parametri->outFile = sve;
+    // fprintf(stdout, "starting with key: %d", key);
+    // FILE *sve = parametri->outFile;
+    // parametri->outFile = stdout;
+    // char c[] = "";
+    // recur(testo,c, parametri);
+    // parametri->outFile = sve;
 
     printInizioTestoCritico(key, parametri);
     visitTesto(testo->testo2->testo1, parametri, sigle);
@@ -883,38 +883,35 @@ void visitCITLONGA(short key,
     fprintf(parametri->outFile, "$\\sim$ ");
     fprintf(parametri->outFile, "\\ref{%s}",testo->lexema);
 
-    //fprintf(parametri->outFile, "===ANCORA-DA-TROVARE===");
-
     {
-      fprintf(stdout, "SEARCHING for %d lexema %s\n", LBKEY, testo->lexema);
-      FILE *sve2 = parametri->outFile;
-      parametri->outFile = stdout;
+      // fprintf(stdout, "SEARCHING for %d lexema %s\n", LBKEY, testo->lexema);
+      // FILE *sve2 = parametri->outFile;
+      // parametri->outFile = stdout;
       char c2[] = "";
-      struct ::testo *xx = findLBByLexema(testo->lexema,rest,c2,parametri);
-      char c2x[] = "";
-      fprintf(stdout, "THE FIND %p\n", xx);
-      fprintf(stdout, "THE FIND %ld lexema %s\n", xx->key, xx->lexema);
-      recur(xx->testo1, c2x, parametri);
-      parametri->outFile = sve2;
+      struct ::testo *correspondingLB = findLBByLexema(testo->lexema,rest,c2,parametri);
+      // char c2x[] = "";
+      //fprintf(stdout, "THE FIND %p\n", xx);
+      //fprintf(stdout, "THE FIND %ld lexema %s\n", xx->key, xx->lexema);
+      //recur(xx->testo1, c2x, parametri);
+      // parametri->outFile = sve2;
 
-      visitTesto(xx->testo1->testo2, parametri, sigle);
+      visitTesto(correspondingLB->testo1->testo2, parametri, sigle);
     }
 
-    fprintf(parametri->outFile, "\\tagcit{");
+    fprintf(parametri->outFile, "\\tagcit");
+    //fprintf(parametri->outFile, "{");
     visitTesto(testo->testo2->testo2, parametri, sigle);
-    fprintf(parametri->outFile, "}");
+    //fprintf(parametri->outFile, "}");
 
     fprintf(parametri->outFile, "}");
     fprintf(parametri->outFile, "}");
 
-    fprintf(stdout, "THE REST");
-    FILE *sve2 = parametri->outFile;
-    parametri->outFile = stdout;
-    char c2[] = "";
-    recur(rest,c2, parametri);
-    parametri->outFile = sve2;
-
-
+    // fprintf(stdout, "THE REST");
+    // FILE *sve2 = parametri->outFile;
+    // parametri->outFile = stdout;
+    // char c2[] = "";
+    // recur(rest,c2, parametri);
+    // parametri->outFile = sve2;
 
     return;
 
@@ -1490,7 +1487,6 @@ void visitTesto(struct testo *testo,
       break;
     case CITLONGAKEY:
         visitCITLONGA(testo->key, testo->testo1,testo->testo2, parametri, sigle);
-
     case NOMTESTKEY:
       parametri->testimone = testo->lexema;
       break;
