@@ -1682,9 +1682,6 @@ listacampibra: LEFTBRA listacampi RIGHTBRA {
 
 cllistacampibra: LEFTBRA cllistacampi RIGHTBRA {
   if ($2.testo) {
-//    yyemessage($2.ln, "lexema");
-//    yyemessage($2.ln, $2.testo->lexema);
-
     $$.testo = $2.testo;
   } else {
     $$.testo = makeTesto($1.ln, NOKEY, NULL, NULL, NULL);
@@ -1695,32 +1692,6 @@ cllistacampibra: LEFTBRA cllistacampi RIGHTBRA {
   $$.testo = makeTesto($1.ln, NOKEY, NULL, NULL, NULL);
   yyemessage($1.ln, "dopo questo punto");
 };
-
-
-//listacampicitl: optspaces {
-//  $$.testo = NULL;
-//}
-//| optspaces campobra listacampi {
-//  $$.testo = makeTesto($1.ln, NOKEY, NULL, $2.testo,$3.testo);
-//};
-
-//listacampicitl: wordbra testobra campobra {
-//  if ($3.testo) {
-//    //$$.lexema = $2.lexema;
-//    $3.testo->lexema = $2.lexema;
-//    $$.testo = $3.testo;
-//  } else {
-//    $$.testo = makeTesto($1.ln, NOKEY, NULL, NULL, NULL);
-//    yyerror("nessun campo nella lista");
-//  }
-//}
-//| LEFTBRA error {
-//  $$.testo = makeTesto($1.ln, NOKEY, NULL, NULL, NULL);
-//  yyemessage($1.ln, "X dopo questo punto");
-//};
-
-
-
 
 listacampi: optspaces {
   $$.testo = NULL;
@@ -1733,8 +1704,6 @@ cllistacampi: optspaces {
   $$.testo = NULL;
 }
 | optspaces wordbra cllistacampi2 {
-//  yyemessage($1.ln, "lexema*");
-//  yyemessage($1.ln, $2.lexema);
   $$.testo = makeTesto($1.ln, NOKEY, $2.lexema, $2.testo,$3.testo);
 };
 
@@ -1742,18 +1711,15 @@ cllistacampi2: optspaces {
   $$.testo = NULL;
 }
 | optspaces testobra cllistacampi3 {
-//  yyemessage($1.ln, "lexema*");
-//  yyemessage($1.ln, $2.lexema);
   $$.testo = makeTesto($1.ln, NOKEY, NULL, $2.testo,$3.testo);
 };
 
 cllistacampi3: optspaces {
   $$.testo = NULL;
 }
-| optspaces campobra cllistacampi3 {
-  $$.testo = makeTesto($1.ln, NOKEY, NULL, $2.testo,$3.testo);
+| optspaces testobra {
+  $$.testo = makeTesto($1.ln, NOKEY, NULL, $2.testo,NULL);
 };
-
 
 
 campobra: LEFTBRA campo RIGHTBRA {
