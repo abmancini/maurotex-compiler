@@ -1,0 +1,120 @@
+\documentclass[italian, latin]{book}
+
+\usepackage{mauro,latexsym,adn,endnotes,babel}
+\ElencoTestimoni{1/A/A+/Bas/G/L/L2/N/N2}
+\FoliumInMargine
+
+\begin{document}
+\htmlcut
+
+\Title{\INTE{Varia de centris}}{}
+\Capitolo{De centro solidi parabolae demonstratio acutissima cum collatione aliorum centrorum}
+\par
+Testo \VV{{L2/Bas:\MARG: prodiorthosis}{G/L/N/Bas:prodiorthosis}}, praecedens correctio. Haec figura, ubi aliquid necessarium dictu,
+\VV{{*:set}{G/L/N/Bas:et}} insuave audientibus aut odiosum
+nobis dicturi sumus, praemunit. \VV{{N2/Bas:Exemplum}{G/L/N:exemplo}} apud Ciceronem
+frequens: ‘Quamquam sentio \VV{{N/Bas:quanta}{G/L:quanto}} hoc cum offensione \VV{{Bas:dicturus sim}{G/L:dicturus sum}{N:sum dicturus}}, dicendum \VV{{*:est}{G:est tamen}}’.
+%%% Quando \par è seguito immediatamente da una macro, \pstart viene posizionato in maniera scorretta, all'interno della macro invece che fuori
+\par
+\VV{{L2/Bas:\MARG: prodiorthosis}{G/L/N/Bas:prodiorthosis}}, praecedens correctio. Haec figura, ubi aliquid necessarium dictu,
+\VV{{*:set}{G/L/N/Bas:et}} insuave audientibus aut odiosum
+nobis dicturi sumus, praemunit. \VV{{N2/Bas:Exemplum}{G/L/N:exemplo}} apud Ciceronem
+frequens: ‘Quamquam sentio \VV{{N/Bas:quanta}{G/L:quanto}} hoc cum offensione \VV{{Bas:dicturus sim}{G/L:dicturus sum}{N:sum dicturus}}, dicendum \VV{{*:est}{G:est tamen}}’.
+%%% Succede con tutte le macro, a parte quelle di sezione (\Capitolo, ecc.) e \Unit. Un solo esempio per tutti:
+\par
+\INTE{* * *
+leptoogia * * *} tale pro Gallio de convivio luxurioso:
+‘\VV{{*:Fit}{G/L/N/Bas:ut}} clamor, \VV{{*:fit}{G/L/N/Bas:ut}} \VV{{Bas:convicium}{L/N:convivium}{G:comitum}} mulierum, \VV{{*:fit}{G/L/N/Bas:ut}} symphoniae cantus.
+\par
+%%% Succede anche con l'ambiente matematico $...$. Notare che la prima espressione va bene, perché preceduta da \Unit
+\Unit[collatioInizio]
+$abc$ parabola\par 
+$abc$ \ABBR{triangulum}
+
+\Capitolo{De centro solidi parabolae demonstratio acutissima cum collatione aliorum centrorum}
+
+%%% \Folium, dentro una macro di sezione, prende un \pstart/\pend che non dovrebbe esserci.
+\Capitolo{\Folium{A:8r}De centro solidi parabolae demonstratio acutissima cum collatione aliorum centrorum}
+\par
+Testo
+
+%%% \Lemma, \Aliter, \Additio vanno aggiunte alle macro che creano un titoletto, come \Capitolo, ecc. e che quindi non vogliono \pstart/\pend
+\par
+\Lemma{Titolo lemma}
+
+%%% \NOTAMARG dà un output scorretto. Dovrebbe inserire \edtext{testo critico}{apparato} come \VV, invece che {apparato} soltanto, come fa adesso.
+%%% Però, vista la peculiarità di \NOTAMARG, non sono sicuro dell'output; forse è meglio che su questo si esprima anche Daniele.
+\par
+\Unit 
+Curam \VV{{1:\POSTDEL{habenda}:corporis}} tibi non suadeo, claro medico et \VV{{*:\DES{add.}\INTERL:qui}}
+\VV{{*:\EX{clarissimi}:clarissimum}} \VV{{*:\DES{add.}\INTERL:huius etatis}} \VV{{*:\EX{medici}:medicum}} \VV{{1:\ANTEDEL{huius etatis filio}:patrem}}
+habes.
+%\NOTAMARG{{*:\INTERL:attende aliquid de questione medicorum}} Puto tibi et causas morbi tui notas et remedia;
+\par
+
+%%% Qui viene creato un \pstart/\pend vuoto di troppo, dovuto al fatto che c'è l'ambiente center.
+%%% In questo caso, però, non lo considererei un vero e proprio errore: l'ambiente center non dovrebbe essere proprio usato in una situazione come questa.
+%\begin{center}
+%\Figskip{1cm}
+%\end{center}
+
+%%% Due \Figskip che non sono separati da testo dovrebbero stare dentro una sola sezione \pausenumbering/resumenumbering.
+%%% Non implementare però ancora questa cosa, perché forse non c'è proprio più bisogno di usare \pausenumbering/resumenumbering.
+%%% Devo fare qualche test prima.
+%\Figskip{1cm}
+
+%\Figskip{1cm}
+
+%%% Qui sono posizionati male sia \pstart, dopo la prima parentesi aperta da \Date, che \pend, dopo \clearpage.
+%%% È anche vero che \clearpage non dovrebbe esserci... In ogni caso il primo \pstart è collocato male, dentro un gruppo che si chiude prima che possa essere trovato \pend.
+\par
+\Date{
+    {{\SAT} \VV{
+             {A+:\POSTDEL{apr.}:5\Sup{o}}
+             } maii 1565}
+   {05.05.1565}
+     }
+
+\Capitolo{Prove novembre 2023}
+
+\Sottocapitolo{Problema tabular}
+\par
+
+\begin{tabula}{lll}
+ 56.  \RTT ~$ac$~$ce$ &  & \\
+                      &  & aequum \QDR\Sup{to} ~$bc$, 225, quod est propositum. \\
+ 169. \QDR ~$ab$      &  &  \\
+\end{tabula}
+\par
+
+\Sottocapitolo{Problema tabular center}
+\par
+
+\begin{center}
+Questo è per vedere se il center normale funziona.
+\end{center}
+\par
+
+\begin{center}
+\begin{tabula}{llll}
+& 4 & 12 & \\
+3 & & &  27\\
+\linea \\
+& 5 & 15 & \\
+\end{tabula}
+\end{center}
+\par
+
+\Sottocapitolo{Problema tagid}
+\par
+
+\VV{{A:\EX{ex}:ex}}
+\VV{{A:\INTERL:interl}}
+\VV{{A:\PC:pc}}
+\VV{{A:\MARG:marg}}
+\VV{{A:\BIS:bis}}
+\VV{{A:\MARGSIGN:margsign}}
+
+\end{document}
+
+%%% PS: sarebbe utile che \pstart e \pend fossero su una riga isolata, per una questione di leggibilità.

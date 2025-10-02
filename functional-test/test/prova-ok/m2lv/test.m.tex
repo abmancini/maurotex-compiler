@@ -1,0 +1,157 @@
+\documentclass[italian, latin]{book}
+
+\usepackage{mauro, latexsym, adn, endnotes, babel}
+
+\usepackage[scaled=0.9]{helvet}
+\usepackage{longtable}
+\usepackage{graphics}
+\usepackage{titleps}
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd{\@makechapterhead}{\Huge}{\centering\Huge}{}{}
+\patchcmd{\@makeschapterhead}{\Huge}{\centering\Huge}{}{}
+\makeatother
+\usepackage{manyfoot}
+\newfootnote{vv}
+\newcounter{footnotevv}
+\newcommand{\footnotemarkvvmath}{%
+\stepcounter{footnotevv}%
+\Footnotemark{[\thefootnotevv]}}
+\newcommand{\footnotemarkvv}{%
+\stepcounter{footnotevv}%
+\Footnotemark{\thefootnotevv}}
+\newcommand{\footnotetextvv}{%
+\Footnotetextvv{\thefootnotevv}}
+\newcommand{\footnotevv}{%
+\footnotemarkvv\footnotetextvv}
+\newfootnote{cit}
+\newcounter{footnotecit}
+\renewcommand{\thefootnotecit}{\roman{footnotecit}}
+\newcommand{\footnotecit}{%
+\stepcounter{footnotecit}%
+\Footnotemark{%
+\textbf{[}%
+\thefootnotecit%
+\textbf{]}}%
+\Footnotetextcit{\thefootnotecit}}
+\newfootnote{nam}
+\newcounter{footnotenam}
+\renewcommand{\thefootnotenam}{\roman{footnotenam}}
+\newcommand{\footnotenam}{%
+\stepcounter{footnotenam}%
+\Footnotemark{%
+\textbf{(}%
+\thefootnotenam%
+\textbf{)}}%
+\Footnotetextnam{\thefootnotenam}}
+\newcommand\inizioepistola{}
+\newcommand\fineepistola{}
+\begin{document}
+ \Title{\INTE{Varia de centris}}{} 
+
+\Capitolo{De centro solidi parabolae demonstratio acutissima cum collatione aliorum centrorum}
+
+ \par
+
+ Testo  prodiorthosis\footnotevv{ prodiorthosis\textlatin{\textsl{\textsf{ in marg.}}} \textlatin{\textsl{\textsf{L\textsuperscript{2}}}} \textlatin{\textsl{\textsf{Bas}}}\hspace{3mm}prodiorthosis \textlatin{\textsl{\textsf{G}}} \textlatin{\textsl{\textsf{L}}} \textlatin{\textsl{\textsf{N}}} \textlatin{\textsl{\textsf{Bas}}}}, praecedens correctio. Haec figura, ubi aliquid necessarium dictu, set\footnotevv{set\textlatin{\textsl{\textsf{:}}}\hspace{3mm}et \textlatin{\textsl{\textsf{G}}} \textlatin{\textsl{\textsf{L}}} \textlatin{\textsl{\textsf{N}}} \textlatin{\textsl{\textsf{Bas}}}} insuave audientibus aut odiosum nobis dicturi sumus, praemunit. Exemplum\footnotevv{Exemplum \textlatin{\textsl{\textsf{N\textsuperscript{2}}}} \textlatin{\textsl{\textsf{Bas}}}\hspace{3mm}exemplo \textlatin{\textsl{\textsf{G}}} \textlatin{\textsl{\textsf{L}}} \textlatin{\textsl{\textsf{N}}}} apud Ciceronem frequens: ‘Quamquam sentio quanta\footnotevv{quanta \textlatin{\textsl{\textsf{N}}} \textlatin{\textsl{\textsf{Bas}}}\hspace{3mm}quanto \textlatin{\textsl{\textsf{G}}} \textlatin{\textsl{\textsf{L}}}} hoc cum offensione dicturus sim\footnotevv{dicturus sim \textlatin{\textsl{\textsf{Bas}}}\hspace{3mm}dicturus sum \textlatin{\textsl{\textsf{G}}} \textlatin{\textsl{\textsf{L}}}\hspace{3mm}sum dicturus \textlatin{\textsl{\textsf{N}}}}, dicendum est\footnotevv{est\textlatin{\textsl{\textsf{:}}}\hspace{3mm}est tamen \textlatin{\textsl{\textsf{G}}}}’. \par
+
+  prodiorthosis\footnotevv{ prodiorthosis\textlatin{\textsl{\textsf{ in marg.}}} \textlatin{\textsl{\textsf{L\textsuperscript{2}}}} \textlatin{\textsl{\textsf{Bas}}}\hspace{3mm}prodiorthosis \textlatin{\textsl{\textsf{G}}} \textlatin{\textsl{\textsf{L}}} \textlatin{\textsl{\textsf{N}}} \textlatin{\textsl{\textsf{Bas}}}}, praecedens correctio. Haec figura, ubi aliquid necessarium dictu, set\footnotevv{set\textlatin{\textsl{\textsf{:}}}\hspace{3mm}et \textlatin{\textsl{\textsf{G}}} \textlatin{\textsl{\textsf{L}}} \textlatin{\textsl{\textsf{N}}} \textlatin{\textsl{\textsf{Bas}}}} insuave audientibus aut odiosum nobis dicturi sumus, praemunit. Exemplum\footnotevv{Exemplum \textlatin{\textsl{\textsf{N\textsuperscript{2}}}} \textlatin{\textsl{\textsf{Bas}}}\hspace{3mm}exemplo \textlatin{\textsl{\textsf{G}}} \textlatin{\textsl{\textsf{L}}} \textlatin{\textsl{\textsf{N}}}} apud Ciceronem frequens: ‘Quamquam sentio quanta\footnotevv{quanta \textlatin{\textsl{\textsf{N}}} \textlatin{\textsl{\textsf{Bas}}}\hspace{3mm}quanto \textlatin{\textsl{\textsf{G}}} \textlatin{\textsl{\textsf{L}}}} hoc cum offensione dicturus sim\footnotevv{dicturus sim \textlatin{\textsl{\textsf{Bas}}}\hspace{3mm}dicturus sum \textlatin{\textsl{\textsf{G}}} \textlatin{\textsl{\textsf{L}}}\hspace{3mm}sum dicturus \textlatin{\textsl{\textsf{N}}}}, dicendum est\footnotevv{est\textlatin{\textsl{\textsf{:}}}\hspace{3mm}est tamen \textlatin{\textsl{\textsf{G}}}}’. \par
+
+ \INTE{* * * leptoogia * * *} tale pro Gallio de convivio luxurioso: ‘Fit\footnotevv{Fit\textlatin{\textsl{\textsf{:}}}\hspace{3mm}ut \textlatin{\textsl{\textsf{G}}} \textlatin{\textsl{\textsf{L}}} \textlatin{\textsl{\textsf{N}}} \textlatin{\textsl{\textsf{Bas}}}} clamor, fit\footnotevv{fit\textlatin{\textsl{\textsf{:}}}\hspace{3mm}ut \textlatin{\textsl{\textsf{G}}} \textlatin{\textsl{\textsf{L}}} \textlatin{\textsl{\textsf{N}}} \textlatin{\textsl{\textsf{Bas}}}} convicium\footnotevv{convicium \textlatin{\textsl{\textsf{Bas}}}\hspace{3mm}convivium \textlatin{\textsl{\textsf{L}}} \textlatin{\textsl{\textsf{N}}}\hspace{3mm}comitum \textlatin{\textsl{\textsf{G}}}} mulierum, fit\footnotevv{fit\textlatin{\textsl{\textsf{:}}}\hspace{3mm}ut \textlatin{\textsl{\textsf{G}}} \textlatin{\textsl{\textsf{L}}} \textlatin{\textsl{\textsf{N}}} \textlatin{\textsl{\textsf{Bas}}}} symphoniae cantus. \par
+
+ \Unit\label{collatioInizio} $abc$ parabola\par
+
+ $abc$ triangulum 
+
+\Capitolo{De centro solidi parabolae demonstratio acutissima cum collatione aliorum centrorum}
+
+ 
+
+\Capitolo{$|$\marginpar{[A:8r]}De centro solidi parabolae demonstratio acutissima cum collatione aliorum centrorum}
+
+ \par
+
+ Testo \par
+
+ 
+
+\Lemma{Titolo lemma}
+
+ \par
+
+ \Unit Curam corporis\footnotevv{\textlatin{\textsl{\textsf{post }}}corporis\textlatin{\textsl{\textsf{ del. }}}habenda \textlatin{\textsl{\textsf{\textsuperscript{1}}}}} tibi non suadeo, claro medico et qui\footnotevv{qui \textlatin{\textsl{\textsf{add.}}}\textlatin{\textsl{\textsf{ supra lineam}}}} clarissimum\footnotevv{clarissimum\textlatin{\textsl{\textsf{ ex }}}clarissimi} huius etatis\footnotevv{huius etatis \textlatin{\textsl{\textsf{add.}}}\textlatin{\textsl{\textsf{ supra lineam}}}} medicum\footnotevv{medicum\textlatin{\textsl{\textsf{ ex }}}medici} patrem\footnotevv{\textlatin{\textsl{\textsf{ante }}}patrem\textlatin{\textsl{\textsf{ del. }}}huius etatis filio \textlatin{\textsl{\textsf{\textsuperscript{1}}}}} habes. \par
+
+ \par
+
+ {{\SAT}} 5\textsuperscript{o}\footnotevv{\textlatin{\textsl{\textsf{post }}}5\textsuperscript{o}\textlatin{\textsl{\textsf{ del. }}}apr. \textlatin{\textsl{\textsf{A}}}} maii 1565 
+
+\Capitolo{Prove novembre 2023}
+
+ 
+
+\Sottocapitolo{Problema tabular}
+
+ \par
+
+ \begin{tabular}{rcl}
+ &
+\begin{tabular}{lll}
+56. {\RTT} ~$ac$~$ce$  &
+ &
+\\
+ &
+ &
+aequum {\QDR}\textsuperscript{to} ~$bc$, 225, quod est propositum. \\
+169. {\QDR} ~$ab$  &
+ &
+\\
+\end{tabular}
+ & 
+
+\end{tabular}
+
+ \par
+
+ 
+
+\Sottocapitolo{Problema tabular center}
+
+ \par
+
+ \begin{center}
+ Questo è per vedere se il center normale funziona. \end{center}
+ \par
+
+ \begin{center}
+ \begin{tabular}{rcl}
+ &
+\begin{tabular}{llll}
+ &
+4  &
+12  &
+\\
+3  &
+ &
+ &
+27\\
+ &
+5  &
+15  &
+\\
+\end{tabular}
+ & 
+
+\end{tabular}
+
+ \end{center}
+ \par
+
+ 
+
+\Sottocapitolo{Problema tagid}
+
+ \par
+
+ ex\footnotevv{ex\textlatin{\textsl{\textsf{ ex }}}ex \textlatin{\textsl{\textsf{A}}}} interl\footnotevv{interl\textlatin{\textsl{\textsf{ supra lineam}}} \textlatin{\textsl{\textsf{A}}}} pc\footnotevv{pc\textlatin{\textsl{\textsf{ post corr.}}} \textlatin{\textsl{\textsf{A}}}} marg\footnotevv{marg\textlatin{\textsl{\textsf{ in marg.}}} \textlatin{\textsl{\textsf{A}}}} bis\footnotevv{bis\textlatin{\textsl{\textsf{ bis}}} \textlatin{\textsl{\textsf{A}}}} margsign\footnotevv{margsign\textlatin{\textsl{\textsf{ signo posito in marg.}}} \textlatin{\textsl{\textsf{A}}}} 
+
+\end{document}
