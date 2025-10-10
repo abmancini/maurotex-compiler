@@ -808,7 +808,7 @@ void visitVV(short key,
 }
 
 
-void recur(struct testo *myt, char *tag, PARAMETRI *param) {
+void printRecur(struct testo *myt, char *tag, PARAMETRI *param) {
   if(myt != NULL) {
     fprintf(stdout, "key %ld, %s lexema: %s\n",myt->key, tag,myt->lexema != NULL ? myt->lexema : "null");
 
@@ -817,12 +817,36 @@ void recur(struct testo *myt, char *tag, PARAMETRI *param) {
     char ltag[1024];
     strcpy (ltag, tag);
     strcat (ltag, "L");
-    recur(myt->testo1,ltag, param);
+    printRecur(myt->testo1,ltag, param);
 
     char rtag[1024];
     strcpy (rtag, tag);
     strcat (rtag, "R");
-    recur(myt->testo2,rtag, param);
+    printRecur(myt->testo2,rtag, param);
+  }
+}
+
+void printRecurUntil(struct testo *myt, char *tag, PARAMETRI *param, struct testo *end) {
+  if(myt != NULL) {
+    if (myt == end) {
+      fprintf(stdout, "found END token\n");
+      return;
+    } else {
+      fprintf(stdout, "not found END token %p != %p\n", myt, end);
+    }
+    fprintf(stdout, "key %ld, %s lexema: %s\n",myt->key, tag,myt->lexema != NULL ? myt->lexema : "null");
+
+    //printLexema(myt->key, myt->lexema, param);
+
+    char ltag[1024];
+    strcpy (ltag, tag);
+    strcat (ltag, "L");
+    printRecurUntil(myt->testo1, ltag, param, end);
+
+    char rtag[1024];
+    strcpy (rtag, tag);
+    strcat (rtag, "R");
+    printRecurUntil(myt->testo2, rtag, param, end);
   }
 }
 
@@ -854,6 +878,24 @@ struct testo *findLBByLexema(const char *lexema,struct testo *myt, char *tag, PA
   return NULL;
 }
 
+struct testo *findKeyUntil(struct testo *myt, long key, struct testo *end) {
+  if(myt != NULL) {
+    if (myt->key == key) {
+      return myt;
+    }
+    if (myt == end) {
+      return NULL;
+    }
+    //fprintf(stdout, "key %ld, %s lexema: %s\n",myt->key, tag,myt->lexema != NULL ? myt->lexema : "null");
+    //printLexema(myt->key, myt->lexema, param);
+    struct testo * left = findKeyUntil(myt->testo1, key, end);
+    if (left != NULL)
+      return left;
+
+    return findKeyUntil(myt->testo2, key, end);
+  }
+  return NULL;
+}
 
 
 // FUNZIONE DI STAMPA DI UNA CITLONGA
@@ -881,7 +923,7 @@ void visitCITLONGA(short key,
 
     visitTesto(testo->testo2->testo1, parametri, sigle);
     fprintf(parametri->outFile, "$\\sim$ ");
-    fprintf(parametri->outFile, "\\ref{%s}",testo->lexema);
+
 
     {
       // fprintf(stdout, "SEARCHING for %d lexema %s\n", LBKEY, testo->lexema);
@@ -895,10 +937,24 @@ void visitCITLONGA(short key,
       //recur(xx->testo1, c2x, parametri);
       // parametri->outFile = sve2;
 
+      //questo va messo solo se c'e' una unit tra la citlonga ed il corrispondente LB
+      struct ::testo * unitBetween = findKeyUntil(rest,UNITKEY,correspondingLB );
+      if (unitBetween != NULL)
+        fprintf(parametri->outFile, "\\ref{%s}",testo->lexema);
+
+
       visitTesto(correspondingLB->testo1->testo2, parametri, sigle);
+
+      //dobbiamo capire se c'e' un Unit tra la citazione ed il LB
+      // char c3[] = "";
+      // fprintf(stdout, "THE FIND %p\n", correspondingLB);
+      // printRecurUntil(rest,c3,parametri,correspondingLB );
+      // fprintf(stdout, "-----\n");
+
     }
 
-    fprintf(parametri->outFile, "\\tagcit");
+
+    fprintf(parametri->outFile, "\\taged{:}\\variantsep \\tagcit");
     //fprintf(parametri->outFile, "{");
     visitTesto(testo->testo2->testo2, parametri, sigle);
     //fprintf(parametri->outFile, "}");
