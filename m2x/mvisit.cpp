@@ -922,7 +922,7 @@ void visitCITLONGA(short key,
     fprintf(parametri->outFile, "\\footnotecitlonga{");
 
     visitTesto(testo->testo2->testo1, parametri, sigle);
-    fprintf(parametri->outFile, "$\\sim$ ");
+    fprintf(parametri->outFile, " $\\sim$ ");
 
 
     {
@@ -940,7 +940,7 @@ void visitCITLONGA(short key,
       //questo va messo solo se c'e' una unit tra la citlonga ed il corrispondente LB
       struct ::testo * unitBetween = findKeyUntil(rest,UNITKEY,correspondingLB );
       if (unitBetween != NULL)
-        fprintf(parametri->outFile, "\\ref{%s}",testo->lexema);
+        fprintf(parametri->outFile, " \\ref{%s} ",testo->lexema);
 
 
       visitTesto(correspondingLB->testo1->testo2, parametri, sigle);
