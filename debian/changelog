@@ -1,3 +1,8 @@
+maurotex (2025.10.22-1) UNRELEASED; urgency=medium
+
+  * \Citlonga
+
+ -- root <root@localhost>  Thu, 25 Sep 2025 17:42:32 +0000
 maurotex (2025.09.25-1) UNRELEASED; urgency=medium
 
   * sintassi altenrativa (retrocompatibile) per \Figura e \Figskip. (Closes: #nnnn)  <nnnn is the bug number of your ITP>
