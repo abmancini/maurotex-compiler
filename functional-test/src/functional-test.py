@@ -4,6 +4,32 @@ import subprocess
 import shutil
 import filecmp
 
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKCYAN = '\033[96m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+
+
+def printWarning(txt):
+    print(bcolors.BOLD  + bcolors.WARNING + txt + bcolors.ENDC)
+
+def printFail(txt):
+    print(bcolors.FAIL + txt + bcolors.ENDC)
+
+def printOk(txt):
+    print(bcolors.OKGREEN + txt + bcolors.ENDC)
+
+def printBold(txt):
+    print(bcolors.BOLD + txt + bcolors.ENDC)
+
+
+    
 def test(folder_path):
     split = os.path.split(folder_path)
     folder_name = split[1]
@@ -12,7 +38,10 @@ def test(folder_path):
     else:
         if os.path.isdir(folder_path):
             if folder_name in binaries:
-                execute(folder_path)
+                if not os.listdir(folder_path):
+                    printWarning("  empty " + folder_path)
+                else:
+                    execute(folder_path)
             else:
                 for subfolder_name in os.listdir(folder_path):
                     subfolder_path = os.path.join(folder_path, subfolder_name)
@@ -36,7 +65,10 @@ def execute(folder_path):
             in_file_path = os.path.join(folder_path, file_name)
             out_file_path = os.path.join(output_path, file_name)
             if not filecmp.cmp(in_file_path, out_file_path, shallow=True):
-                print("  fail", out_file_path)
+                printFail("   fail " +  in_file_path)
+            else:
+                printOk(  " sucess " +  in_file_path)
+                
 
 root_folder = os.getcwd()
 
@@ -50,7 +82,7 @@ if binaries:
     test_folders = sys.argv[1:] or ["test"]
     for folder in test_folders:
         folder_path = os.path.abspath(folder)
-        print("========= analyzing", folder_path)
+        printBold("========= analyzing " + folder_path)
         test(folder_path)
 else:
-    print("no binary in ", bin_folder)
+    printFail("no binary in " + bin_folder)
