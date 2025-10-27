@@ -5,6 +5,15 @@ docker build -t maurotex-dev -f Dockerfile.dev .
 docker run -v .:/code -it --rm -t maurotex-dev
 
 
+## procedura di test
+cd m2x
+make osx
+cd functional-test/
+ln -s ../m2x bin
+python src/functional-test.py test/*
+
+
+
 ## tex files (sty,mf) da copiare  
 cd support
 mkdir -p /usr/local/share/texmf/tex/latex/maurotex
