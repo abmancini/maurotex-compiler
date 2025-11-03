@@ -1,6 +1,6 @@
 #!/bin/bash
-export LANG=it_IT
-VERSION=$(git describe)
+export LC_ALL=it_IT
+VERSION=$(git describe --tags)
 DATE=$(date +"%d %B %Y")
 
 cat <<EOF
