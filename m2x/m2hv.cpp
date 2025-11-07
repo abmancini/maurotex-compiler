@@ -1,4 +1,4 @@
-#include "version.h"
+#define VERSIONSTRING "versione 1.15b1 del 24 agosto 2022"
 
 /*
 

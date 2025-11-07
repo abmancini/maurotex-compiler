@@ -27,7 +27,7 @@ win: $(WTARGETS)
 
 osx: LFLAGS = -ll 
 
-osx: $(TARGETS)
+osx: m2ledmac #$(TARGETS)
 
 afronte:
 
@@ -39,13 +39,8 @@ execute: mmerge.m.dvi
 prova%: prova%-a.tex prova%-b.tex
 	mmerge $^
 
-
-.PHONY: version.h
-version.h:
-	../create_version_file.sh > version.h
-
 clean:
-	rm -fr mparsef.cpp mparsey.cpp mparsey.hpp *.o *.w $(CTARGETS) $(WTARGETS) *.output *.htm* *.m.* *.rtf *.log core *~ mauro.*pk mauro.tfm *.ppm *.jpg *.ps *.pdf mmerge.tex *.flc *.unit *.json 1.* 2.* 3.* 4.* version.h
+	rm -fr mparsef.cpp mparsey.cpp mparsey.hpp *.o *.w $(CTARGETS) $(WTARGETS) *.output *.htm* *.m.* *.rtf *.log core *~ mauro.*pk mauro.tfm *.ppm *.jpg *.ps *.pdf mmerge.tex *.flc *.unit *.json 1.* 2.* 3.* 4.*
 
 mmerge.tex: mmerge1.tex mmerge2.tex mmerge
 	./mmerge mmerge1.tex mmerge2.tex
@@ -155,7 +150,7 @@ yywrap.w: yywrap.cpp
 #%.o: %.c mparse.h mparsein.h mparsey.hpp mvisit.h comp.h plugin.h standard.h epistolario.h
 #	c++ -c $(CFLAGS) $< -o $@
 
-%.o: %.cpp mparse.h mparsein.h mparsey.hpp mvisit.h comp.h plugin.h standard.h epistolario.h version.h
+%.o: %.cpp mparse.h mparsein.h mparsey.hpp mvisit.h comp.h plugin.h standard.h epistolario.h
 	c++ -c $(CFLAGS) $< -o $@
 
 %.w: %.cpp mparse.h mparsein.h mparsey.hpp mvisit.h comp.h

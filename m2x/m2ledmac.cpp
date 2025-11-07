@@ -1,4 +1,5 @@
-#include "version.h"
+#define VERSIONSTRING "versione 1.16b1 del 25 giugno 2023"
+
 /*
   file "m2ledmac.c"
   PROGRAMMA PRINCIPALE
